@@ -1,19 +1,21 @@
-"""Emision, verificacion y migracion con doble capa y domain separation."""
+"""Servicio de evidencia criptográfica para KRONOS360."""
 
 from __future__ import annotations
 
-from collections.abc import Iterable
-from datetime import UTC, datetime
+import hashlib
+from datetime import datetime, timezone
+from typing import Iterable
 from uuid import uuid4
 
-from ..crypto.canonicalization import canonicalize
-from ..crypto.hashing import sha3_512_hex
-from ..crypto.signatures import (
+from kronos360.crypto.canonicalize import canonicalize
+from kronos360.crypto.hashes import sha3_512_hex
+from kronos360.crypto.signatures import (
     Signer,
     build_signed_message,
     verify_signature,
+    verify_dual_signature,
 )
-from ..models.evidence import EvidenceRecord, SignatureRecord
+from kronos360.models.evidence import EvidenceRecord, SignatureRecord
 
 PAYLOAD_ALGO = "SHA3-512"
 HASH_ALGO = "SHA3-512"
@@ -21,7 +23,7 @@ GENESIS_HASH = "0" * 128
 
 
 def _now_iso() -> str:
-    return datetime.now(UTC).isoformat()
+    return datetime.now(timezone.utc).isoformat()
 
 
 def _hash_hex(payload: bytes, algo: str) -> str:
@@ -39,7 +41,7 @@ def _build_record(
     migration_of: str | None = None,
 ) -> EvidenceRecord:
     if responsable is None:
-        responsable = {"id": "DESCONOCIDO", "tipo": "operador-kronos360"}
+        responsable = {"id": "DESCONOCIDO", "tipo": "operador-kronos"}
 
     payload_bytes = canonicalize(content)
     payload_hash = _hash_hex(payload_bytes, PAYLOAD_ALGO)
@@ -68,7 +70,7 @@ def _build_record(
             signer_id=signer.signer_id,
             algorithm=signer.algorithm,
             public_key_hex=signer.public_key_hex(),
-            signature_hex=signer.sign(build_signed_message(hash_registro, signer.algorithm)).hex(),
+            signature_hex=signer.sign(build_signed_message(hash_registro, signer.algorithm)).hex()
         )
         for signer in signers
     )
@@ -99,9 +101,20 @@ def issue_record(
     return _build_record(content, signers, tipo, responsable, prev_hash)
 
 
-def verify_record(
+def migrate_record(record: EvidenceRecord, signers: Iterable[Signer]) -> EvidenceRecord:
+    return _build_record(
+        record.content,
+        signers,
+        tipo=record.tipo,
+        responsable=record.responsable,
+        prev_hash=record.hash_registro,
+        migration_of=record.record_id,
+    )
+
+
+def verify_forensic(
     record: EvidenceRecord,
-    atestaciones: dict | None = None,
+    atestaciones: dict | None = None
 ) -> dict:
     """Verificacion forense con diagnostico por capa y expiracion.
 
@@ -111,12 +124,12 @@ def verify_record(
             Si se pasa, verifica que el registro fue emitido dentro de
             la ventana de validez de cada agente.
     """
-    # Capa 1
+    # Capa 1: Payload
     payload_bytes = canonicalize(record.content)
     payload_recalculado = _hash_hex(payload_bytes, record.payload_hash_algo)
     payload_ok = payload_recalculado == record.payload_hash
 
-    # Capa 2
+    # Capa 2: Registro
     pre_registro = {
         "record_id": record.record_id,
         "tipo": record.tipo,
@@ -132,34 +145,33 @@ def verify_record(
     hash_recalculado = _hash_hex(registro_bytes, record.hash_algo)
     hash_ok = hash_recalculado == record.hash_registro
 
-    # Firmas con domain separation
+    # Capa 3: Firmas
     sig_results = []
     for sig in record.signatures:
         message = build_signed_message(record.hash_registro, sig.algorithm)
         valida = verify_signature(
             sig.algorithm,
             sig.public_key_hex,
+            message,  # Ojo: la función verify_signature espera (algorithm, pubkey, message, sig)
             sig.signature_hex,
-            message,
         )
         vigente = True
         if atestaciones and sig.signer_id in atestaciones:
             valido_hasta = atestaciones[sig.signer_id]
             vigente = record.created_at <= valido_hasta
 
-        sig_results.append(
-            {
-                "signer_id": sig.signer_id,
-                "algorithm": sig.algorithm,
-                "valid": valida,
-                "vigente": vigente,
-            }
-        )
+        sig_results.append({
+            "signer_id": sig.signer_id,
+            "algorithm": sig.algorithm,
+            "valid": valida,
+            "vigente": vigente,
+        })
 
+    # 🚨 FIX ISSUE #6: Exigir MÍNIMO 2 firmas (Fundador + Agente) y que AMBAS sean válidas y vigentes.
+    # Ya no se acepta una sola firma.
     firmas_ok = (
-        len(sig_results) > 0
-        and all(s["valid"] for s in sig_results)
-        and all(s["vigente"] for s in sig_results)
+        len(sig_results) >= 2 
+        and all(r["valid"] and r["vigente"] for r in sig_results)
     )
 
     return {
@@ -176,14 +188,3 @@ def verify_record(
         },
         "firmas": sig_results,
     }
-
-
-def migrate_record(record: EvidenceRecord, signers: Iterable[Signer]) -> EvidenceRecord:
-    return _build_record(
-        record.content,
-        signers,
-        tipo=record.tipo,
-        responsable=record.responsable,
-        prev_hash=record.hash_registro,
-        migration_of=record.record_id,
-    )
