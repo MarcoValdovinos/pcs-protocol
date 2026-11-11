@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════════
+#  ▓▒░ .DOCKERIGNORE · ARKHÉ ZERO · ◯_● ░▒▓
+# ═══════════════════════════════════════════════════════════════
+
+.git
+.gitignore
+.github
+node_modules
+dist
+build
+coverage
+.nyc_output
+
+.env
+.env.*
+*.key
+*.pem
+secrets/
+vault/
+07-LLAVES/
+
+logs
+*.log
+tmp/
+backup/
+
+.vscode
+.idea
+*.swp
+
+archive
+laboratorio
+kodice-secreto
+public/
+
+docs/adr
+tests/e2e
+src/kronos360
+
+README.md
+CHANGELOG.md
+CONTRIBUTORS.md
+AUTHORS.md
+
+# ◯_● · 51/49/100 · KRONOS

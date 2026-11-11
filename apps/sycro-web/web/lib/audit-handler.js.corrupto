@@ -1,0 +1,88 @@
+import { NextResponse } from 'next/server';
+import crypto from 'crypto';
+import { GoogleGenAI } from '@google/genai';
+import { GEMINI_BODY_SCHEMA } from './pqc-audit-schema';
+import { PQC_SYSTEM_PROMPT } from './pqc-system-prompt';
+
+export const maxDuration = 60;
+
+const QV_SECRET = process.env.QV_SECRET;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const FOLIO_RAIZ = "2608276846490-9H.CNLK";
+const AUDITOR = "SYCRO VALDOVINOS · QV-KRONOS-28";
+const MAX_CODE_BYTES = 50000;
+
+function verificarLicencia(folio_cliente, sello_qv, expira_en) {
+  if (!folio_cliente || !sello_qv || !expira_en) return false;
+  if (Date.now() > Number(expira_en)) return false;
+  const payload = `${folio_cliente}|${FOLIO_RAIZ}|${expira_en}`;
+  const esperado = "QV-" + crypto.createHmac('sha256', QV_SECRET).update(payload).digest('hex').slice(0, 16).toUpperCase();
+  if (typeof sello_qv !== 'string' || sello_qv.length !== esperado.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(sello_qv), Buffer.from(esperado));
+}
+
+function derivarCertificable(score, hallazgos) {
+  const criticos = hallazgos.filter(h => h.severidad === 'critica').length;
+  return score >= 80 && criticos === 0;
+}
+
+function derivarFirmaRequerida(hallazgos) {
+  return hallazgos.some(h => h.severidad === 'critica' || h.severidad === 'alta');
+}
+
+export async function POST(request) {
+  const ts = new Date().toISOString();
+  try {
+    if (!GEMINI_API_KEY || !QV_SECRET) {
+      return NextResponse.json({ ok: false, error: "Sistema no configurado" }, { status: 500 });
+    }
+    const body = await request.json().catch(() => null);
+    if (!body) return NextResponse.json({ ok: false, error: "JSON invalido" }, { status: 400 });
+    const { codigo, estandar, folio_cliente, sello_qv, expira_en } = body;
+    if (!codigo || !estandar || !folio_cliente || !sello_qv || !expira_en) {
+      return NextResponse.json({ ok: false, error: "Faltan parametros" }, { status: 400 });
+    }
+    if (!["FIPS_203", "FIPS_204", "FIPS_205"].includes(estandar)) {
+      return NextResponse.json({ ok: false, error: "Estandar no soportado" }, { status: 400 });
+    }
+    if (Buffer.byteLength(codigo, 'utf8') > MAX_CODE_BYTES) {
+      return NextResponse.json({ ok: false, error: "Codigo excede 50KB" }, { status: 413 });
+    }
+    if (!verificarLicencia(folio_cliente, sello_qv, expira_en)) {
+      console.warn(`[${ts}] Licencia rechazada: ${folio_cliente}`);
+      return NextResponse.json({ ok: false, error: "Sello invalido" }, { status: 403 });
+    }
+    const hash_codigo = crypto.createHash('sha256').update(codigo, 'utf8').digest('hex');
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `Estandar: ${estandar}\n\nCodigo:\n\`\`\`\n${codigo}\n\`\`\``,
+      config: {
+        systemInstruction: PQC_SYSTEM_PROMPT,
+        temperature: 0.1,
+        responseMimeType: 'application/json',
+        responseSchema: GEMINI_BODY_SCHEMA,
+      }
+    });
+    if (!response || !response.text) throw new Error("Sin respuesta de Gemini");
+    const bodyAuditado = JSON.parse(response.text);
+    const reporte = {
+      metadata: { fecha: ts, version_estandar: estandar, hash_codigo: `sha256:${hash_codigo}`, auditor: AUDITOR },
+      cumplimiento: bodyAuditado.cumplimiento,
+      hallazgos: bodyAuditado.hallazgos,
+      score: bodyAuditado.score,
+      certificable: derivarCertificable(bodyAuditado.score, bodyAuditado.hallazgos),
+      firma_requerida: derivarFirmaRequerida(bodyAuditado.hallazgos)
+    };
+    const sello_auditoria = "QV-AUDIT-" + crypto.createHmac('sha256', QV_SECRET).update(JSON.stringify(reporte)).digest('hex').slice(0, 16).toUpperCase();
+    console.log(`[${ts}] OK: ${sello_auditoria} score=${reporte.score}`);
+    return NextResponse.json({ ok: true, reporte, sello_auditoria, verificar_en: `/api/validar-auditoria?sello=${sello_auditoria}`, auditor: AUDITOR });
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] ERROR:`, err.message);
+    return NextResponse.json({ ok: false, error: err.message || "Error interno" }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  return NextResponse.json({ ok: true, uso: "POST /api/auditar-pqc", requiere: ["codigo","estandar","folio_cliente","sello_qv","expira_en"], estandares: ["FIPS_203","FIPS_204","FIPS_205"], schema_version: "v2" });
+}

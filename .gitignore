@@ -1,0 +1,12 @@
+# Seguridad extrema - NO SUBIR LLAVES
+*.pem
+*.key
+*.txt
+*keys*
+env-*.txt
+SYNCRO-VALDOVINOS-KEYS-BACKUP.txt
+*.tar.gz
+*.zip
+*.log
+node_modules/
+venv/

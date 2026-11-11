@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANCLAJE ETHEREUM · cimiento</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/hub.css">
+</head>
+<body data-page="cimiento-anclaje" data-theme="terminal-cyan">
+<nav id="nav-system" data-active="hub"></nav>
+
+<main class="doc-container">
+<pre class="ascii-banner">
+   ┌─(kali㉿arkhe-zero)-[~/cimiento/anclaje-ethereum]──┐
+   │   A N C L A J E   E T H E R E U M   ·   ◯_●        │
+   └────────────────────────────────────────────────────┘
+</pre>
+
+<h1>⛓️ Anclaje Ethereum</h1>
+
+<h2>🜂 Qué hace</h2>
+<p>Convierte un Merkle root en una transacción data-only a Ethereum mainnet. El root queda anclado permanentemente.</p>
+
+<h2>🜃 Uso</h2>
+<pre class="terminal-block">
+import { anclar } from './anchor.js';
+
+const doc = 'Acta fundacional ARKHÉ ZERO · 2026';
+const hash = sha3_512(doc);
+const ancla = await anclar({ hash, red: 'mainnet' });
+
+[ ✓✓ ] ◯_● · 51/49/100
+</pre>
+
+<h2>🜄 Redes soportadas</h2>
+<table class="data-table">
+<tbody>
+<tr><td>mainnet</td><td>Chain ID 1</td></tr>
+<tr><td>sepolia</td><td>Chain ID 11155111</td></tr>
+<tr><td>localhost</td><td>Chain ID 31337</td></tr>
+</tbody>
+</table>
+
+<p><a href="manual.html">→ Ver manual completo</a></p>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · cimiento · anclaje-ethereum</p>
+</footer>
+</main>
+
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

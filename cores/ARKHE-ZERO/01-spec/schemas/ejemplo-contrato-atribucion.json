@@ -1,0 +1,130 @@
+{
+  "version": "1.0.0",
+  "agente": {
+    "did": "did:kronos:agent:0x1234567890abcdef1234567890abcdef12345678",
+    "nombre": "Agente de Auditoría Notarial",
+    "version": "1.0.0",
+    "creador_did": "did:kronos:human:0xabcdef1234567890abcdef1234567890abcdef12",
+    "operador_did": "did:kronos:human:0x9876543210fedcba9876543210fedcba98765432",
+    "proveedor_modelo": "local",
+    "fecha_registro": "2026-10-26T00:00:00Z"
+  },
+  "autonomia": {
+    "nivel": "semi-autonomo",
+    "acciones_requieren_aprobacion": [
+      "transferencias > 100 KRN",
+      "modificación de código",
+      "acceso a datos sensibles"
+    ],
+    "limite_operativo": "datos"
+  },
+  "responsabilidad": {
+    "limite_dano_maximo_krn": 10000,
+    "colateral_requerido_krn": 2000,
+    "seguro_aplicable": "kronos-pool-v1",
+    "cobertura_seguro_krn": 50000,
+    "periodo_reclamacion_dias": 90
+  },
+  "atribucion": {
+    "reglas": [
+      {
+        "si": "autonomia == supervisado",
+        "responsable": "creador",
+        "porcentaje": 100
+      },
+      {
+        "si": "autonomia == semi-autonomo AND dano <= colateral",
+        "responsable": "creador",
+        "porcentaje": 70
+      },
+      {
+        "si": "autonomia == autonomo AND dano > colateral",
+        "responsable": "pool + tribunal",
+        "porcentaje": "50/50",
+        "escalada": true
+      }
+    ],
+    "causas_excluyentes": [
+      "fuerza_mayor_verificada",
+      "ataque_externo_documentado"
+    ],
+    "causas_agravantes": [
+      "agente_operando_sin_colateral",
+      "logs_manipulados"
+    ]
+  },
+  "prueba": {
+    "firma_cada_accion": true,
+    "algoritmo_firma": "ECDSA-secp256k1 + ML-DSA-Dilithium",
+    "log_inmutable": true,
+    "anclaje_ethereum": true,
+    "timestamp_rfc3161": true,
+    "merkle_hash_estado": true,
+    "retencion_logs_anos": 10
+  },
+  "resolucion": {
+    "niveles": [
+      {
+        "si": "disputa < 1000 KRN",
+        "nivel": "arbitraje-automatico",
+        "tiempo_maximo": "48h"
+      },
+      {
+        "si": "disputa < 100000 KRN",
+        "nivel": "tribunal-hibrido",
+        "composicion": "3 humanos + 7 agentes"
+      },
+      {
+        "si": "disputa >= 100000 KRN",
+        "nivel": "tribunal-constitucional",
+        "composicion": "7 humanos + 3 agentes"
+      }
+    ],
+    "apelaciones_permitidas": 2,
+    "idioma_oficial": "es"
+  },
+  "revocacion": {
+    "iniciada_por": [
+      "creador",
+      "operador",
+      "tribunal",
+      "guardianes"
+    ],
+    "causas": [
+      "violacion_contrato",
+      "danos_reiterados",
+      "inactividad_90d"
+    ],
+    "procedimiento": "on-chain vote + tribunal approval",
+    "efectos": [
+      "congelacion_colateral",
+      "revocacion_did",
+      "publicacion_en_registro_publico"
+    ],
+    "apelable": true
+  },
+  "garante_legal": {
+    "tipo": "persona_fisica",
+    "nombre": "Marco Antonio Rojas Valdovinos",
+    "identificacion": "RFC: XXXXXXXX123",
+    "firma": {
+      "algoritmo": "ambos",
+      "valor": "a1b2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890a1b2c3d4e5f67890"
+    }
+  },
+  "firmas": {
+    "agente": {
+      "algoritmo": "ambos",
+      "valor": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "creador": {
+      "algoritmo": "ambos",
+      "valor": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "operador": {
+      "algoritmo": "ambos",
+      "valor": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    "rules_hash": "4444444444444444444444444444444444444444444444444444444444444444"
+  }
+}

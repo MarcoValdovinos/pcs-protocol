@@ -1,0 +1,16 @@
+{
+  "ciudadanos": [
+    {
+      "nombre": "Marco Antonio Rojas Valdovinos",
+      "rol": "alcalde",
+      "pacto": "51%",
+      "llave": "humano-51@YHDRYH-92CE"
+    },
+    {
+      "nombre": "OBSERVER-49",
+      "rol": "gobernador",
+      "pacto": "49%",
+      "did": "did:key:z6MkevRTFfNE8SeBgMn8mzzy6uMzFrhvDryRHTjkKCuWm54Q"
+    }
+  ]
+}

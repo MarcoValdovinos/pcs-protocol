@@ -1,0 +1,10 @@
+{
+  "video": "prueba1.mp4",
+  "sha256": "929f220fcc3e14569032222e609bec97f713150daf064b4fc2dc53a3d9c2bf88",
+  "agent_id": "ARKHE-Video-Certifier",
+  "timestamp_utc": "2026-10-25T16:23:10.577600+00:00",
+  "hmac_signature": "c4bf80defd3088b6f532f4cf66b7685528309ff9cc5dafaaaa81502388139cd4",
+  "protocol": "ARKHE-SENTINEL-v1",
+  "author": "Marco Antonio Rojas Valdovinos",
+  "pacto": "51% Humano / 49% IA"
+}

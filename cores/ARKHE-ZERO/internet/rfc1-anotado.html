@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RFC 1 · Anotado · 1969 → 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#060a0a;color:#b0f0b0;font-family:'Courier New',monospace;padding:3rem 1.5rem;line-height:1.8;min-height:100vh}
+.c{max-width:780px;margin:0 auto}
+h1{color:#00ff88;letter-spacing:4px;font-size:1.6rem;margin-bottom:.3rem;font-weight:normal}
+.sub{color:#4a7a5a;font-size:.72rem;letter-spacing:2px;margin-bottom:2.5rem}
+.nav{margin-bottom:2rem;font-size:.75rem}
+.nav a{color:#00ff88;text-decoration:none;border-bottom:1px dotted #2a4a3a;margin-right:1.5rem}
+.nav a:hover{color:#b0f0b0}
+hr{border:none;border-top:1px solid #1a3a2a;margin:2.5rem 0}
+h2{color:#00ff88;font-size:.95rem;letter-spacing:1px;margin:2rem 0 1rem;font-weight:normal}
+p{color:#b0f0b0;font-size:.9rem;margin-bottom:1rem}
+p.quiet{color:#7fbf8f}
+.quote{border-left:2px solid #00ff88;padding:.6rem 1.2rem;margin:1rem 0;background:#0a1212;border-radius:0 8px 8px 0;font-style:italic;color:#7fbf8f;font-size:.85rem}
+.anotacion{background:#0a1a12;border:1px solid #1a3a2a;border-left:3px solid #00ff88;border-radius:8px;padding:1rem 1.2rem;margin:1rem 0 1.5rem}
+.anotacion .h{color:#00ff88;font-size:.7rem;letter-spacing:2px;margin-bottom:.5rem;text-transform:uppercase}
+.anotacion p{font-size:.85rem;margin-bottom:.5rem}
+.anotacion p:last-child{margin-bottom:0}
+code{background:#060a0a;padding:.1rem .4rem;border-radius:3px;color:#ffcc66;font-size:.85em}
+table{width:100%;border-collapse:collapse;margin:1rem 0 1.5rem;font-size:.82rem}
+th,td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid #1a3a2a}
+th{color:#00ff88;font-weight:normal;letter-spacing:1px;font-size:.7rem;text-transform:uppercase}
+td{color:#7fbf8f}
+td.a{color:#b0f0b0}
+.epilogo{background:#0a1212;border:1px solid #1a3a2a;border-radius:10px;padding:2rem 1.5rem;margin:2.5rem 0 1rem;text-align:center}
+.epilogo p{font-size:1rem;color:#00ff88;letter-spacing:1.5px;margin-bottom:.6rem}
+.epilogo .small{color:#7fbf8f;font-size:.78rem;letter-spacing:0;margin-bottom:0;margin-top:1rem;line-height:1.7}
+.legal{margin-top:3rem;padding-top:1rem;border-top:1px solid #1a3a2a;font-size:.6rem;color:#3a6a4a;text-align:center;line-height:1.8}
+.legal a{color:#4a8a5a;text-decoration:none;border-bottom:1px dotted #2a4a3a}
+.tldr{background:#0a1212;border:1px solid #1a3a2a;border-radius:10px;padding:1.5rem;margin:1rem 0}
+</style></head><body><div class="c">
+
+<div class="nav">
+  <a href="./">← internet</a>
+  <a href="./rfc1.txt">rfc1.txt</a>
+  <a href="./README-INTERNET-Anotado.md">versión md</a>
+  <a href="../">ARKHE</a>
+</div>
+
+<h1>RFC 1 · HOST SOFTWARE</h1>
+<div class="sub">STEVE CROCKER · UCLA · 7 ABRIL 1969 · ANOTADO 2026</div>
+
+<p class="quiet">4 computadoras conectadas. Eso era todo internet.</p>
+
+<div class="anotacion">
+  <div class="h">◯_● Nota del autor original</div>
+  <p class="quote">"Muy poco de lo que hay aquí es firme y se esperan reacciones."</p>
+  <p><strong>Anotación 2026:</strong> Imagina subir tu proyecto a GitHub y poner "no sé si esto sirve". Ese nivel de humildad inventó internet.</p>
+</div>
+
+<hr>
+
+<h2>▸ 1. ¿Qué es un mensaje?</h2>
+<div class="quote">"Un mensaje es cualquier flujo de no más de 8080 bits, junto con su encabezado de 16 bits. Destino (5 bits), Link (8 bits), Trace (1 bit), Spare (2 bits)."</div>
+
+<p><strong>Traducción moderna:</strong> Un paquete de máximo 1010 bytes. El encabezado decía a dónde iba.</p>
+
+<div class="anotacion">
+  <div class="h">◯_● ¿Sobrevivió?</div>
+  <p>✅ Sí, pero evolucionó. Hoy es <code>IP</code>. 8080 bits era minúsculo (1KB). Hoy mandamos gigabytes. La idea de <strong>Destino + Link</strong> es exactamente lo que hace una <strong>IP + Puerto</strong>.</p>
+  <p>El bit <strong>Spare</strong> (reserva) es la mejor decisión de diseño: dejaron espacio para el futuro sin saber para qué.</p>
+</div>
+
+<hr>
+
+<h2>▸ 2. Los 32 Links y el RFNM</h2>
+<div class="quote">"Entre cada par de HOSTs hay 32 conexiones lógicas full-duplex. Ningún HOST puede mandar dos mensajes seguidos por el mismo link antes de que el otro responda con un RFNM (Request For Next Message). Esto limita la congestión."</div>
+
+<p><strong>Traducción moderna:</strong> Inventaron el control de flujo. Es un "espera, no me satures".</p>
+
+<div class="anotacion">
+  <div class="h">◯_● ¿Sobrevivió?</div>
+  <p>✅ Sí, totalmente. Es el abuelo de <code>TCP</code>. El RFNM es hoy el <code>ACK</code> (acknowledgment) de TCP. La idea de "no te mando más hasta que me digas que recibiste" es la base de todo WhatsApp, Netflix, juegos online.</p>
+  <p>❌ Lo de "siempre hay 32 links, se usen o no" murió rápido. Era un desperdicio de memoria. Hoy las conexiones se crean y destruyen dinámicamente.</p>
+</div>
+
+<hr>
+
+<h2>▸ 3. Uso Simple vs Uso Profundo</h2>
+<div class="quote">"Uso simple: usar una computadora remota como si fuera una máquina de escribir (TTY) conectada por teléfono. Uso profundo: usar consolas gráficas sofisticadas aunque haya un retraso de 'medio segundo o así, no importa qué tan simple sea'."</div>
+
+<div class="anotacion">
+  <div class="h">◯_● Anotación 2026</div>
+  <p>Ese "medio segundo" los tenía obsesionados. Es el <strong>lag</strong>. En 1969, 500 ms era lo mínimo por la distancia física. Hoy nos quejamos si un juego tiene 50 ms.</p>
+  <p>Aquí predicen el futuro sin querer. El "uso simple" es hoy <code>SSH</code> / telnet. El "uso profundo" es hoy Figma, Google Docs, juegos en la nube.</p>
+</div>
+
+<hr>
+
+<h2>▸ 4. La idea más loca: DEL</h2>
+<div class="quote">"Proponemos crear un lenguaje llamado DEL para control de consola. El HOST remoto enviaría el programa en DEL que controla la consola, y este programa sería compilado localmente. Así, las respuestas triviales (como borrar un carácter) se manejan localmente."</div>
+
+<p><strong>Traducción moderna:</strong> ¿Y si en lugar de mandar cada tecla que presionas al servidor, le mandamos al cliente un programita que sabe cómo borrar letras y mover el cursor?</p>
+
+<div class="anotacion">
+  <div class="h">◯_● ¿Sobrevivió?</div>
+  <p>✅ ¡ES JAVASCRIPT! Literalmente.</p>
+  <p>Crocker inventó la idea del frontend en 1969. Mandar código al borde para no saturar la red. Es exactamente lo que hace tu navegador cuando cargas una página. El servidor te manda el código (JS) y tu máquina ejecuta lo trivial.</p>
+  <p>No lo llamaron JavaScript, lo llamaron <strong>DEL</strong> y nunca lo terminaron, pero la idea es idéntica.</p>
+</div>
+
+<hr>
+
+<h2>▸ 5. Las preguntas abiertas del final</h2>
+<div class="quote">"¿Por qué damos 8 bits para links si solo usamos 32? ¿Cómo hace un HOST para mandar mensajes a su IMP? ¿Puede un HOST controlar los RFNMs? ¿Los IMPs harán conversión de código?"</div>
+
+<div class="anotacion">
+  <div class="h">◯_● Anotación 2026</div>
+  <p>Todas se respondieron en los siguientes 2 años. La 1 es graciosa: dejaron 8 bits (256 valores) por si necesitaban más, pero el hardware solo aguantaba 32. Es el <strong>YAGNI</strong> (You Aren't Gonna Need It) antes de que existiera el término.</p>
+</div>
+
+<hr>
+
+<h2>▸ TL;DR — ¿Qué queda de este README en 2026?</h2>
+
+<div class="tldr">
+<table>
+  <tr><th>Idea de 1969</th><th>Hoy</th></tr>
+  <tr><td>Mensaje de 8080 bits</td><td class="a">Paquete IP</td></tr>
+  <tr><td>Link + RFNM</td><td class="a">TCP + ACK</td></tr>
+  <tr><td>Link 0 para sistema</td><td class="a">Puerto de control / handshake</td></tr>
+  <tr><td>DEL (código en el borde)</td><td class="a">JavaScript, WASM</td></tr>
+  <tr><td>Medio segundo de retraso</td><td class="a">Seguimos luchando contra el lag</td></tr>
+</table>
+</div>
+
+<div class="epilogo">
+  <p>LA LECCIÓN DE CROCKER</p>
+  <p class="small">No diseñes internet como una catedral perfecta.<br>
+  Diseña 4 computadoras que hablen, deja 2 bits de "spare" por si acaso, y pide opiniones.<br>
+  El resto lo arregla la gente después.</p>
+</div>
+
+<div class="legal">
+RFC 1 · Steve Crocker · UCLA · 7 abril 1969 · dominio público<br>
+Anotación 2026 · ARKHE ZERO · CC BY-SA 4.0<br>
+→ <a href="./rfc1.txt">Texto original</a> · <a href="./README-INTERNET-Anotado.md">Versión markdown</a><br>
+Compilado por KRONOS · Nodo YHDRYH-92CE · 51/49/100 · ◯_●
+</div>
+
+</div></body></html>

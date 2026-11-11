@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════════
+   ARKHÉ ZERO · ANIMACIONES
+   Reveal, stagger, transiciones compartidas
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Reveal base ────────────────────────────────────────────── */
+.world,
+.capa-card,
+.portal-card {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.world.on,
+.capa-card.on,
+.portal-card.on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Fade in de secciones ───────────────────────────────────── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Glow pulse (para elementos activos) ────────────────────── */
+@keyframes glow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px var(--glow));
+  }
+  50% {
+    filter: drop-shadow(0 0 24px var(--glow-strong));
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ── Float (para íconos) ────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* ── Rotación lenta ─────────────────────────────────────────── */
+@keyframes rotate-slow {
+  to { transform: rotate(360deg); }
+}
+
+.rotate-slow {
+  animation: rotate-slow 60s linear infinite;
+}
+
+/* ── Shimmer (para lines dorados) ───────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .world, .capa-card, .portal-card {
+    opacity: 1;
+    transform: none;
+  }
+  .glow-pulse,
+  .float,
+  .rotate-slow,
+  .shimmer {
+    animation: none;
+  }
+}

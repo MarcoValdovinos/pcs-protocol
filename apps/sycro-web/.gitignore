@@ -1,0 +1,5 @@
+.vercel
+.env*
+.qv-secret
+gen-qv.js
+.next

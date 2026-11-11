@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holographic Card Test</title>
+<style>
+  body {
+    background-color: #05040a;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; margin: 0; font-family: monospace;
+    perspective: 1000px; /* Necesario para el efecto 3D */
+  }
+
+  /* La Tarjeta */
+  .holo-card {
+    width: 300px;
+    height: 400px;
+    background: #111;
+    border-radius: 20px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  /* El brillo holográfico (Capa sobre la tarjeta) */
+  .holo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(125deg, 
+      transparent 0%, 
+      rgba(0, 242, 254, 0.1) 30%, 
+      rgba(255, 159, 28, 0.1) 50%, 
+      transparent 70%);
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .holo-card:hover::before {
+    opacity: 1;
+  }
+
+  .holo-card:hover {
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(0, 242, 254, 0.5), 0 0 30px rgba(0, 242, 254, 0.2);
+  }
+
+  /* Contenido interno */
+  .card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    transform: translateZ(30px); /* Hace que el texto flote */
+  }
+  .card-title { color: #00f2fe; font-size: 18px; font-weight: bold; margin: 0; text-shadow: 0 0 10px rgba(0,242,254,0.5); }
+  .card-icon { color: #ff9f1c; font-size: 24px; }
+  
+  .card-body {
+    transform: translateZ(40px);
+  }
+  .card-body p { color: #a29cb8; font-size: 12px; line-height: 1.5; }
+  
+  .card-footer {
+    transform: translateZ(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 15px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .status-badge {
+    background: rgba(0, 255, 102, 0.1); color: #00ff66;
+    padding: 4px 10px; border-radius: 20px; font-size: 10px;
+    border: 1px solid #00ff66;
+  }
+</style>
+</head>
+<body>
+
+  <!-- La tarjeta que reacciona al mouse -->
+  <div class="holo-card" id="card">
+    <div class="card-header">
+      <h3 class="card-title">QUANTUM ART</h3>
+      <span class="card-icon">💠</span>
+    </div>
+    <div class="card-body">
+      <p>Generador de certificados criptográficos con sello holográfico, fondo animado y exportación PNG/PDF.</p>
+      <p style="color:#58536e; font-size:10px; margin-top:10px;">ID: 2607146379465</p>
+    </div>
+    <div class="card-footer">
+      <span class="status-badge">● LIVE</span>
+      <span style="color:#58536e; font-size:10px;">V14.0</span>
+    </div>
+  </div>
+
+  <script>
+    // JS ligero solo para calcular el ángulo del mouse/dedo
+    const card = document.getElementById('card');
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -15; // Inclinación vertical
+      const rotateY = ((x - centerX) / centerX) * 15;  // Inclinación horizontal
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `rotateX(0) rotateY(0)`;
+      card.style.transition = 'transform 0.5s ease'; // Suavizar el regreso
+    });
+    
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'none'; // Quitar transición para movimiento fluido
+    });
+  </script>
+</body>
+</html>

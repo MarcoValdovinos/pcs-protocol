@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual · Storage Dexie</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body data-page="cimiento-storage-manual" data-theme="terminal-amber">
+<nav id="nav-system" data-active="hub"></nav>
+<main class="doc-container">
+<pre class="ascii-banner">
+   M A N U A L   ·   S T O R A G E   D E X I E
+</pre>
+
+<h1>📘 Manual · Storage Dexie</h1>
+
+<h2>🜂 Base de datos local</h2>
+<pre class="terminal-block">
+Nombre: arkhe-zero-cimiento
+Store:  documentos
+Index:  hash (keyPath)
+Volumen:~ 50MB típico
+[ ✓✓ ] Local-First · ◯_● · 51/49/100
+</pre>
+
+<h2>🜃 Operaciones</h2>
+<ul>
+  <li><code>guardar({hash, contenido, firma})</code> · insert/upsert</li>
+  <li><code>obtener(hash)</code> · read por hash</li>
+  <li><code>listar()</code> · read all</li>
+  <li><code>borrar(hash)</code> · nunca borra realmente, superpone</li>
+</ul>
+
+<h2>🜄 Privacidad</h2>
+<p>Todo vive en IndexedDB del navegador. Nunca sale sin consentimiento.</p>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · cimiento · storage-dexie · manual</p>
+</footer>
+</main>
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

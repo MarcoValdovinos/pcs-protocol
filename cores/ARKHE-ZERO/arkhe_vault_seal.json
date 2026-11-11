@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-10-26T09:38:09.797810",
+  "fuente": "https://vault.fbi.gov",
+  "total_registros": 10,
+  "sellos": [
+    {
+      "titulo": "10.23.26Reuben Sturman Part 04",
+      "hash": "d6d5bbcce70bd872..."
+    },
+    {
+      "titulo": "10.22.26John Holmes (Final)",
+      "hash": "86722152c1234b8a..."
+    },
+    {
+      "titulo": "10.22.26Abbott Simon (Final)",
+      "hash": "f2bb9ff20cb13d93..."
+    },
+    {
+      "titulo": "10.22.26Roy McGrath (Final)",
+      "hash": "39a990f75c11139c..."
+    },
+    {
+      "titulo": "10.22.26Robert Pastor (Final)",
+      "hash": "42264eb15d2089ff..."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+name: Security Scan
+on: [push]
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+            - uses: actions/checkout@v4
+            - run: semgrep --config=auto
+            - uses: aquasecurity/trivy-action@master
+            - uses: zaproxy/action-full-scan@v0.8.0

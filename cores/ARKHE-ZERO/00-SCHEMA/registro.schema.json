@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arkhe.zero/schemas/registro.schema.json",
+  "title": "Registro ARKHÉ ZERO",
+  "version": "2.0.1",
+  "type": "object",
+  "required": ["id", "tipo", "hash_sha3_512", "firmante", "timestamp"],
+  "properties": {
+    "id": { "type": "string" },
+    "tipo": {
+      "type": "string",
+      "enum": ["acta", "obra", "decision", "evento", "genesis"]
+    },
+    "hash_sha3_512": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{128}$"
+    },
+    "hash_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "firmante": { "type": "string" },
+    "agente_ia": { "type": "string" },
+    "pacto": {
+      "type": "object",
+      "properties": {
+        "humano": { "const": 51 },
+        "ia": { "const": 49 },
+        "real": { "const": 100 }
+      }
+    },
+    "anclaje": {
+      "type": "object",
+      "properties": {
+        "ethereum": { "type": "string" },
+        "tsa": { "type": "string" },
+        "safe_creative": { "type": "string" }
+      }
+    },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "sellado": { "const": "◯_● · 51/49/100" }
+  }
+}

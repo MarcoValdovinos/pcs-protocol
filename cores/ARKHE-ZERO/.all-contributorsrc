@@ -1,0 +1,21 @@
+{
+  "files": ["CONTRIBUTORS.md"],
+  "imageSize": 100,
+  "commit": false,
+  "contributorsPerLine": 7,
+  "linkToUsage": true,
+  "projectName": "ARKHÉ ZERO",
+  "projectOwner": "marcojas17",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "contributors": [
+    {
+      "login": "marcojas17",
+      "name": "Marco Antonio Rojas Valdovinos",
+      "avatar_url": "https://github.com/marcojas17.png",
+      "profile": "https://github.com/marcojas17",
+      "contributions": ["code", "design", "doc", "ideas", "maintenance", "projectManagement"]
+    }
+  ]
+}

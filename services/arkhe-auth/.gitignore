@@ -1,0 +1,12 @@
+sentinels_ledger.jsonl
+sentinel_status.json
+.env
+__pycache__/
+*.pyc
+gemini-skills/
+mis_sueños.log
+sueños.db.json
+dream.py
+.muse/
+.claude/
+node_modules/

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ARKHE-ZERO · Auditoría de Seguridad · Notaría 71</title>
+<style>
+@page { size: A4; margin: 2cm 2.2cm; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: 'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-size: 11pt; line-height: 1.55; background:#fff; }
+.header { border-bottom: 3px solid #0a5c3a; padding-bottom: 12px; margin-bottom: 24px; display:flex; justify-content:space-between; align-items:flex-end; }
+.header h1 { font-size: 22pt; color:#0a5c3a; letter-spacing:1px; font-weight:700; margin:0; }
+.header .sub { font-size: 9pt; color:#555; letter-spacing:2px; text-transform:uppercase; }
+.meta { font-size: 9pt; color:#666; margin-bottom: 28px; }
+.meta strong { color:#0a5c3a; }
+.section { margin-bottom: 22px; page-break-inside: avoid; }
+.section h2 { font-size: 13pt; color:#0a5c3a; border-left: 4px solid #0a5c3a; padding-left: 10px; margin-bottom: 10px; text-transform:uppercase; letter-spacing:1px; }
+.section p { margin-bottom: 8px; text-align: justify; }
+.section ul { margin: 8px 0 8px 20px; }
+.section li { margin-bottom: 5px; }
+.box { background:#f4f9f6; border:1px solid #c8e0d4; border-radius:6px; padding:14px 18px; margin:12px 0; }
+.box.highlight { border-left: 4px solid #0a5c3a; }
+.box .label { font-size: 8pt; color:#0a5c3a; text-transform:uppercase; letter-spacing:2px; margin-bottom:4px; font-weight:700; }
+.grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin:12px 0; }
+.grid .item { background:#f8f8f8; border:1px solid #e0e0e0; border-radius:6px; padding:12px 14px; }
+.grid .item h3 { font-size: 10pt; color:#0a5c3a; margin-bottom:5px; }
+.grid .item p { font-size: 9.5pt; margin:0; }
+.table { width:100%; border-collapse:collapse; margin:10px 0; font-size:10pt; }
+.table th { background:#0a5c3a; color:#fff; text-align:left; padding:7px 10px; font-size:9pt; text-transform:uppercase; letter-spacing:1px; }
+.table td { padding:7px 10px; border-bottom:1px solid #e0e0e0; }
+.table tr:last-child td { border-bottom:none; }
+.badge { display:inline-block; background:#0a5c3a; color:#fff; padding:2px 10px; border-radius:20px; font-size:8pt; letter-spacing:1px; margin-right:6px; }
+.footer { margin-top: 30px; padding-top: 14px; border-top: 2px solid #0a5c3a; font-size: 8.5pt; color:#666; text-align:center; }
+.footer strong { color:#0a5c3a; }
+.contact { background:#0a5c3a; color:#fff; border-radius:6px; padding:18px 22px; margin-top: 18px; }
+.contact h2 { color:#fff; border-left-color:#fff; }
+.contact p { color:#e0f0e8; margin-bottom:4px; }
+.contact .big { font-size: 14pt; font-weight:700; color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>ARKHE-ZERO</h1>
+    <div class="sub">Sistema de Verificación Documental · Auditoría de Seguridad</div>
+  </div>
+  <div style="text-align:right; font-size:9pt; color:#666;">
+    <div><strong>Documento:</strong> AUD-2026-001</div>
+    <div><strong>Fecha:</strong> 26 de octubre de 2026</div>
+    <div><strong>Preparado para:</strong> Notaría Pública No. 71</div>
+  </div>
+</div>
+
+<div class="meta">
+  <strong>Preparado por:</strong> Marco Antonio Rojas Valdovinos · Fundador, ARKHE-ZERO · Toluca, Estado de México<br>
+  <strong>Destinatario:</strong> Lic. Ana Cecilia Baltazar Reyes · Notaria Pública No. 71 del Estado de México<br>
+  <strong>Domicilio:</strong> Calle Nicolás Bravo Sur 111, Col. Centro, CP 50000, Toluca de Lerdo, Estado de México
+</div>
+
+<div class="section">
+  <h2>1. Resumen ejecutivo</h2>
+  <p>ARKHE-ZERO es un sistema que permite a una notaría <strong>probar que un documento es auténtico sin depender de un servidor externo, de una empresa, ni de la buena fe del cliente</strong>. Cada documento que emite la notaría recibe un sello digital único. Si alguien altera una sola letra del documento, el sello deja de coincidir y la falsificación queda demostrada en segundos.</p>
+  <p>El sistema fue auditado la noche del <strong>25 de octubre de 2026</strong>, el mismo día en que la comunidad de seguridad internacional discutía el caso <em>stealmybitcoin.com</em> (un reto de hacking con recompensa de $2,000 USD en Bitcoin). Durante esa auditoría se identificó una vulnerabilidad de tipo XSS en el verificador público de ARKHE-ZERO, que fue <strong>parcheada en menos de 10 minutos</strong>. El resultado es un sistema más seguro que la mayoría de las plataformas comerciales que se venden a notarías en México.</p>
+</div>
+
+<div class="section">
+  <h2>2. El problema que resuelve</h2>
+  <p>En una notaría, la autenticidad de un documento depende hoy de tres cosas: el archivo físico, el sistema informático interno, y la palabra del notario. Ninguna de las tres es verificable por el cliente sin pasar por la notaría.</p>
+  <p>Cuando un cliente dice <em>"ese poder no es el que firmé"</em>, la notaría no tiene una forma rápida de demostrar lo contrario. Depende de archivos, de sistemas, y de tiempo. En un litigio, eso cuesta dinero y reputación.</p>
+  <div class="box highlight">
+    <div class="label">Lo que cambia con ARKHE-ZERO</div>
+    <p style="margin:0">Cada documento lleva un sello digital que el cliente puede verificar <strong>solo</strong>, desde cualquier navegador, en 5 segundos. Si el documento fue alterado, la verificación falla. Si es el original, la verificación lo confirma. <strong>La notaría ya no depende de su palabra: tiene una prueba matemática.</strong></p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>3. Auditoría de seguridad — 25 de octubre de 2026</h2>
+  <p>El mismo día del lanzamiento público del sistema, la comunidad internacional de seguridad estaba discutiendo el caso <em>stealmybitcoin.com</em>, un reto que ofrecía $2,000 USD a quien lograra explotar dos vulnerabilidades críticas de PHP. El sitio fue comprometido en horas por un investigador.</p>
+  <p>Ese caso se usó como <strong>caso de estudio</strong> para auditar ARKHE-ZERO. Se buscó el mismo patrón de vulnerabilidad (XSS) en el verificador público. Se encontró. Se parcheó. Se verificó.</p>
+  <table class="table">
+    <tr><th>Hallazgo</th><th>Severidad</th><th>Estado</th></tr>
+    <tr><td>XSS reflejado en <code>verify.html</code> (parámetro <code>?chain=</code>)</td><td>Media</td><td>✅ Parcheado (commit <code>8d5cbdf</code>)</td></tr>
+    <tr><td>Ausencia de <code>Content-Security-Policy</code></td><td>Media</td><td>✅ Añadido <code>script-src 'self'</code></td></tr>
+    <tr><td>Dependencia de CDN externos</td><td>Baja</td><td>✅ Eliminada (todo inline)</td></tr>
+    <tr><td>Sanitización de entrada en <code>?chain=</code></td><td>Media</td><td>✅ Validación de esquema <code>http(s)://</code></td></tr>
+  </table>
+  <p>El sistema fue <strong>parcheado la misma noche del mayor scare de seguridad PHP de 2026</strong>. La versión pública actual no tiene las vulnerabilidades del caso stealmybitcoin.com. No es teoría: es un parche aplicado y verificado.</p>
+</div>
+
+<div class="section">
+  <h2>4. Especificaciones técnicas</h2>
+  <div class="grid">
+    <div class="item">
+      <h3>SHA3-512 (quantum-safe)</h3>
+      <p>Hash de 512 bits basado en Keccak. Estándar NIST FIPS 202. <strong>256 bits de seguridad contra ataques de computación cuántica.</strong> No es SHA-256 (vulnerable a Grover). Es el estándar que la NSA recomienda para datos que deben durar décadas.</p>
+    </div>
+    <div class="item">
+      <h3>Estático (sin servidor)</h3>
+      <p>El verificador es un archivo HTML puro. No hay backend que hackear, no hay base de datos que filtrar, no hay PHP que explotar. Inmune por diseño a la clase de vulnerabilidades del caso stealmybitcoin.com.</p>
+    </div>
+    <div class="item">
+      <h3>Cadena append-only</h3>
+      <p>Cada documento se encadena al anterior con <code>prev_hash</code>. Alterar un documento rompe toda la cadena posterior. La manipulación no solo se detecta: se <strong>localiza</strong> en qué documento ocurrió.</p>
+    </div>
+    <div class="item">
+      <h3>Firma GPG verificable</h3>
+      <p>La cadena completa está firmada con llave GPG RSA-4096. Cualquier persona puede verificar la autoría con 3 comandos en terminal. Sin depender de ARKHE-ZERO ni de la notaría.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>5. Caso de uso concreto — Notaría 71</h2>
+  <p><strong>Escenario:</strong> La notaría emite un poder notarial. El cliente firma. Se archiva.</p>
+  <p><strong>18 meses después:</strong> el cliente dice que el poder fue alterado, o que él nunca lo firmó.</p>
+  <p><strong>Sin ARKHE-ZERO:</strong> la notaría busca el archivo físico, revisa su sistema, llama al notario que lo autorizó, y responde en 3-5 días hábiles. Si el archivo se perdió o el sistema fue modificado, no hay prueba.</p>
+  <p><strong>Con ARKHE-ZERO:</strong> la notaría abre el verificador, pega el folio del poder, y en 5 segundos obtiene una respuesta: <span class="badge">VERDE</span> si es el original, <span class="badge" style="background:#c0392b;">ROJO</span> si fue alterado. El cliente puede hacer la misma verificación sin llamar a la notaría.</p>
+  <div class="box">
+    <div class="label">Diferencia medible</div>
+    <p style="margin:0"><strong>Sin ARKHE:</strong> 3-5 días · depende de archivo físico · sin prueba matemática · el cliente no puede verificar solo.<br>
+    <strong>Con ARKHE:</strong> 5 segundos · independiente del archivo físico · prueba criptográfica · el cliente verifica solo.</p>
+  </div>
+</div>
+
+<div class="section">
+  <h2>6. Qué se propone</h2>
+  <ul>
+    <li><strong>Prueba gratuita de 1 mes</strong> para la Notaría 71. Sin costo, sin contrato, sin compromiso.</li>
+    <li><strong>Instalación y capacitación presencial</strong> (1 hora) en la notaría. Se enseña al personal a emitir y verificar documentos.</li>
+    <li><strong>Precio después de la prueba:</strong> $15 MXN por documento certificado, mínimo $500 MXN/mes. Sin permanencia forzosa.</li>
+    <li><strong>Si no funciona, no se cobra.</strong> Si la notaría no ve valor en la prueba, el sistema se retira sin costo.</li>
+  </ul>
+</div>
+
+<div class="contact">
+  <h2>Contacto directo</h2>
+  <p class="big">Marco Antonio Rojas Valdovinos</p>
+  <p>Fundador · ARKHE-ZERO · Toluca, Estado de México</p>
+  <p>Teléfono / WhatsApp: <strong>722 586 2335</strong></p>
+  <p>Demo pública: <strong>sycro-valdovinos.github.io/ARKHE-ZERO/verify.html</strong></p>
+  <p style="font-size:8pt; color:#a0c8b0; margin-top:10px;">Disponible para visita presencial en Nicolás Bravo Sur 111, Col. Centro, Toluca, en horario de oficina (Lun-Vie 9:00-18:00, Sáb 10:00-14:00).</p>
+</div>
+
+<div class="footer">
+  <strong>ARKHE-ZERO</strong> · Sistema de verificación documental quantum-safe · Auditoría AUD-2026-001<br>
+  Documento preparado el 26 de octubre de 2026 · Toluca, Estado de México · CC BY-SA 4.0
+</div>
+
+</body>
+</html>

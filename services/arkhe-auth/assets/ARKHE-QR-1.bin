@@ -1,0 +1,12 @@
+"piel_global": "Pillow",
+  "consenso": "51/49",
+  "triangulo": {
+    "mesa": "IDEA",
+    "corral": "PRUEBA-PIL",
+    "homestead2": "CITY-JSON"
+  }
+}
+{
+  "ciudad": "VALDOVINOS-ARKHE",
+  "archivo": "city/manifest.city.json",
+  "sha256": "23c221280b

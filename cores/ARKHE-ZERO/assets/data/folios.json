@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "seal": "◯_● · 51/49/100",
+  "prefix": "ARKHE",
+  "next_number": 2,
+  "folios": [
+    {
+      "folio": "ARKHE-2026-0001",
+      "tipo": "genesis",
+      "hash": "f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112",
+      "fecha": "2026-01-01T00:00:00Z",
+      "firmante": "Marco Antonio Rojas Valdovinos"
+    }
+  ]
+}

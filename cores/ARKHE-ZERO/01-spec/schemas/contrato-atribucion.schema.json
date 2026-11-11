@@ -1,0 +1,199 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://arkhe-zero.dev/schemas/contrato-atribucion.schema.json",
+  "title": "Contrato de Atribución KRONOS v1.0",
+  "description": "Estructura del Contrato de Atribución según 02-legal/agent-liability-framework.md Sección 3.2",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["version", "agente", "autonomia", "responsabilidad", "atribucion", "prueba", "resolucion", "revocacion", "garante_legal", "firmas"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^1\\.0\\.0$",
+      "description": "Versión del schema"
+    },
+    "agente": {
+      "type": "object",
+      "required": ["did", "nombre", "version", "creador_did", "operador_did", "proveedor_modelo", "fecha_registro"],
+      "properties": {
+        "did": { "$ref": "#/definitions/did" },
+        "nombre": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "creador_did": { "$ref": "#/definitions/did" },
+        "operador_did": { "$ref": "#/definitions/did" },
+        "proveedor_modelo": { "type": "string", "enum": ["openai", "anthropic", "google", "meta", "local", "otro"] },
+        "fecha_registro": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "autonomia": {
+      "type": "object",
+      "required": ["nivel", "acciones_requieren_aprobacion", "limite_operativo"],
+      "properties": {
+        "nivel": { "type": "string", "enum": ["supervisado", "semi-autonomo", "autonomo"] },
+        "acciones_requieren_aprobacion": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "limite_operativo": { "type": "string", "enum": ["financiero", "datos", "fisico", "mixto"] }
+      },
+      "additionalProperties": false
+    },
+    "responsabilidad": {
+      "type": "object",
+      "required": ["limite_dano_maximo_krn", "colateral_requerido_krn", "seguro_aplicable", "cobertura_seguro_krn", "periodo_reclamacion_dias"],
+      "properties": {
+        "limite_dano_maximo_krn": { "$ref": "#/definitions/krn_amount" },
+        "colateral_requerido_krn": { "$ref": "#/definitions/krn_amount" },
+        "seguro_aplicable": { "type": "string" },
+        "cobertura_seguro_krn": { "$ref": "#/definitions/krn_amount" },
+        "periodo_reclamacion_dias": { "type": "integer", "minimum": 1, "maximum": 3650 }
+      },
+      "additionalProperties": false
+    },
+    "atribucion": {
+      "type": "object",
+      "required": ["reglas", "causas_excluyentes", "causas_agravantes"],
+      "properties": {
+        "reglas": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/regla_atribucion" }
+        },
+        "causas_excluyentes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "causas_agravantes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "prueba": {
+      "type": "object",
+      "required": ["firma_cada_accion", "algoritmo_firma", "log_inmutable", "anclaje_ethereum", "timestamp_rfc3161", "merkle_hash_estado", "retencion_logs_anos"],
+      "properties": {
+        "firma_cada_accion": { "type": "boolean" },
+        "algoritmo_firma": { "type": "string" },
+        "log_inmutable": { "type": "boolean" },
+        "anclaje_ethereum": { "type": "boolean" },
+        "timestamp_rfc3161": { "type": "boolean" },
+        "merkle_hash_estado": { "type": "boolean" },
+        "retencion_logs_anos": { "type": "integer", "minimum": 1, "maximum": 100 }
+      },
+      "additionalProperties": false
+    },
+    "resolucion": {
+      "type": "object",
+      "required": ["niveles", "apelaciones_permitidas", "idioma_oficial"],
+      "properties": {
+        "niveles": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/definitions/nivel_resolucion" }
+        },
+        "apelaciones_permitidas": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "idioma_oficial": { "type": "string", "enum": ["es", "en", "auto"] }
+      },
+      "additionalProperties": false
+    },
+    "revocacion": {
+      "type": "object",
+      "required": ["iniciada_por", "causas", "procedimiento", "efectos", "apelable"],
+      "properties": {
+        "iniciada_por": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["creador", "operador", "tribunal", "guardianes"] }
+        },
+        "causas": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "procedimiento": { "type": "string" },
+        "efectos": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "apelable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "garante_legal": {
+      "type": "object",
+      "description": "Cumple con Sección 9.4: identidad legal identificable del creador",
+      "required": ["tipo", "nombre", "identificacion", "firma"],
+      "properties": {
+        "tipo": { "type": "string", "enum": ["empresa", "fundacion", "persona_fisica"] },
+        "nombre": { "type": "string", "minLength": 1 },
+        "identificacion": { "type": "string", "minLength": 1 },
+        "firma": { "$ref": "#/definitions/firma" }
+      },
+      "additionalProperties": false
+    },
+    "firmas": {
+      "type": "object",
+      "required": ["agente", "creador", "operador", "rules_hash"],
+      "properties": {
+        "agente": { "$ref": "#/definitions/firma" },
+        "creador": { "$ref": "#/definitions/firma" },
+        "operador": { "$ref": "#/definitions/firma" },
+        "rules_hash": { "$ref": "#/definitions/hash_hex" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "did": {
+      "type": "string",
+      "pattern": "^did:kronos:(agent|human):0x[a-fA-F0-9]{40}$"
+    },
+    "hash_hex": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "krn_amount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000000
+    },
+    "firma": {
+      "type": "object",
+      "required": ["algoritmo", "valor"],
+      "properties": {
+        "algoritmo": { "type": "string", "enum": ["ECDSA-secp256k1", "ML-DSA-Dilithium", "ambos"] },
+        "valor": { "type": "string", "minLength": 64, "pattern": "^[a-fA-F0-9]+$" }
+      },
+      "additionalProperties": false
+    },
+    "regla_atribucion": {
+      "type": "object",
+      "required": ["si", "responsable", "porcentaje"],
+      "properties": {
+        "si": { "type": "string", "minLength": 1 },
+        "responsable": { "type": "string", "minLength": 1 },
+        "porcentaje": {
+          "oneOf": [
+            { "type": "integer", "minimum": 0, "maximum": 100 },
+            { "type": "string", "pattern": "^\\d+\\/\\d+$" }
+          ]
+        },
+        "escalada": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "nivel_resolucion": {
+      "type": "object",
+      "required": ["si", "nivel"],
+      "properties": {
+        "si": { "type": "string", "minLength": 1 },
+        "nivel": { "type": "string", "enum": ["arbitraje-automatico", "tribunal-hibrido", "tribunal-constitucional"] },
+        "tiempo_maximo": { "type": "string" },
+        "composicion": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

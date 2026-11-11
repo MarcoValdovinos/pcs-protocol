@@ -1,0 +1,22 @@
+# ═══════════════════════════════════════════════════════════════
+#  ▓▒░ MANIFEST.SHA256 · ARKHÉ ZERO · ◯_● ░▒▓
+# ═══════════════════════════════════════════════════════════════
+#  Verificación: sha256sum -c MANIFEST.sha256
+# ═══════════════════════════════════════════════════════════════
+
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  README.md
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  KINTSUGI.md
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  GOVERNANCE.md
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  AI-MANIFEST.json
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  PROMPT-MAESTRO.md
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  crypto/primitives/sha3-512.js
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  crypto/primitives/ml-dsa-87.js
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  crypto/primitives/ml-kem-1024.js
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  contracts/RegistroGenesis.sol
+f03f7e2d852617309457e0fe207f8f8bd2627d0b723de02f3b0ce05767219112  contracts/Pacto5149.sol
+
+# ───────────────────────────────────────────────────────────────
+# NOTA: hashes de ejemplo. En producción, regenerar con:
+#   find . -type f -not -path './.git/*' -exec sha256sum {} \; > MANIFEST.sha256
+# ◯_● · 51/49/100
+# ───────────────────────────────────────────────────────────────

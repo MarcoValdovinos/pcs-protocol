@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>◯_● KRONOS MD-33</title>
+<style>
+:root{--oro:#d4af37;--bg:#0a0a0a;--fg:#e8e8e8;--dim:#666}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:ui-monospace,Menlo,monospace;padding:20px;line-height:1.5}
+.hdr{border:1px solid var(--oro);padding:16px;margin-bottom:20px;text-align:center}
+.sello{color:var(--oro);font-size:32px;letter-spacing:4px}
+h1{color:var(--oro);font-size:18px;margin:8px 0;font-weight:400}
+.sub{color:var(--dim);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.card{border:1px solid #222;padding:14px;background:#111}
+.card .lbl{color:var(--dim);font-size:11px;text-transform:uppercase}
+.card .val{color:var(--oro);font-size:22px;margin-top:4px}
+.ok{color:#4ade80}.bad{color:#ef4444}
+</style>
+</head><body>
+<div class="hdr">
+  <div class="sello">◯_●</div>
+  <h1>KRONOS MD-33 · <span id="nodo">—</span></h1>
+  <div class="sub">Sello <span id="sello">—</span> · Firma ◯_● · 51/49/100 · KINTSUGI</div>
+  <div class="sub" id="ts">—</div>
+</div>
+
+<div class="grid">
+  <div class="card"><div class="lbl">Daemon</div><div class="val" id="daemon">—</div></div>
+  <div class="card"><div class="lbl">Servidor</div><div class="val" id="web">—</div></div>
+  <div class="card"><div class="lbl">Eventos</div><div class="val" id="eventos">—</div></div>
+  <div class="card"><div class="lbl">Costuras</div><div class="val" id="costuras">—</div></div>
+  <div class="card"><div class="lbl">Reparaciones OK</div><div class="val" id="ok">—</div></div>
+  <div class="card"><div class="lbl">Belleza Kintsugi</div><div class="val" id="belleza">—</div></div>
+</div>
+
+<h1>Últimas costuras doradas</h1>
+<div id="costuras_lista" style="margin-top:12px"></div>
+<script>
+function cls(id,val,bad){
+  var e=document.getElementById(id);
+  e.textContent=val;
+  e.className="val "+(bad?"bad":"ok");
+}
+function tick(){
+  fetch("kronos.json?t="+Date.now())
+    .then(function(r){return r.json()})
+    .then(function(d){
+      document.getElementById("nodo").textContent=d.nodo;
+      document.getElementById("sello").textContent=d.sello;
+      document.getElementById("ts").textContent=d.ts;
+      cls("daemon",d.daemon,d.daemon!=="VIVO");
+      cls("web",d.web,d.web!=="OK");
+      document.getElementById("eventos").textContent=d.eventos;
+      document.getElementById("costuras").textContent=d.costuras;
+      document.getElementById("ok").textContent=d.ok;
+      document.getElementById("belleza").textContent=d.belleza+"%";
+      var h="";
+      for(var i=0;i<d.ultimas.length;i++){
+        h+='<div class="card" style="margin-bottom:8px;font-size:11px">'+d.ultimas[i]+'</div>';
+      }
+      document.getElementById("costuras_lista").innerHTML=h;
+    })
+    .catch(function(e){
+      document.getElementById("ts").textContent="sin datos (kronos.json)";
+    });
+}
+tick();
+setInterval(tick,5000);
+</script>
+</body></html>

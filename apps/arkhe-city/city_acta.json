@@ -1,0 +1,20 @@
+{
+  "total_manifiestos": 13,
+  "archivos": [
+    "acta_fundacion.txt.manifest_v5.json",
+    "contrato.txt.manifest_v5.json",
+    "doc_ed25519.txt.manifest_v5.json",
+    "php_audit_20261023_081424.txt.manifest_v5.json",
+    "php_audit_20261023_081546.txt.manifest_v5.json",
+    "php_security_20261023_082816.json.manifest_v5.json",
+    "snapshot_net_4fff3733.manifest_v5.json",
+    "snapshot_net_5a394caa.manifest_v5.json",
+    "snapshot_net_84ff0e21.manifest_v5.json",
+    "snapshot_net_b5a289f2.manifest_v5.json",
+    "snapshot_net_f2905ae6.manifest_v5.json",
+    "snapshot_net_fd511156.manifest_v5.json",
+    "test_oficial.txt.manifest_v5.json"
+  ],
+  "merkle_root_ciudad": "00b028175ee14049fc0aaaa02862e2f799b1840cf4726043b55c0e34d1aeca63",
+  "timestamp": "2026-10-25T08:53:21.660357+00:00"
+}

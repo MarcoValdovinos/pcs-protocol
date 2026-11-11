@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════
+#  ▓▒░ PRE-COMMIT · ARKHÉ ZERO · ◯_● ░▒▓
+# ═══════════════════════════════════════════════════════════════
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=5000']
+      - id: detect-private-key
+      - id: mixed-line-ending
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [javascript, jsx, ts, tsx, json, css, md, yaml]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.2.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: arkhe-seal-verify
+        name: Verificar sello ARKHÉ
+        entry: python scripts/verify-seal.py
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+# ◯_● · 51/49/100 · KRONOS

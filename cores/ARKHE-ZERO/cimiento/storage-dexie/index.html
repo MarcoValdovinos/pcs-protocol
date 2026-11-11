@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>STORAGE DEXIE · cimiento</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/hub.css">
+</head>
+<body data-page="cimiento-storage" data-theme="terminal-amber">
+<nav id="nav-system" data-active="hub"></nav>
+<main class="doc-container">
+<pre class="ascii-banner">
+   ┌─(kali㉿arkhe-zero)-[~/cimiento/storage-dexie]──────┐
+   │   S T O R A G E   ·   ◯_●                          │
+   └────────────────────────────────────────────────────┘
+</pre>
+
+<h1>💾 Storage Local (IndexedDB)</h1>
+
+<h2>🜂 Uso</h2>
+<pre class="terminal-block">
+import { guardar, obtener, listar } from './storage.js';
+
+await guardar({ hash, contenido, firma });
+const doc = await obtener(hash);
+const todos = await listar();
+
+[ ✓✓ ] Local-First · ◯_● · 51/49/100
+</pre>
+
+<p><a href="manual.html">→ Ver manual completo</a></p>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · cimiento · storage-dexie</p>
+</footer>
+</main>
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

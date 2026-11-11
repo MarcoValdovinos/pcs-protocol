@@ -1,0 +1,112 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*                                                                           */
+/*    ███████╗████████╗██╗   ██╗██╗     ███████╗███████╗                     */
+/*    ██╔════╝╚══██╔══╝╚██╗ ██╔╝██║     ██╔════╝██╔════╝                     */
+/*    ███████╗   ██║    ╚████╔╝ ██║     █████╗  ███████╗                     */
+/*    ╚════██║   ██║     ╚██╔╝  ██║     ██╔══╝  ╚════██║                     */
+/*    ███████║   ██║      ██║   ███████╗███████╗███████║                     */
+/*    ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚══════╝                     */
+/*                                                                           */
+/*   ▓▒░ EXPORT-CIFRADO · CSS · ARKHÉ ZERO · ◯_● · 51/49/100 ░▒▓           */
+/*                                                                           */
+/*   NODO: YHDRYH-92CE · GENESIS: K28-M05-MN01-YHDRYH-92CE                  */
+/*                                                                           */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.export-cifrado {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.export-hero {
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 32px;
+  margin-bottom: 40px;
+}
+
+.export-hero h1 {
+  font-size: 2.4em;
+  letter-spacing: 0.15em;
+  border: none;
+}
+
+.export-shard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  margin: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.export-shard__num {
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 50px;
+}
+
+.export-shard__plano {
+  color: var(--fg-0);
+  flex: 1;
+}
+
+.export-shard__estado {
+  color: var(--green);
+  font-size: 11px;
+}
+
+.export-crypto-box {
+  background: var(--bg-0);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 32px;
+  margin: 32px 0;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.export-crypto-box::before {
+  content: '🔐';
+  display: block;
+  font-size: 2.5em;
+  margin-bottom: 16px;
+}
+
+.export-crypto-box h3 {
+  color: var(--accent);
+  margin: 0 0 16px;
+  letter-spacing: 0.2em;
+}
+
+.export-firma {
+  background: var(--bg-1);
+  border: 2px dashed var(--accent);
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.export-firma::after {
+  content: '◯_● · 51/49/100';
+  display: block;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  margin-top: 12px;
+}
+
+@media print {
+  .export-crypto-box { page-break-inside: avoid; }
+  .export-shard { page-break-inside: avoid; }
+}
+
+/* ◯_● · 51/49/100 · KRONOS · Nodo YHDRYH-92CE */

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYCRO VALIDATOR</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #050508;
+      color: #00f3ff;
+      font-family: 'Courier New', Courier, Consolas, monospace;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.05) 0%, transparent 60%),
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+    }
+
+    .terminal-container {
+      width: 100%;
+      max-width: 640px;
+      background: #09090f;
+      border: 1px solid #00f3ff;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.25), inset 0 0 15px rgba(0, 243, 255, 0.05);
+      position: relative;
+    }
+
+    .terminal-header {
+      background: #00f3ff;
+      color: #050508;
+      padding: 8px 16px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 14px;
+    }
+
+    .terminal-header .dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .terminal-header .dot {
+      width: 8px;
+      height: 8px;
+      background: #050508;
+    }
+
+    .terminal-body {
+      padding: 24px;
+    }
+
+    .glitch-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ff0055;
+      text-shadow: 0 0 8px #ff0055, 2px 2px #00f3ff;
+      margin-bottom: 20px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border-bottom: 1px dashed rgba(255, 0, 85, 0.4);
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      color: #00f3ff;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.6);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: #030305;
+      border: 1px solid #ff0055;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 12px;
+      outline: none;
+      box-shadow: inset 0 0 8px rgba(255, 0, 85, 0.2);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #00f3ff;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.5), inset 0 0 10px rgba(0, 243, 255, 0.2);
+      color: #00f3ff;
+    }
+
+    button.btn-validate {
+      width: 100%;
+      background: transparent;
+      border: 1px solid #00f3ff;
+      color: #00f3ff;
+      padding: 14px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+      margin-top: 10px;
+    }
+
+    button.btn-validate:hover {
+      background: #00f3ff;
+      color: #050508;
+      box-shadow: 0 0 20px #00f3ff, 0 0 40px rgba(0, 243, 255, 0.6);
+    }
+
+    button.btn-validate:active {
+      background: #ff0055;
+      border-color: #ff0055;
+      color: #ffffff;
+      box-shadow: 0 0 20px #ff0055;
+    }
+
+    .console-section {
+      margin-top: 24px;
+    }
+
+    .console-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #ff0055;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .console-screen {
+      background: #020204;
+      border: 1px solid #222233;
+      border-left: 3px solid #00f3ff;
+      padding: 14px;
+      min-height: 130px;
+      max-height: 240px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    .console-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .console-screen::-webkit-scrollbar-thumb {
+      background: #ff0055;
+    }
+
+    .log-init {
+      color: #8888aa;
+    }
+
+    .log-info {
+      color: #00f3ff;
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+    }
+
+    .log-success {
+      color: #00ff66;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ff66, 0 0 20px rgba(0, 255, 102, 0.5);
+    }
+
+    .log-error {
+      color: #ff0033;
+      font-weight: bold;
+      text-shadow: 0 0 10px #ff0033, 0 0 20px rgba(255, 0, 51, 0.5);
+    }
+
+    .scanline {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.3));
+      background-size: 100% 4px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="terminal-container">
+    <div class="scanline"></div>
+    <div class="terminal-header">
+      <span>SYCRO_SYSTEMS // v2.6.4</span>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="terminal-body">
+      <h1 class="glitch-title">SYCRO VALIDATOR</h1>
+
+      <form id="sycroForm">
+        <div class="form-group">
+          <label for="folio_cliente">> Folio Cliente</label>
+          <input type="text" id="folio_cliente" required autocomplete="off" spellcheck="false" placeholder="EJ: CL-90412">
+        </div>
+
+        <div class="form-group">
+          <label for="sello_qv">> Sello QV</label>
+          <input type="text" id="sello_qv" required autocomplete="off" spellcheck="false" placeholder="EJ: QV-7A4B-99">
+        </div>
+
+        <div class="form-group">
+          <label for="expira_en">> Expiración (Timestamp)</label>
+          <input type="text" id="expira_en" required autocomplete="off" spellcheck="false" placeholder="EJ: 1794241545">
+        </div>
+
+        <button type="submit" class="btn-validate" id="btnValidate">[ VALIDAR EN EL NÚCLEO ]</button>
+      </form>
+
+      <div class="console-section">
+        <div class="console-label">
+          <span>// CONSOLA_LOGS</span>
+          <span>ESTADO: LISTO</span>
+        </div>
+        <div class="console-screen" id="consoleScreen"><span class="log-init">> Esperando parámetros de validación...</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('sycroForm');
+    const consoleScreen = document.getElementById('consoleScreen');
+    const btnValidate = document.getElementById('btnValidate');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const folioVal = document.getElementById('folio_cliente').value.trim();
+      const selloVal = document.getElementById('sello_qv').value.trim();
+      const expiraRaw = document.getElementById('expira_en').value.trim();
+      const expiraVal = Number(expiraRaw);
+
+      btnValidate.disabled = true;
+      consoleScreen.innerHTML = '<span class="log-info">> Estableciendo conexión con SYCRO-VALDOVINOS...</span>';
+
+      try {
+        const response = await fetch('https://sycro-valdovinos.vercel.app/api/validar', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            folio_cliente: folioVal,
+            sello_qv: selloVal,
+            expira_en: expiraVal
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json().catch(() => ({}));
+          consoleScreen.innerHTML = 
+            '<div class="log-success">> LICENCIA VALIDA - ΔΨ = ∞</div>\n' +
+            '<div class="log-info">' + JSON.stringify(data, null, 2) + '</div>';
+        } else {
+          consoleScreen.innerHTML = '<div class="log-error">> FALLA DEL SISTEMA - SELLO INVÁLIDO O REVOCADO</div>';
+        }
+      } catch (err) {
+        consoleScreen.innerHTML = '<div class="log-error">> FALLA DEL SISTEMA - SELLO INVÁLIDO O REVOCADO</div>';
+      } finally {
+        btnValidate.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

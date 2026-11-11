@@ -1,0 +1,65 @@
+';
+
+// Schema COMPLETO (lo que se devuelve al cliente, incluye metadata server-side)
+export const PQC_AUDIT_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    metadata: {
+      type: Type.OBJECT,
+      properties: {
+        fecha: { type: Type.STRING },
+        version_estandar: { type: Type.STRING },
+        hash_codigo: { type: Type.STRING },
+        auditor: { type: Type.STRING }
+      },
+      required: ["fecha", "version_estandar", "hash_codigo", "auditor"]
+    },
+    cumplimiento: {
+      type: Type.OBJECT,
+      properties: {
+        FIPS_203: { type: Type.BOOLEAN },
+        FIPS_204: { type: Type.BOOLEAN },
+        FIPS_205: { type: Type.BOOLEAN }
+      },
+      required: ["FIPS_203", "FIPS_204", "FIPS_0Type.INTEGER },
+          descripcion: { type: Type.STRING },
+          fix: { type: Type.STRING }
+        },
+        required: ["severidad", "categoria", "linea", "descripcion", "fix"]
+      }
+    },
+    score: { type: Type.INTEGER },
+    certificable: { type: Type.BOOLEAN },
+cable", "firma_requerida"]
+};
+
+// Sub-schema SOLO para Gemini (sin metadata, sin campos derivables)
+export const GEMINI_BODY_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    cumplimiento: {
+      type: Type.OBJECT,
+      properties: {
+        FIPS_203: { type: Type.BOOLEAN, description: "true si el codigo cumple ML-KEM" },
+        FIPS_204: { type: Type.BOOLEAN, description: "true si el codigo cumple ML-DSA" },
+        FIPS_205: { type: Type.BOOLEAN, description: "true si el codigo cumple SLH-DSA" }
+      },
+      required: ["FIPS_203", "FIPS_204", "FIPS_205"]
+    },
+    hallazgos: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          severidad: { type: Type.STRING, enum: ["critica", "alta", "media", "baja"] },
+          categoria: { type: Type.STRING, enum: ["side_channel", "timing", "key_reuse", "implementation", "nist_compliance", "performance"] },
+          linea: { type: Type.INTEGER, description: "Numero de linea aproximado" },
+         descripcion: { type: Type.STRING, description: "ExplicacinSTRING, description: "Solucion o pseudocodigo de remediacion" }
+        },
+        required: ["severidad", "categoria", "linea", "descripcion", "fix"]
+      }
+    },
+    score: { type: Type.INTEGER, description: "Score de seguridad 0-100" }
+  },
+  required: ["cumplimiento", "hallazgos", "score"]
+};

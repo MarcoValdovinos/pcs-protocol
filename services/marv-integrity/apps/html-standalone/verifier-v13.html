@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>■_□ MARV ○_● · Certificador</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#05040a;color:#e3def2;font-family:system-ui;padding:16px;min-height:100vh}
+#bg{position:fixed;inset:0;z-index:0;opacity:.4;pointer-events:none}
+.w{max-width:700px;margin:auto;position:relative;z-index:1}
+h1{font-size:1.4rem;color:#ff9f1c;margin-bottom:4px;font-family:monospace}
+h2{font-size:1.1rem;color:#ff9f1c;margin-bottom:6px}
+.card{background:rgba(16,12,32,.7);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin:12px 0}
+.drop{border:2px dashed rgba(255,159,28,.3);border-radius:8px;padding:20px;text-align:center;cursor:pointer;margin-top:8px;transition:.2s}
+.drop:hover{border-color:#ff9f1c;background:rgba(255,159,28,.05)}
+.hash{background:#000;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;word-break:break-all;color:#ff9f1c;margin-top:10px}
+button{background:#ff9f1c;border:none;color:#000;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;margin:8px 8px 0 0;font-size:13px;width:100%}
+button:disabled{opacity:.3;cursor:not-allowed}
+button.alt{background:transparent;border:1px solid #ff9f1c;color:#ff9f1c}
+canvas{display:none}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="w">
+<h1>■_□ MARV ○_●</h1>
+<p style="color:#6e658a;font-size:12px">Generador de Certificados Criptográficos</p>
+<div class="card">
+<h2>1. Archivo de origen</h2>
+<div class="drop" id="d1">📄 Toca para elegir<input type="file" id="i1" style="display:none"></div>
+<div class="hash" id="o1">—</div>
+<button id="b1" disabled>Calcular SHA-256</button>
+</div>
+
+<div class="card">
+<h2>2. Generar Certificado</h2>
+<p style="font-size:12px;color:#6e658a;margin-bottom:12px">Crea una imagen cuadrada (1080x1080) lista para compartir o guardar como PDF.</p>
+<button id="b2" class="alt" disabled>⬇️ Descargar Certificado PNG</button>
+<button id="b3" class="alt" disabled>🖨️ Guardar como PDF</button>
+</div>
+</div>
+<canvas id="certCanvas" width="1080" height="1080" style="display:none;"></canvas>
+<script>
+(function(){
+'use strict';
+// Fondo animado (lluvia hex)
+var cv=document.getElementById('bg'),cx=cv.getContext('2d'),CH='0123456789ABCDEF',cols,dr;
+function ini(){cv.width=innerWidth;cv.height=innerHeight;cols=Math.floor(cv.width/16);dr=Array(cols).fill(0).map(function(){return Math.random()*-50})}
+ini();addEventListener('resize',ini);
+setInterval(function(){cx.fillStyle='rgba(5,4,10,.1)';cx.fillRect(0,0,cv.width,cv.height);cx.font='13px monospace';for(var i=0;i<cols;i++){cx.fillStyle=Math.random()>.95?'rgba(255,159,28,.6)':'rgba(255,159,28,.15)';cx.fillText(CH[Math.floor(Math.random()*16)],i*16,dr[i]*16);if(dr[i]*16>cv.height&&Math.random()>.97)dr[i]=0;dr[i]++}},80);
+
+// Lógica
+var file=null,hash=null;
+var d1=document.getElementById('d1'),i1=document.getElementById('i1');
+d1.onclick=function(){i1.click()};
+i1.onchange=function(){if(i1.files[0]){file=i1.files[0];d1.innerHTML='📄 '+file.name;document.getElementById('b1').disabled=false}};
+
+async function sha256(buf){
+  var h=await crypto.subtle.digest('SHA-256',buf);
+  return Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+
+document.getElementById('b1').onclick=async function(){
+  if(!file)return;
+  var btn=this;btn.disabled=true;btn.textContent='⏳ Calculando...';
+  var buf=await file.arrayBuffer();
+  hash=await sha256(buf);
+  document.getElementById('o1').textContent=hash;
+  btn.textContent='✅ Hash Calculado';
+  document.getElementById('b2').disabled=false;
+  document.getElementById('b3').disabled=false;
+};
+
+// Generador de Certificado
+function drawCert(){
+  var c=document.getElementById('certCanvas'),x=c.getContext('2d');
+  // Fondo
+  x.fillStyle='#05040a';x.fillRect(0,0,1080,1080);
+  // Patrón de fondo sutil
+  x.strokeStyle='rgba(255,159,28,0.05)';x.lineWidth=1;
+  for(var i=0;i<1080;i+=40){x.beginPath();x.moveTo(i,0);x.lineTo(i,1080);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(1080,i);x.stroke();}
+  // Borde dorado
+  x.strokeStyle='#ff9f1c';x.lineWidth=8;x.strokeRect(40,40,1000,1000);
+  x.strokeStyle='rgba(255,159,28,0.3)';x.lineWidth=2;x.strokeRect(60,60,960,960);
+  // Título y marca
+  x.fillStyle='#ff9f1c';x.font='bold 70px monospace';x.textAlign='center';
+  x.fillText('■_□ MARV ○_●',540,180);
+  x.font='24px monospace';x.fillStyle='#6e658a';
+  x.fillText('CERTIFICADO DE INTEGRIDAD DIGITAL',540,230);
+  x.beginPath();x.moveTo(240,260);x.lineTo(840,260);x.strokeStyle='#ff9f1c';x.lineWidth=2;x.stroke();
+  // Datos del archivo
+  x.textAlign='left';x.fillStyle='#a29cb8';x.font='20px monospace';
+  x.fillText('ARCHIVO:',150,340);
+  x.fillText('TAMAÑO:',150,390);
+  x.fillText('FECHA:',150,440);
+  x.fillStyle='#e3def2';x.font='24px monospace';
+  x.fillText(file.name.length>40?file.name.slice(0,37)+'...':file.name,380,340);
+  x.fillText((file.size/1024).toFixed(2)+' KB',380,390);
+  x.fillText(new Date().toLocaleDateString('es-MX'),380,440);
+  // Hash
+  x.fillStyle='#a29cb8';x.font='20px monospace';x.fillText('SHA-256:',150,520);
+  x.fillStyle='#ff9f1c';x.font='22px monospace';
+  var parts=hash.match(/.{1,32}/g);
+  x.fillText(parts[0],150,570);x.fillText(parts[1],150,610);
+  // QR simulado
+  x.fillStyle='#000';x.fillRect(760,520,180,180);
+  x.strokeStyle='#ff9f1c';x.lineWidth=2;x.strokeRect(760,520,180,180);
+  x.fillStyle='#ff9f1c';
+  for(var i=0;i<10;i++){for(var j=0;j<10;j++){if(Math.random()>.5){x.fillRect(770+i*16,530+j*16,14,14);}}}
+  // Footer
+  x.textAlign='center';x.fillStyle='#58536e';x.font='16px monospace';
+  x.fillText('Este certificado es una prueba técnica de integridad SHA-256.',540,900);
+  x.fillText('No sustituye un registro notarial o legal. Generado localmente, 100% offline.',540,930);
+  x.fillText('ID: '+Date.now().toString(16).toUpperCase(),540,980);
+}
+
+document.getElementById('b2').onclick=function(){
+  if(!hash)return;
+  drawCert();
+  var a=document.createElement('a');
+  a.href=document.getElementById('certCanvas').toDataURL('image/png');
+  a.download='Certificado_MARV_'+file.name+'.png';
+  a.click();
+};
+
+document.getElementById('b3').onclick=function(){
+  if(!hash)return;
+  drawCert();
+  var img=document.getElementById('certCanvas').toDataURL('image/png');
+  var win=window.open('','_blank');
+  win.document.write('<html><body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:#000;"><img src="'+img+'" style="max-width:100%;max-height:100%;"><script>window.onload=function(){window.print()}<\/script></body></html>');
+  win.document.close();
+};
+})();
+</script>
+</body>
+</html>

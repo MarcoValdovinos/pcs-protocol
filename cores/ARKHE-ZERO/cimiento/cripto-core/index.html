@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>CRIPTO-CORE · cimiento</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/hub.css">
+</head>
+<body data-page="cimiento-cripto" data-theme="terminal-green">
+<nav id="nav-system" data-active="hub"></nav>
+<main class="doc-container">
+<pre class="ascii-banner">
+   ┌─(kali㉿arkhe-zero)-[~/cimiento/cripto-core]───────┐
+   │   C R I P T O - C O R E   ·   ◯_●                  │
+   └────────────────────────────────────────────────────┘
+</pre>
+
+<h1>🔐 Cripto-Core</h1>
+
+<h2>🜂 API unificada</h2>
+<pre class="terminal-block">
+import { core } from './core.js';
+
+core.sha3_512('texto');
+core.dsa.sign(secretKey, 'texto');
+core.dsa.verify(publicKey, firma, 'texto');
+core.kem.keygen();
+core.kem.encapsulate(publicKey);
+core.slh.sign(secretKey, 'texto');
+
+[ ✓✓ ] ◯_● · 51/49/100
+</pre>
+
+<p><a href="manual.html">→ Ver manual completo</a></p>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · cimiento · cripto-core</p>
+</footer>
+</main>
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

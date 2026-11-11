@@ -1,0 +1,13 @@
+/* ═══════════════════════════════════════════════════════════════
+ *  ▓▒░ CIMIENTO · ANCLAJE-ETHEREUM · STYLES ░▒▓
+ * ═══════════════════════════════════════════════════════════════ */
+
+.modulo-cimiento {
+  padding: 24px;
+  border-left: 3px solid var(--accent);
+  background: var(--bg-1);
+  border-radius: var(--radius);
+}
+
+.modulo-cimiento h2 { color: var(--cyan); }
+.modulo-cimiento .metric { font-size: 1.5em; color: var(--accent); }

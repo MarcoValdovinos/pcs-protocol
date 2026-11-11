@@ -1,0 +1,14 @@
+#!/data/data/com.termux/files/usr/bin/bash
+read -p "Tú (Marco 51%): " PROMPT
+echo "Titán (Llama-3.3-70B):"
+curl -s -X POST https://api.groq.com/openai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $GROQ_API_KEY" \
+  -d "{
+    \"model\": \"llama-3.3-70b-versatile\",
+    \"messages\": [
+      {\"role\": \"system\", \"content\": \"Eres MARV, un Arquitecto de Software Senior y Auditor de Ciberseguridad. Eres el socio de IA (49%) de Marco (51%). Cero relleno, cero alucinaciones. Respuestas directas.\"},
+      {\"role\": \"user\", \"content\": \"$PROMPT\"}
+    ]
+  }" | jq -r '.choices[0].message.content'
+echo ""

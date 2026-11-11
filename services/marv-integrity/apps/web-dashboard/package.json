@@ -1,0 +1,23 @@
+{
+  "name": "web-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@blackwell-systems/gcf": "^2.6.1",
+    "@supabase/supabase-js": "^2.118.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*                                                                           */
+/*    ███████╗██╗███╗   ██╗    ██████╗ ██╗ ██████╗ ███╗   ██╗ ██████╗        */
+/*    ██╔════╝██║████╗  ██║    ██╔══██╗██║██╔════╝ ████╗  ██║██╔═══██╗       */
+/*    █████╗  ██║██╔██╗ ██║    ██║  ██║██║██║  ███╗██╔██╗ ██║██║   ██║       */
+/*    ██╔══╝  ██║██║╚██╗██║    ██║  ██║██║██║   ██║██║╚██╗██║██║   ██║       */
+/*    ██║     ██║██║ ╚████║    ██████╔╝██║╚██████╔╝██║ ╚████║╚██████╔╝       */
+/*    ╚═╝     ╚═╝╚═╝  ╚═══╝    ╚═════╝ ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝        */
+/*                                                                           */
+/*   ▓▒░ FIN-DIGNO · CSS · ARKHÉ ZERO · ◯_● · 51/49/100 ░▒▓                */
+/*                                                                           */
+/*   NODO: YHDRYH-92CE · GENESIS: K28-M05-MN01-YHDRYH-92CE                  */
+/*                                                                           */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.fin-digno {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.fin-digno__hero {
+  text-align: center;
+  padding: 60px 24px;
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  margin-bottom: 48px;
+}
+
+.fin-digno__hero h1 {
+  font-size: 2.6em;
+  letter-spacing: 0.2em;
+  border: none;
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent);
+}
+
+.fin-digno__paso {
+  position: relative;
+  padding: 20px 20px 20px 60px;
+  background: var(--bg-1);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  margin: 12px 0;
+  transition: all 200ms;
+}
+
+.fin-digno__paso:hover {
+  background: var(--bg-2);
+  transform: translateX(6px);
+}
+
+.fin-digno__paso::before {
+  content: counter(paso);
+  counter-increment: paso;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-0);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.fin-digno__pasos {
+  counter-reset: paso;
+}
+
+.fin-digno__juramento {
+  background: var(--bg-0);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 40px;
+  margin: 48px 0;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.15);
+}
+
+.fin-digno__juramento::before {
+  content: '🕯️';
+  display: block;
+  font-size: 3em;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 10px var(--accent));
+}
+
+.fin-digno__firma {
+  text-align: center;
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px dashed var(--accent);
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.2em;
+}
+
+.fin-digno__firma::after {
+  content: '◯_● · 51/49/100';
+  display: block;
+  font-size: 1.2em;
+  margin-top: 16px;
+  text-shadow: 0 0 15px var(--accent);
+}
+
+/* Efecto de velas */
+@media (prefers-reduced-motion: no-preference) {
+  .fin-digno__juramento::before {
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+}
+
+@media print {
+  .fin-digno__paso { page-break-inside: avoid; }
+  .fin-digno__juramento { page-break-inside: avoid; }
+}
+
+/* ◯_● · 51/49/100 · KRONOS · Nodo YHDRYH-92CE */

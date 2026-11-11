@@ -1,0 +1,19 @@
+{
+  "v": "1.0",
+  "alg": {
+    "hash": "sha256",
+    "signature": "gpg-rsa4096",
+    "encoding": "hex-lowercase"
+  },
+  "issuer": {
+    "name": "Marco Antonio Rojas Valdovinos",
+    "gpg_fingerprint": "0B903A7613F4D71B93C12EBE89EEB1D1177BE286",
+    "jurisdiction": "MX"
+  },
+  "chain": {
+    "filename": "chain.log",
+    "signature_filename": "chain.log.asc",
+    "spec_version": "ARKHE-chain-v1"
+  },
+  "ts": "2026-10-26T00:00:00Z"
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual · Anclaje Ethereum</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+</head>
+<body data-page="cimiento-anclaje-manual" data-theme="terminal-cyan">
+<nav id="nav-system" data-active="hub"></nav>
+<main class="doc-container">
+<pre class="ascii-banner">
+   M A N U A L   ·   A N C L A J E   E T H E R E U M
+</pre>
+
+<h1>📘 Manual · Anclaje Ethereum</h1>
+
+<h2>🜂 Conceptos</h2>
+<ul>
+  <li><strong>Merkle root</strong> · hash que agrupa N documentos</li>
+  <li><strong>Anclaje</strong> · transacción on-chain con el root en data</li>
+  <li><strong>Merkle proof</strong> · prueba de pertenencia sin revelar el conjunto</li>
+</ul>
+
+<h2>🜃 Paso a paso</h2>
+<ol>
+  <li>Recolectar hashes de documentos</li>
+  <li>Calcular Merkle root con SHA3-512</li>
+  <li>Preparar tx data-only al contrato ancla</li>
+  <li>Firmar con wallet humana (51%)</li>
+  <li>Broadcast a Ethereum</li>
+  <li>Confirmar en 12 bloques</li>
+</ol>
+
+<h2>🜄 Costo estimado</h2>
+<pre class="terminal-block">
+1 documento  · ~ 45,000 gas · ~$0.50 USD (2026)
+100 docs     · ~ 45,000 gas · mismo costo (Merkle)
+1000 docs    · ~ 45,000 gas · mismo costo (Merkle)
+[ >> ] Batching reduce 1000x el costo por documento
+[ ✓✓ ] ◯_● · 51/49/100
+</pre>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · cimiento · anclaje-ethereum · manual</p>
+</footer>
+</main>
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

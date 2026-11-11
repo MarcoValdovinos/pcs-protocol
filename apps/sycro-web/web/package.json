@@ -1,0 +1,23 @@
+{
+  "name": "sycro",
+  "private": true,
+  "dependencies": {
+    "@ai-sdk/google": "^4.0.114",
+    "@ai-sdk/react": "^4.0.170",
+    "@google/genai": "^2.32.0",
+    "@noble/post-quantum": "^0.4.1",
+    "@upstash/redis": "^1.41.0",
+    "ai": "^7.0.166",
+    "lucide-react": "^1.70.0",
+    "mercadopago": "^3.6.1",
+    "next": "^16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "stripe": "^14.0.0"
+  },
+  "scripts": {
+    "build": "next build",
+    "start": "next start"
+  },
+  "version": "1.0.0"
+}

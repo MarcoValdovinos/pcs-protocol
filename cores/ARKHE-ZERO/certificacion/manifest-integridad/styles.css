@@ -1,0 +1,7 @@
+/* ▓▒░ manifest-integridad · styles ░▒▓ */
+.cert-manifest {
+  padding: 24px;
+  border-left: 3px solid var(--green);
+  background: var(--bg-1);
+}
+.cert-manifest h2 { color: var(--green); }

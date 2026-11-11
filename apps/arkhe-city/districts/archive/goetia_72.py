@@ -1,0 +1,1 @@
+../cathedral/goetia_72.py

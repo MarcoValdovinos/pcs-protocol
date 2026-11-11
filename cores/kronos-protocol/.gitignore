@@ -1,0 +1,30 @@
+# ==== ARCHIVOS PELIGROSOS O SENSIBLES ====
+.env
+.env.*
+*.key
+*.secret
+*.pem
+*secret*
+sueños.db.json
+sentinels_ledger.jsonl
+server.log
+
+# ==== ARCHIVOS MUY PESADOS ====
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+*.mp4
+*.wav
+*.iso
+node_modules/
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+
+# ==== ARCHIVOS TEMPORALES ====
+*.tmp
+*.bak
+*.swp
+.DS_Store

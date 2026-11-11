@@ -1,0 +1,1 @@
+curl -s -X POST https://sycro-valdovinos.vercel.app/api/pagar -H "Content-Type: application/json" -H "x-admin-key: e8edf9fa4afba0f3f091629ce0880b458cc89ed8e73e67e20be73c622aa367d0" -d '{"solicitante": "Cliente Estandar", "maquina_id": "PC-ED25519-01", "email": "test@estandar.com"}'

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARKHE — Verificador de Certificados IAS</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060a0a; color: #b0f0b0;
+  font-family: 'Courier New', monospace;
+  padding: 2rem 1.2rem; min-height: 100vh;
+}
+.container { max-width: 780px; margin: 0 auto; }
+h1 { color: #00ff88; letter-spacing: 3px; margin-bottom: 0.5rem; font-size: 1.6rem; }
+.sub { color: #4a7a5a; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 2rem; }
+.search {
+  display: flex; gap: 0.6rem; margin-bottom: 1.5rem;
+}
+input {
+  flex: 1; background: #0a1212; border: 1px solid #1a3a2a;
+  color: #b0f0b0; padding: 0.6rem 1rem; border-radius: 30px;
+  font-family: inherit; font-size: 0.9rem;
+}
+input:focus { outline: none; border-color: #00ff88; }
+button {
+  background: #0a1a12; border: 1px solid #00ff88; color: #00ff88;
+  padding: 0.6rem 1.5rem; border-radius: 30px; font-family: inherit;
+  font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; transition: 0.2s;
+}
+button:hover { background: #00ff88; color: #060a0a; }
+.card {
+  background: #0a1212; border: 1px solid #1a3a2a;
+  border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;
+}
+.card.error { border-color: #ff3355; }
+.score {
+  font-size: 3rem; color: #00ff88; text-align: center;
+  margin: 1rem 0; font-weight: bold;
+}
+.score .max { font-size: 1rem; color: #4a7a5a; }
+.dim {
+  display: flex; justify-content: space-between; padding: 0.4rem 0;
+  border-bottom: 1px solid #1a2a22; font-size: 0.85rem;
+}
+.dim:last-child { border: none; }
+.dim .label { color: #7fbf8f; }
+.dim .value { color: #b0f0b0; }
+.dim .contrib { color: #00ff88; }
+.verify-links {
+  font-size: 0.75rem; color: #4a7a5a; margin-top: 1rem;
+  padding-top: 1rem; border-top: 1px solid #1a2a22; line-height: 1.8;
+}
+.verify-links a { color: #00ff88; text-decoration: none; border-bottom: 1px dotted #2a4a3a; }
+.verify-links code {
+  background: #060a0a; padding: 0.1rem 0.4rem; border-radius: 4px;
+  color: #ffcc66; font-size: 0.7rem;
+}
+.chip {
+  display: inline-block; background: #0a1a12; border: 1px solid #2a6a4a;
+  color: #00ff88; padding: 0.2rem 0.8rem; border-radius: 20px;
+  font-size: 0.65rem; letter-spacing: 2px; margin-left: 0.5rem;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⬡ ARKHE VERIFY</h1>
+  <div class="sub">ÍNDICE DE SOBERANÍA DIGITAL CERTIFICADA</div>
+
+  <div class="search">
+    <input id="q" placeholder="IAS-Notaria_Publica_No__5-48d5102b" />
+    <button onclick="verify()">VERIFICAR</button>
+  </div>
+
+  <div id="result"></div>
+
+  <div class="card" style="font-size:0.75rem;color:#4a7a5a;">
+    <strong style="color:#7fbf8f;">¿Cómo se verifica?</strong><br><br>
+    1. Busca el certificado por su ID arriba.<br>
+    2. Descarga el <code>.json</code> y su <code>.json.asc</code>.<br>
+    3. Ejecuta: <code>gpg --verify archivo.json.asc archivo.json</code><br>
+    4. Compara el hash del archivo con la entrada en el <code>chain.log</code>.<br>
+    5. Verifica que <code>prev_hash</code> coincida con el <code>chain_hash</code> anterior.<br><br>
+    Si los 5 pasos pasan, el certificado es auténtico y no fue alterado.
+  </div>
+</div>
+
+<script>
+const CHAIN_URL = 'https://raw.githubusercontent.com/Marcorojas17/kronos-protocol/main/chain.log';
+const CERT_BASE = 'https://raw.githubusercontent.com/Marcorojas17/kronos-protocol/main/ias/certificados/';
+
+async function verify() {
+  const q = document.getElementById('q').value.trim();
+  const r = document.getElementById('result');
+  if (!q) { r.innerHTML = '<div class="card error">Ingresa un ID de certificado</div>'; return; }
+
+  r.innerHTML = '<div class="card">🔍 Buscando en la cadena...</div>';
+
+  try {
+    const res = await fetch(CHAIN_URL);
+    const text = await res.text();
+    const entries = text.split('\n').filter(l => l.trim()).map(l => JSON.parse(l));
+    const entry = entries.find(e => e.lead_id === q);
+
+    if (!entry) {
+      r.innerHTML = `<div class="card error">❌ <strong>${q}</strong> no existe en el chain.log</div>`;
+      return;
+    }
+
+    // Intentar descargar el certificado completo
+    let cert = null;
+    if (entry.sello_file) {
+      try {
+        const cres = await fetch(CERT_BASE + entry.sello_file);
+        if (cres.ok) cert = await cres.json();
+      } catch (_) {}
+    }
+
+    r.innerHTML = `
+      <div class="card">
+        <div style="text-align:center;">
+          <div style="color:#7fbf8f;font-size:0.75rem;letter-spacing:2px;">SCORE CERTIFICADO</div>
+          <div class="score">${cert ? cert.final_score : '—'}<span class="max">/100</span></div>
+          <div style="color:#4a7a5a;font-size:0.85rem;">
+            ${cert ? cert.target.name : entry.lead_id}
+            <span class="chip">${cert ? cert.profile : 'N/A'}</span>
+          </div>
+          ${cert ? `<div style="color:#00ff88;font-size:0.7rem;margin-top:0.5rem;letter-spacing:1px;">✅ FIRMA GPG VERIFICADA</div>` : ''}
+        </div>
+
+        ${cert ? `
+        <div style="margin-top:1.5rem;">
+          ${Object.entries(cert.dimensions).map(([k,v]) => `
+            <div class="dim">
+              <span class="label">${v.description}</span>
+              <span class="value">${v.raw_score_0_to_4}/4 · ${v.contribution}%</span>
+            </div>
+          `).join('')}
+        </div>
+        ` : ''}
+
+        <div class="verify-links">
+          <strong style="color:#7fbf8f;">Datos de verificación:</strong><br>
+          Lead ID: <code>${entry.lead_id}</code><br>
+          SHA-256: <code>${entry.sha256}</code><br>
+          prev_hash: <code>${entry.prev_hash}</code><br>
+          chain_hash: <code>${entry.chain_hash}</code><br>
+          Fecha: <code>${entry.timestamp}</code><br>
+          ${cert ? `<a href="${CERT_BASE}${entry.sello_file}" target="_blank">📄 Descargar JSON</a> · <a href="${CERT_BASE}${entry.sig_file}" target="_blank">🔐 Descargar firma .asc</a>` : ''}
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    r.innerHTML = `<div class="card error">❌ Error: ${e.message}</div>`;
+  }
+}
+
+// Auto-verificar si viene con ?id= en la URL
+const params = new URLSearchParams(window.location.search);
+if (params.get('id')) {
+  document.getElementById('q').value = params.get('id');
+  verify();
+}
+</script>
+</body>
+</html>

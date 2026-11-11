@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>■_□ MARV ○_● · Quantum Art</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020104;color:#e3def2;font-family:system-ui;padding:16px;min-height:100vh;overflow-x:hidden}
+#bg{position:fixed;inset:0;z-index:0;opacity:.4;pointer-events:none}
+.w{max-width:700px;margin:auto;position:relative;z-index:1}
+h1{font-size:1.4rem;color:#00f2fe;margin-bottom:4px;font-family:monospace;text-shadow:0 0 10px rgba(0,242,254,.5)}
+h2{font-size:1.1rem;color:#ff9f1c;margin-bottom:6px}
+.card{background:rgba(10,8,20,.7);border:1px solid rgba(0,242,254,.2);border-radius:12px;padding:16px;margin:12px 0;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,242,254,.05)}
+.drop{border:2px dashed rgba(0,242,254,.4);border-radius:8px;padding:20px;text-align:center;cursor:pointer;margin-top:8px;transition:.3s}
+.drop:hover{border-color:#00f2fe;background:rgba(0,242,254,.05)}
+.hash{background:#000;border:1px solid rgba(255,159,28,.3);border-radius:8px;padding:12px;font-family:monospace;font-size:11px;word-break:break-all;color:#00f2fe;margin-top:10px}
+button{background:linear-gradient(135deg, #ff9f1c, #ff4000);border:none;color:#000;padding:12px 18px;border-radius:8px;font-weight:700;cursor:pointer;margin:8px 8px 0 0;font-size:13px;width:100%;transition:.2s}
+button:disabled{opacity:.3;cursor:not-allowed;filter:grayscale(1)}
+button.alt{background:transparent;border:1px solid #00f2fe;color:#00f2fe;box-shadow:0 0 10px rgba(0,242,254,.2)}
+button.alt:hover:not(:disabled){background:rgba(0,242,254,.1)}
+canvas{display:none}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="w">
+<h1>■_□ MARV ○_●</h1>
+<p style="color:#a29cb8;font-size:12px">Quantum Art & Integrity Generator</p>
+<div class="card">
+<h2>1. Archivo de origen</h2>
+<div class="drop" id="d1">📄 Toca para elegir<input type="file" id="i1" style="display:none"></div>
+<div class="hash" id="o1">—</div>
+<button id="b1" disabled>Calcular SHA-256</button>
+</div>
+
+<div class="card">
+<h2>2. Generar Arte Criptográfico</h2>
+<p style="font-size:12px;color:#6e658a;margin-bottom:12px">Certificado 1080x1080 con Sello Cromático Holográfico.</p>
+<button id="b2" class="alt" disabled>⬇️ Descargar Certificado PNG</button>
+<button id="b3" class="alt" disabled>🖨️ Guardar como PDF</button>
+</div>
+</div>
+<canvas id="certCanvas" width="1080" height="1080" style="display:none;"></canvas>
+<script>
+(function(){
+'use strict';
+// Fondo multicolor
+var cv=document.getElementById('bg'),cx=cv.getContext('2d'),CH='0123456789ABCDEF',cols,dr;
+var colors=['#00f2fe','#ff9f1c','#9b59b6','#00ff66'];
+function ini(){cv.width=innerWidth;cv.height=innerHeight;cols=Math.floor(cv.width/16);dr=Array(cols).fill(0).map(function(){return Math.random()*-50})}
+ini();addEventListener('resize',ini);
+setInterval(function(){cx.fillStyle='rgba(2,1,4,.1)';cx.fillRect(0,0,cv.width,cv.height);cx.font='13px monospace';for(var i=0;i<cols;i++){cx.fillStyle=colors[Math.floor(Math.random()*colors.length)];cx.globalAlpha=Math.random()>.9?0.8:0.15;cx.fillText(CH[Math.floor(Math.random()*16)],i*16,dr[i]*16);if(dr[i]*16>cv.height&&Math.random()>.97)dr[i]=0;dr[i]++}},80);
+
+var file=null,hash=null;
+var d1=document.getElementById('d1'),i1=document.getElementById('i1');
+d1.onclick=function(){i1.click()};
+i1.onchange=function(){if(i1.files[0]){file=i1.files[0];d1.innerHTML='📄 '+file.name;document.getElementById('b1').disabled=false}};
+
+async function sha256(buf){var h=await crypto.subtle.digest('SHA-256',buf);return Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');}
+
+document.getElementById('b1').onclick=async function(){
+  if(!file)return;var btn=this;btn.disabled=true;btn.textContent='⏳ Calculando...';
+  var buf=await file.arrayBuffer();hash=await sha256(buf);
+  document.getElementById('o1').textContent=hash;btn.textContent='✅ Hash Calculado';
+  document.getElementById('b2').disabled=false;document.getElementById('b3').disabled=false;
+};
+
+// Generador del Certificado Holográfico
+function drawCert(){
+  var c=document.getElementById('certCanvas'),x=c.getContext('2d');
+  // Fondo Gradiente
+  var grad=x.createLinearGradient(0,0,1080,1080);
+  grad.addColorStop(0,'#05040a');grad.addColorStop(1,'#110b29');
+  x.fillStyle=grad;x.fillRect(0,0,1080,1080);
+  
+  // Cuadrícula Neón
+  x.strokeStyle='rgba(0,242,254,0.05)';x.lineWidth=1;
+  for(var i=0;i<1080;i+=30){x.beginPath();x.moveTo(i,0);x.lineTo(i,1080);x.stroke();x.beginPath();x.moveTo(0,i);x.lineTo(1080,i);x.stroke();}
+
+  // Bordes
+  x.strokeStyle='#00f2fe';x.lineWidth=4;x.strokeRect(40,40,1000,1000);
+  x.strokeStyle='#ff9f1c';x.lineWidth=2;x.strokeRect(50,50,980,980);
+
+  // Títulos
+  x.textAlign='center';x.fillStyle='#00f2fe';x.font='bold 65px monospace';x.shadowColor='#00f2fe';x.shadowBlur=15;
+  x.fillText('■_□ MARV ○_●',540,170);x.shadowBlur=0;
+  x.font='20px monospace';x.fillStyle='#a29cb8';x.fillText('CERTIFICADO DE INTEGRIDAD CUÁNTICA',540,215);
+  
+  // Datos
+  x.textAlign='left';x.fillStyle='#6e658a';x.font='20px monospace';
+  x.fillText('ARCHIVO:',150,310);x.fillText('TAMAÑO:',150,360);x.fillText('FECHA:',150,410);
+  
+  x.fillStyle='#e3def2';x.font='22px monospace';
+  x.fillText(file.name.length>35?file.name.slice(0,32)+'...':file.name,350,310);
+  x.fillText((file.size/1024).toFixed(2)+' KB',350,360);
+  x.fillText(new Date().toLocaleDateString('es-MX'),350,410);
+
+  // Hash
+  x.fillStyle='#ff9f1c';x.font='20px monospace';x.fillText('SHA-256:',150,480);
+  x.fillStyle='#00f2fe';x.font='20px monospace';
+  var parts=hash.match(/.{1,32}/g);x.fillText(parts[0],150,520);x.fillText(parts[1],150,555);
+
+  // Sello Cromático Holográfico (Círculo con gradiente cónico)
+  var sx=810, sy=480, sr=90;
+  x.save();
+  x.beginPath();x.arc(sx,sy,sr,0,Math.PI*2);x.clip();
+  var holo=x.createConicGradient(0,sx,sy);
+  holo.addColorStop(0,'#00f2fe');holo.addColorStop(0.25,'#ff9f1c');holo.addColorStop(0.5,'#ff0055');holo.addColorStop(0.75,'#9b59b6');holo.addColorStop(1,'#00f2fe');
+  x.fillStyle=holo;x.fillRect(sx-sr,sy-sr,sr*2,sr*2);
+  // Texto del sello
+  x.translate(sx,sy);x.rotate(-Math.PI/4);
+  x.fillStyle='#000';x.font='bold 16px monospace';x.textAlign='center';
+  x.fillText('MARV',0,0);x.fillText('VERIFIED',0,20);
+  x.restore();
+
+  // Anillo exterior del sello
+  x.beginPath();x.arc(sx,sy,sr+5,0,Math.PI*2);x.strokeStyle='#fff';x.lineWidth=2;x.stroke();
+  x.beginPath();x.arc(sx,sy,sr+12,0,Math.PI*2);x.strokeStyle='rgba(0,242,254,0.5)';x.lineWidth=1;x.stroke();
+
+  // Footer
+  x.textAlign='center';x.fillStyle='#58536e';x.font='16px monospace';
+  x.fillText('Arte digital generado localmente con criptografía SHA-256.',540,920);
+  x.fillText('ID: '+Date.now().toString(16).toUpperCase(),540,960);
+}
+
+document.getElementById('b2').onclick=function(){
+  if(!hash)return;drawCert();
+  var a=document.createElement('a');a.href=document.getElementById('certCanvas').toDataURL('image/png');
+  a.download='MARV_Quantum_Art_'+file.name+'.png';a.click();
+};
+
+document.getElementById('b3').onclick=function(){
+  if(!hash)return;drawCert();
+  var img=document.getElementById('certCanvas').toDataURL('image/png');
+  var win=window.open('','_blank');
+  win.document.write('<html><body style="margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:#000;"><img src="'+img+'" style="max-width:100%;max-height:100%;"><script>window.onload=function(){window.print()}<\/script></body></html>');
+  win.document.close();
+};
+})();
+</script>
+</body>
+</html>

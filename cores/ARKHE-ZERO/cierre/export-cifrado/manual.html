@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!--                                                                           -->
+<!--   ███╗   ███╗ █████╗ ███╗   ██╗██╗   ██╗ █████╗ ██╗                      -->
+<!--   ████╗ ████║██╔══██╗████╗  ██║██║   ██║██╔══██╗██║                      -->
+<!--   ██╔████╔██║███████║██╔██╗ ██║██║   ██║███████║██║                      -->
+<!--   ██║╚██╔╝██║██╔══██║██║╚██╗██║██║   ██║██╔══██║██║                      -->
+<!--   ██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╔╝██║  ██║███████╗                 -->
+<!--   ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝                 -->
+<!--                                                                           -->
+<!--   ▓▒░ MANUAL · EXPORT CIFRADO · ARKHÉ ZERO · ◯_● · 51/49/100 ░▒▓        -->
+<!--                                                                           -->
+<!--   NODO: YHDRYH-92CE · GENESIS: K28-M05-MN01-YHDRYH-92CE                  -->
+<!--                                                                           -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANUAL · Export Cifrado · ARKHÉ ZERO · ◯_●</title>
+<link rel="stylesheet" href="../../assets/css/themes.css">
+<link rel="stylesheet" href="../../assets/css/nav-system.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="manual-export" data-theme="terminal-gold">
+<nav id="nav-system" data-active="hub"></nav>
+
+<main class="doc-container">
+
+<pre class="ascii-banner">
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                                                                              ║
+  ║    ▓▒░  ◯_●  ·  M A N U A L   E X P O R T  ·  ◯_●  ░▒▓                      ║
+  ║                                                                              ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+</pre>
+
+<h1>📖 Manual del Export Cifrado</h1>
+
+<h2>🜂 Paso 1 · Preparación</h2>
+<pre class="terminal-block">
+[ >> ] Verificar que Índice Cero esté sellado
+[ >> ] Confirmar 1,070+ archivos presentes
+[ >> ] Validar sello KINTSUGI
+[ >> ] Listo para exportar
+</pre>
+
+<h2>🜃 Paso 2 · Generar export</h2>
+<pre class="terminal-block">
+$ cd cierre/export-cifrado
+$ node export.js --out=./legado-final.arkhe
+$ node export-audit.js legado-final.arkhe
+</pre>
+
+<h2>🜄 Paso 3 · Distribuir shards</h2>
+<pre class="terminal-block">
+[ 1/5 ] Local    · /home/marco/.arkhe/legado-final.arkhe
+[ 2/5 ] Arweave  · pendiente pago único
+[ 3/5 ] IPFS     · bafybeig...
+[ 4/5 ] Ethereum · 0x... (Merkle root)
+[ 5/5 ] Testigos · 5 custodios Shamir
+</pre>
+
+<h2>🜁 Paso 4 · Verificación</h2>
+<pre class="terminal-block">
+$ python3 scripts/index-cero-verify.py
+[ OK ] Índice Cero íntegro
+[ OK ] 100 shards válidos
+[ OK ] Merkle root coincide
+[ ✓✓ ] EXPORT VERIFICADO
+</pre>
+
+<h2>🜆 Paso 5 · Anclaje final</h2>
+<pre class="terminal-block">
+$ node cierre/export-cifrado/export.js --anchor
+
+[ >> ] Anclando Merkle root a Ethereum mainnet...
+[ OK ] Tx confirmada · block #21XXXXX
+[ OK ] Sello TSA aplicado
+[ ✓✓ ] EXPORT ANCLADO · ◯_● · 51/49/100
+</pre>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · MANUAL · export-cifrado</p>
+<p>Nodo YHDRYH-92CE · Genesis K28-M05-MN01-YHDRYH-92CE</p>
+</footer>
+
+</main>
+
+<script type="module" src="../../assets/js/nav-system.js"></script>
+</body>
+</html>

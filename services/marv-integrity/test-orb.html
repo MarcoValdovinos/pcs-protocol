@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    background-color: #05040a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: system-ui, sans-serif;
+  }
+
+  /* Contenedor de los botones */
+  .button-stack {
+    display: flex;
+    gap: 30px;
+    background: rgba(16, 12, 32, 0.6);
+    padding: 30px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* El botón esférico base */
+  .orb-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(255,255,255,0.1), 0 0 10px rgba(0,0,0,0.5);
+  }
+
+  /* Efecto de luz al pasar el dedo */
+  .orb-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .orb-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+  }
+
+  .orb-btn:hover::before {
+    opacity: 1;
+  }
+
+  /* Iconos SVG */
+  .orb-btn svg {
+    width: 28px;
+    height: 28px;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Textos debajo de los botones */
+  .btn-label {
+    font-size: 11px;
+    color: #a29cb8;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+  }
+
+  /* --- VARIANTES DE COLOR --- */
+
+  /* Botón Teal (Crear) */
+  .btn-teal {
+    background: linear-gradient(135deg, #00f2fe 0%, #0066ff 100%);
+    border-color: #00f2fe;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.3), inset 0 0 15px rgba(255,255,255,0.2);
+  }
+  .btn-teal:hover {
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.6), inset 0 0 20px rgba(255,255,255,0.4);
+  }
+
+  /* Botón Silver (Exportar) */
+  .btn-silver {
+    background: linear-gradient(135deg, #e0e0e0 0%, #888888 100%);
+    border-color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(255,255,255,0.5);
+  }
+  .btn-silver svg { stroke: #111; }
+  .btn-silver:hover {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), inset 0 0 20px rgba(255,255,255,0.8);
+  }
+
+  /* Botón Mauve (Confirmar) */
+  .btn-mauve {
+    background: linear-gradient(135deg, #ff00cc 0%, #333399 100%);
+    border-color: #ff00cc;
+    box-shadow: 0 0 20px rgba(255, 0, 204, 0.3), inset 0 0 15px rgba(255,255,255,0.2);
+  }
+  .btn-mauve:hover {
+    box-shadow: 0 0 30px rgba(255, 0, 204, 0.6), inset 0 0 20px rgba(255,255,255,0.4);
+  }
+</style>
+</head>
+<body>
+
+  <!-- Tus botones -->
+  <div class="button-stack">
+    <div class="btn-wrapper">
+      <button class="orb-btn btn-teal" aria-label="Add">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="12" y1="4" x2="12" y2="20"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+        </svg>
+      </button>
+      <span class="btn-label">Create</span>
+    </div>
+
+    <div class="btn-wrapper">
+      <button class="orb-btn btn-silver" aria-label="Open or Export">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 17 L17 7 M17 7 L9 7 M17 7 L17 15"></path>
+        </svg>
+      </button>
+      <span class="btn-label">Export</span>
+    </div>
+
+    <div class="btn-wrapper">
+      <button class="orb-btn btn-mauve" aria-label="Confirm">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 13 L10 17.5 L19 7"></path>
+        </svg>
+      </button>
+      <span class="btn-label">Confirm</span>
+    </div>
+  </div>
+
+</body>
+</html>

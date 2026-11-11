@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar Plaza · Movimiento ARKHÉ</title>
+<link rel="stylesheet" href="../assets/css/themes.css">
+<link rel="stylesheet" href="../assets/css/nav-system.css">
+<link rel="stylesheet" href="../assets/css/hub.css">
+<link rel="stylesheet" href="../assets/css/forms.css">
+</head>
+<body data-page="solicitar" data-theme="terminal-amber">
+<nav id="nav-system" data-active="movimiento"></nav>
+
+<main class="doc-container">
+<pre class="ascii-banner">
+   ┌─(kali㉿arkhe-zero)-[~/movimiento]────────────────────┐
+   │                                                      │
+   │   SOLICITAR  PLAZA   ·   ◯_●                         │
+   │                                                      │
+   │   Cuarentena: 72h · Aval: 2 fundadores               │
+   │                                                      │
+   └──────────────────────────────────────────────────────┘
+</pre>
+
+<h1>✊ Solicitar Plaza</h1>
+
+<p>El proceso de iniciación al Movimiento ARKHÉ es personal y no comercial.</p>
+
+<form id="solicitud-form" class="form-canonical" action="gracias.html" method="GET">
+  <label for="nombre">NOMBRE COMPLETO *</label>
+  <input id="nombre" name="nombre" type="text" required autocomplete="name">
+
+  <label for="email">CORREO ELECTRÓNICO *</label>
+  <input id="email" name="email" type="email" required autocomplete="email">
+
+  <label for="ubicacion">UBICACIÓN</label>
+  <input id="ubicacion" name="ubicacion" type="text" placeholder="Ciudad, País">
+
+  <label for="motivacion">¿POR QUÉ QUIERES FIRMAR? (máx. 500 palabras)</label>
+  <textarea id="motivacion" name="motivacion" rows="8" required></textarea>
+
+  <label for="compromiso">COMPROMISO</label>
+  <select id="compromiso" name="compromiso">
+    <option value="si">Acepto el Pacto 51/49/100 y el juramento KINTSUGI</option>
+    <option value="no">No acepto (no aplica mi solicitud)</option>
+  </select>
+
+  <button type="submit" class="btn-primary">▶ ENVIAR SOLICITUD</button>
+</form>
+
+<pre class="terminal-block">
+[ INFO ] Después de enviar:
+[ >> ]   · Cuarentena de 72h
+[ >> ]   · Necesitarás aval de 2 miembros activos
+[ >> ]   · Quórum 4/5 decide tu admisión
+[ >> ]   · Si aprueban: firma el juramento
+[ ✓✓ ] Bienvenido al Movimiento ARKHÉ · ◯_● · 51/49/100
+</pre>
+
+<footer class="doc-footer">
+<p class="seal-line">◯_● · 51/49/100 · MOVIMIENTO ARKHÉ · solicitud</p>
+</footer>
+</main>
+
+<script type="module" src="../assets/js/nav-system.js"></script>
+</body>
+</html>

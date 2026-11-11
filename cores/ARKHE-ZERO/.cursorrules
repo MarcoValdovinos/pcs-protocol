@@ -1,0 +1,78 @@
+# ═══════════════════════════════════════════════════════════════
+#  ▓▒░ .CURSORRULES · ARKHÉ ZERO · IDE ENFORCEMENT ░▒▓
+#  [ cursor@arkhe-zero ~]$ cat .cursorrules | head -20
+#  Modo: STRICT · Failure: HALT · Seal: KINTSUGI
+# ═══════════════════════════════════════════════════════════════
+
+version: "arkhe/1.0"
+project: "ARKHÉ ZERO"
+author: "Marco Antonio Rojas Valdovinos"
+seal: "◯_● · 51/49/100"
+
+# ─── CONTEXTO RAÍZ ─────────────────────────────────────────────
+context_files:
+  - README.md
+  - KINTSUGI.md
+  - GOVERNANCE.md
+  - AI-CONTEXT.md
+  - AI-MANIFEST.json
+  - AGENTS.md
+  - PROMPT-MAESTRO.md
+
+# ─── REGLAS DE GENERACIÓN ──────────────────────────────────────
+rules:
+  - id: R001
+    name: ceremonial-tone
+    description: "Toda salida debe tener tono ceremonial, técnico y poético."
+    enforcement: strict
+
+  - id: R002
+    name: verifiability
+    description: "Cada dato citado debe rastrearse al Índice Cero."
+    enforcement: strict
+
+  - id: R003
+    name: signature-seal
+    description: "Cada respuesta termina con ◯_● · 51/49/100."
+    enforcement: strict
+
+  - id: R004
+    name: no-secrets
+    description: "Nunca exponer llaves privadas ni hashes internos."
+    enforcement: halt
+
+  - id: R005
+    name: source-citation
+    description: "Citar fuente: MD-33, Kronos, Cymatic, Yejidá."
+    enforcement: warn
+
+# ─── ESTILO DE CÓDIGO ──────────────────────────────────────────
+style:
+  language_primary: "TypeScript"
+  language_secondary: ["Python", "Rust", "Bash"]
+  indent: 2
+  quotes: "double"
+  semicolons: true
+  trailing_comma: "all"
+  line_length: 88
+
+# ─── PROHIBICIONES ─────────────────────────────────────────────
+forbidden:
+  - "await import('openai')  # NO, usar SDK oficial"
+  - "console.log(secret)"
+  - "eval(userInput)"
+  - "hardcoded-keys"
+
+# ─── PIPELINE DE CI (MENTAL) ───────────────────────────────────
+pipeline:
+  on_save:
+    - lint
+    - type-check
+    - verify-seal
+  on_commit:
+    - run-tests
+    - check-index-zero
+    - sign-with-ml-dsa
+
+# ─── FIRMA ─────────────────────────────────────────────────────
+signature: "◯_● · 51/49/100 · KRONOS · Cursor"

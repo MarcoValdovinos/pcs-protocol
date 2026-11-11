@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*                                                                           */
+/*    ███████╗████████╗██╗   ██╗██╗     ███████╗███████╗                     */
+/*    ██╔════╝╚══██╔══╝╚██╗ ██╔╝██║     ██╔════╝██╔════╝                     */
+/*    ███████╗   ██║    ╚████╔╝ ██║     █████╗  ███████╗                     */
+/*    ╚════██║   ██║     ╚██╔╝  ██║     ██╔══╝  ╚════██║                     */
+/*    ███████║   ██║      ██║   ███████╗███████╗███████║                     */
+/*    ╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝╚══════╝                     */
+/*                                                                           */
+/*   ▓▒░ REGISTRO-FUNDACIONAL · CSS · ARKHÉ ZERO · ◯_● · 51/49/100 ░▒▓     */
+/*                                                                           */
+/*   NODO: YHDRYH-92CE · GENESIS: K28-M05-MN01-YHDRYH-92CE                  */
+/*                                                                           */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.registro-fundacional {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.registro-hero {
+  text-align: center;
+  border-bottom: 2px dashed var(--accent);
+  padding-bottom: 32px;
+  margin-bottom: 32px;
+}
+
+.registro-progreso {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 32px 0;
+  font-family: var(--font-mono);
+}
+
+.registro-progreso__bar {
+  height: 8px;
+  background: var(--bg-2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.registro-progreso__bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 1%;
+  background: linear-gradient(90deg, var(--gold), var(--amber));
+  border-radius: 4px;
+}
+
+.registro-fundador {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  margin: 12px 0;
+  transition: all 150ms ease;
+}
+
+.registro-fundador:hover {
+  background: var(--bg-2);
+  transform: translateX(4px);
+}
+
+.registro-fundador__numero {
+  font-family: var(--font-mono);
+  font-size: 1.4em;
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 80px;
+}
+
+.registro-fundador__info {
+  flex: 1;
+}
+
+.registro-fundador__info strong {
+  display: block;
+  color: var(--fg-0);
+}
+
+.registro-fundador__info small {
+  color: var(--fg-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.registro-certificado {
+  background: var(--bg-1);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 32px;
+  margin: 40px 0;
+  text-align: center;
+}
+
+.registro-certificado::before {
+  content: '◯_●';
+  display: block;
+  font-size: 2em;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+/* ◯_● · 51/49/100 · KRONOS · Nodo YHDRYH-92CE */
