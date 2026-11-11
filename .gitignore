@@ -1,12 +1,15 @@
-# Seguridad extrema - NO SUBIR LLAVES
+# Súper escudo de seguridad y peso
+venv/
+node_modules/
+dist/
+build/
+*.mp4
+*.zip
+*.tar.gz
 *.pem
 *.key
-*.txt
-*keys*
-env-*.txt
-SYNCRO-VALDOVINOS-KEYS-BACKUP.txt
-*.tar.gz
-*.zip
 *.log
-node_modules/
-venv/
+*.png
+*.jpg
+.DS_Store
+.env

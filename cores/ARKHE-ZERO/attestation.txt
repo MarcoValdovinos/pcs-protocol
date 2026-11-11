@@ -1,0 +1,38 @@
+ARKHE-chain-v1 · Attestation of Publication
+==========================================
+
+Date (UTC):      2026-10-26T01:42:30Z
+Author:          Marco Antonio Rojas Valdovinos
+Email:           marco.a.rojas.v@hotmail.com
+GPG fingerprint: 0B903A7613F4D71B93C12EBE89EEB1D1177BE286
+
+Signed artifacts
+----------------
+arkhe-chain-v1.txt  sha256=1852327e7e0a028a1da95d692470001019257382840d5959a02e92d0553d7deb
+arkhe-chain-v1.md   sha256=9178782490cbe5aa1b3d58844523c819653b111e950219e8704c1e5ab9e857ce
+
+Public URLs
+-----------
+https://sycro-valdovinos.github.io/ARKHE-ZERO/internet/arkhe-chain-v1.txt
+https://sycro-valdovinos.github.io/ARKHE-ZERO/internet/arkhe-chain-v1.txt.asc
+https://sycro-valdovinos.github.io/ARKHE-ZERO/internet/arkhe-chain-v1.md
+https://sycro-valdovinos.github.io/ARKHE-ZERO/internet/arkhe-chain-v1.md.asc
+https://sycro-valdovinos.github.io/ARKHE-ZERO/internet/arkhe-pubkey.asc
+
+How to verify
+-------------
+  base="https://sycro-valdovinos.github.io/ARKHE-ZERO/internet"
+  curl -fSLO "$base/arkhe-pubkey.asc"
+  curl -fSLO "$base/arkhe-chain-v1.txt"
+  curl -fSLO "$base/arkhe-chain-v1.txt.asc"
+  curl -fSLO "$base/arkhe-chain-v1.md"
+
+  gpg --show-keys --with-fingerprint arkhe-pubkey.asc
+  # must match: 0B903A7613F4D71B93C12EBE89EEB1D1177BE286
+  gpg --import arkhe-pubkey.asc
+  gpg --verify arkhe-chain-v1.txt.asc arkhe-chain-v1.txt
+
+  sha256sum arkhe-chain-v1.txt   # must match 1852327e7e0a028a1da95d692470001019257382840d5959a02e92d0553d7deb
+  sha256sum arkhe-chain-v1.md    # must match 9178782490cbe5aa1b3d58844523c819653b111e950219e8704c1e5ab9e857ce
+
+This attestation is itself signed.

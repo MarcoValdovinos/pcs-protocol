@@ -1,0 +1,46 @@
+=== W3 NAMING SCHEMES - ORIGEN DE LA URL - 1990 ===
+Autor: Tim Berners-Lee - timbl@info.cern.ch
+
+Formato inventado:
+scheme://host.domain:port/path/path#anchor
+?words+separated+by+plus = search index
+
+Ejemplos 1990:
+file://cernvax.cern.ch/usr/lib/WWW/default.html#123
+#greg = anchor en mismo doc
+
+Esquemas definidos:
+- file
+- news (NNTP)
+- http (search and retrieve)
+- telnet
+- gopher
+- wais (Z39.50)
+- x500 (to be defined)
+
+Problema resuelto: nombre lógico vs dirección física.
+" A hypertext link to a document ought to be specified using 
+the most logical name as opposed to a physical address.
+This is (almost) the only way of getting over the problem 
+of documents being physically moved."
+
+Comandos Line Mode Browser:
+[1] [2] = referencias
+f = find
+b = back, n = next, q = quit, u = up, d = down
+p = print, > file = save, | command = pipe
+! command = shell, CD directory
+Help = lista comandos + UDI (hoy URI/URL)
+
+Bug reports: www-bug@info.cern.ch
+
+=== INTEGRACION ARKHE ZERO ===
+1947 Williams Tube -> 1990 URL format -> 2026 ARKHE ZERO
+- 1947: primer RAM físico
+- 1990: primer nombre lógico universal (URL)
+- 2026: VALDOVINOS-ARKHE-COMPLETA.json = nombre lógico
+        que preserva 1330 FILES aunque cambie hash físico
+Principio Kintsugi: el documento se mueve, el nombre permanece.
+
+ARCHIVED TOLUCA-GLOBAL 2026-10-26
+51%H 49%AI - Pillow-offline-fallback

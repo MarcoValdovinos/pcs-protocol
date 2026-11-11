@@ -1,0 +1,25 @@
+=== INSTALLING WWW - ORIGINAL 1991 ===
+Source: info.cern.ch - Tim BL
+
+"This section describes how to install the World-Wide Web 
+line-mode browser called 'www'."
+
+Steps 1991:
+1. ftp info.cern.ch / anonymous / me@myhost.edu
+2. cd /pub/www/src or /pub/www/bin
+3. binary - get WWWLineMode_vvv.tar.Z
+4. uncompress + tar xvf
+5. make lib -> libwww.a
+6. make -> www binary
+7. make install -> /usr/local/bin/www
+8. rehash -> www starts at CERN home page
+
+Custom home: WWWLineModeDefaults.tar.Z -> /usr/local/lib/WWW
+cerm.html example of customized home page.
+
+ARkHE PARALLEL 2026:
+2026: pkg install -> python arkhe_video.py -> Pillow
+1991: ftp get -> make -> www binary
+Mismo principio: libre, compilable, offline.
+
+-- ARCHIVED BY ARKHE ZERO TOLUCA-GLOBAL 1330 FILES 51/49 --

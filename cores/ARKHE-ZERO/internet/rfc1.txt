@@ -1,0 +1,143 @@
+Network Working Group                                   Steve Crocker
+Request for Comments: 1                                          UCLA
+                                                          7 April 1969
+
+                          Title:   Host Software
+                         Author:   Steve Crocker
+                           Installation:   UCLA
+                           Date:   7 April 1969
+
+CONTENTS
+
+INTRODUCTION
+
+  I. A Summary of the IMP Software
+     Messages
+     Links
+     IMP Transmission and Error Checking
+     Open Questions on the IMP Software
+
+ II. Some Requirements Upon the Host-to-Host Software
+     Simple Use
+     Deep Use
+     Error Checking
+
+III. The Host Software
+     Establishment of a Connection
+     High Volume Transmission
+     A Summary of Primitives
+     Error Checking
+     Closer Interaction
+     Open Questions
+
+ IV. Initial Experiments
+     Experiment One
+     Experiment Two
+
+Introduction
+
+   The software for the ARPA Network exists partly in the IMPs and
+   partly in the respective HOSTs.  BB&N has specified the software of
+   the IMPs and it is the responsibility of the HOST groups to agree on
+   HOST software.
+
+   During the summer of 1968, representatives from the initial four
+   sites met several times to discuss the HOST software and initial
+   experiments on the network.  There emerged from these meetings a
+   working group of three, Steve Carr from Utah, Jeff Rulifson from SRI,
+   and Steve Crocker of UCLA, who met during the fall and winter.  The
+   most recent meeting was in the last week of March in Utah.  Also
+   present was Bill Duvall of SRI who has recently started working with
+   Jeff Rulifson.
+
+   Somewhat independently, Gerard DeLoche of UCLA has been working on
+   the HOST-IMP interface.
+
+   I present here some of the tentative agreements reached and some of
+   the open questions encountered.  Very little of what is here is firm
+   and reactions are expected.
+
+I.   A Summary of the IMP Software
+
+Messages
+
+   Information is transmitted from HOST to HOST in bundles called
+   messages.  A message is any stream of not more than 8080 bits,
+   together with its header.  The header is 16 bits and contains the
+   following information:
+
+           Destination     5 bits
+           Link            8 bits
+           Trace           1 bit
+           Spare           2 bits
+
+   The destination is the numerical code for the HOST to which the
+   message should be sent.  The trace bit signals the IMPs to record
+   status information about the message and send the information back to
+   the NMC (Network Measurement Center, i.e., UCLA).  The spare bits are
+   unused.
+
+Links
+
+   The link field is a special device used by the IMPs to limit certain
+   kinds of congestion.  They function as follows.  Between every pair of
+   HOSTs there are 32 logical full-duplex connections over which messages
+   may be passed in either direction.  The IMPs place the restriction on
+   these links that no HOST can send two successive messages over the
+   same link before the IMP at the destination has sent back a special
+   message called an RFNM (Request for Next Message).
+
+   By "always ready" we mean that the IMPs are always prepared to
+   transmit another message over them.  No notion of beginning or ending
+   a conversation is contained in the IMP software.
+
+II. Some Requirements Upon the Host-to-Host Software
+
+Simple Use
+
+   As with any new facility, there will be a period of very light usage
+   until the community of users experiments with the network and begins
+   to depend upon it.  One of our goals must be to stimulate the
+   immediate and easy use by a wide class of users.  With this goal, it
+   seems natural to provide the ability to use any remote HOST as if it
+   had been dialed up from a TTY (teletype) terminal.
+
+Deep Use
+
+   One of the inherent problems in the network is the fact that all
+   responses from a remote HOST will require on the order of a
+   half-second or so, no matter how simple.
+
+III.  The Host Software
+
+Establishment of a Connection
+
+   The simplest connection we can imagine is where the local HOST acts as
+   if it is a TTY and has dialed up the remote HOST.  After some
+   consideration of the problems of initiating and terminating such a
+   connection, it has been decided to reserve link 0 for communication
+   between HOST operating systems.  The remaining 31 links are thus to be
+   used as dial-up lines.
+
+Open Questions
+
+   1.  If the IMPs do code conversion, the checksum will not be correct.
+   2.  The procedure for requesting the DEL front end is not yet specified.
+
+IV.  Initial Experiments
+
+Experiment One
+
+   SRI is currently modifying their on-line retrieval system which will
+   be the major software component on the Network Documentation Center so
+   that it can be operated with model 35 teletypes.  The control of the
+   teletypes will be written in DEL.  All sites will write DEL compilers
+   and use NLS through the DEL program.
+
+Experiment Two
+
+   SRI will write a DEL front end for full NLS, graphics included.  UCLA
+   and UTAH will use NLS with graphics.
+
+         [ This RFC was put into machine readable form for entry ]
+         [ into the online RFC archives by Celeste Anderson 3/97 ]

@@ -1,0 +1,7 @@
+{
+  "issuer": "sycro:core:valdovinos",
+  "protocol": "SYCRO-QV",
+  "algorithm": "Ed25519",
+  "key_id": "sycro-root-01",
+  "public_key": "MCowBQYDK2VwAyEA8qZZXWVoHsmLEqLykTvcZ+aSMvX4Prq51DjDtZKmzr8="
+}

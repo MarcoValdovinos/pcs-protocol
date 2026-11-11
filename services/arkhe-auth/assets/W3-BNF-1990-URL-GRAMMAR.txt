@@ -1,0 +1,41 @@
+=== W3 ADDRESS SYNTAX: BNF - TIM BERNERS-LEE 1990 ===
+Origen: info.cern.ch - The original URL grammar
+
+BNF DEFINICION ORIGINAL PEGADA EN ARKHE ZERO:
+
+anchoraddress ::= docaddress [ # anchor ]
+docaddress ::= httpaddress | fileaddress | newsaddress | 
+               telnetaddress | prosperoaddress | 
+               gopheraddress | waisaddress
+
+httpaddress ::= http://hostport[/path][?search]
+fileaddress ::= file://host/path
+newsaddress ::= news:groupart
+waisaddress ::= wais://hostport/database[?search]
+telnetaddress ::= telnet://[user@]hostport
+gopheraddress ::= gopher://hostport[/gtype[/selector]][?search]
+
+hostport ::= host[:port]
+host ::= hostname | hostnumber (digits.digits.digits.digits)
+path ::= void | xalphas[/path]
+search ::= xalphas[+search]
+
+xalpha ::= alpha | $ | _ | @ | ! | % | ^ | & | * | ( | ) | . | digit
+alpha ::= a-z | A-Z
+digit ::= 0-9
+
+=== VALOR FORENSE ===
+Este BNF es la primera especificación formal de URL en historia.
+De aquí nace:
+- http:// que usas hoy
+- file:// que usas en Termux /mnt/data/
+- #anchor que usas en HTML
+- ?search con + que hoy es ?q= + Google
+
+Tim BL lo escribió con | para alternativas y [brackets] para opcional.
+"Spaces are representational only: no spaces are actually allowed 
+within a W3 address."
+
+ARCHIVED: ARKHE ZERO TOLUCA-GLOBAL
+2026-10-26 - 1330 FILES - 51%H 49%AI
+Origen 1947 -> BNF 1990 -> ARKHE 2026
