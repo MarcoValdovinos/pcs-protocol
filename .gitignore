@@ -17,3 +17,7 @@ llave_pqc.txt
 *.pem
 *.key
 seed_pqc.txt
+.env.local
+payload.json
+node_modules/
+.next/
