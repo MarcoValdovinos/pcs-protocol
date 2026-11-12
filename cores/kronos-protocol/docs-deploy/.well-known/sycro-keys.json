@@ -1,0 +1,19 @@
+{
+  "issuer": "sycro:core:valdovinos",
+  "protocol": "SYCRO-VALDOVINOS-PQC-v1",
+  "algorithms": ["Ed25519", "ML-DSA-65"],
+  "public_keys": [
+    {
+      "kid": "sycro-root-ed25519",
+      "alg": "Ed25519",
+      "use": "sig",
+      "public_key_pem": "PENDING_UPDATE"
+    },
+    {
+      "kid": "sycro-root-mldsa65",
+      "alg": "ML-DSA-65",
+      "use": "sig",
+      "public_key_hex": "PENDING_UPDATE"
+    }
+  ]
+}
