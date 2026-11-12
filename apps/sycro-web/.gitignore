@@ -3,3 +3,7 @@
 .qv-secret
 gen-qv.js
 .next
+llave_pqc.txt
+*.pem
+*.key
+seed_pqc.txt

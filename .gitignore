@@ -13,3 +13,7 @@ build/
 *.jpg
 .DS_Store
 .env
+llave_pqc.txt
+*.pem
+*.key
+seed_pqc.txt

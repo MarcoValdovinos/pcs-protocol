@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata 
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:kronos="https://sycro.io/ns/kronos#">
+
+    <!-- Metadatos estándar Dublin Core (/elements/1.1/) -->
+    <dc:title>Test Final</dc:title>
+    <dc:creator>Marco Antonio Rojas Valdovinos</dc:creator>
+
+    <!-- Metadatos extendidos Dublin Core (/terms/) -->
+    <dcterms:identifier>CL-PQC-FINAL</dcterms:identifier>
+    <dcterms:created>2026-11-12T04:15:55.081Z</dcterms:created>
+    <dcterms:type>Software</dcterms:type>
+
+    <!-- Metadatos SYCRO / KRONOS -->
+    <kronos:folio_cliente>CL-PQC-FINAL</kronos:folio_cliente>
+    <kronos:sovereignty human="51" ai="49" standard="SCDR-002" />
+    <kronos:compliance standard="NOM-151-SCFI-2016" anchor="TOLUCA-GLOBAL-e8d9eac8" />
+
+</metadata>
