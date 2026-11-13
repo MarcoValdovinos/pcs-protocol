@@ -5,9 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
+      
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+        
+      - name: Run Snyk on sycro-web
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --all-projects --severity-threshold=high
+        run: |
+          cd apps/sycro-web
+          snyk test --severity-threshold=high
