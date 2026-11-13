@@ -1,5 +1,5 @@
 {
-  "name": "sycro",
+  "name": "kronos-desk-val",
   "private": true,
   "dependencies": {
     "@google/genai": "^2.32.0",
@@ -16,5 +16,10 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start"
-  }
+  },
+  "type": "module",
+  "bin": {
+    "kronos-desk-val": "cli.js"
+  },
+  "version": "0.2.0"
 }

@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  devIndicators: false,
   typescript: {
     ignoreBuildErrors: true,
   },
-  outputFileTracingRoot: __dirname,
+  outputFileTracingRoot: process.cwd(),
+  allowedDevOrigins: ['192.168.100.38', 'localhost'],
 };
 
-module.exports = nextConfig;
+export default nextConfig;
