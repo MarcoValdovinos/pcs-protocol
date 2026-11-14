@@ -19,7 +19,7 @@
 
 ### 🧬 El Nacimiento de un Estándar
 
-**SYCRO / KRONOS** es la intersección entre la soberanía de los datos, la criptografía resistente a computadoras cuánticas y los estándares legales de validez documental. 
+**SYCRO / KRONOS** es la intersección entre la soberanía de los datos, la criptografía resistente a computadoras cuánticas y los estándares legales de validez documental.
 
 Este repositorio contiene el primer motor de validación offline capaz de leer metadatos **Dublin Core (XML)**, verificar firmas criptográficas generadas con **ML-DSA-65 (NIST FIPS 204)**, anclarlas al tiempo universal con **RFC 3161**, y emitir **Credenciales Verificables (W3C VC)**.
 
@@ -27,7 +27,22 @@ Este repositorio contiene el primer motor de validación offline capaz de leer m
 
 ---
 
-### 🛠️ El Stack (Forjado en el Terminal)
+### ⚡ Inicio Rápido (Instalación)
+
+Puedes usar SYCRO directamente desde tu terminal (Node.js requerido):
+
+```bash
+# Instalar el CLI globalmente
+npm install -g kronos-desk-val
+
+# Notarizar un documento (genera un archivo .sycro.json)
+kronos-desk-val notarize mi_documento.pdf
+
+También puedes probar el validador web en vivo: https://sycro-valdovinos.vercel.app
+
+---
+
+🛠️ El Stack (Forjado en el Terminal)
 
 <div align="center">
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
@@ -41,9 +56,8 @@ Este repositorio contiene el primer motor de validación offline capaz de leer m
 
 ---
 
-### ⚡ Arquitectura del Protocolo
+🔄 Arquitectura del Protocolo
 
-```mermaid
 graph TD
     A[Humano: Firma 51%] -->|ML-DSA-65| B(Agente IA: Valida 49%)
     B --> C{Firma Válida?}
@@ -51,7 +65,7 @@ graph TD
     D --> E[RFC 3161 Time-Stamp Authority]
     E --> F[(Registro CERN / NOM-151)]
     C -->|NO| G[Rechazo: Documento Alterado]
-    
+
     style A fill:#00FFCC,stroke:#333,stroke-width:2px
     style B fill:#FF00FF,stroke:#333,stroke-width:2px
     style D fill:#00FF00,stroke:#333,stroke-width:2px
