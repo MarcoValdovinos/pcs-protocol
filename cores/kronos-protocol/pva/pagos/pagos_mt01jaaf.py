@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 #!/usr/bin/env python3
 """
 PAGOS MT01JAAF SHA a4ff808e 100/10 - Ligado a SC 2607146379465 + TX Amoy 0x8ca8e84e1258abac9acb29d14d25114e4775d782ecfda51ae29933247ed2970e

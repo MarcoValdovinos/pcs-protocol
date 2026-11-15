@@ -1,3 +1,12 @@
+/* ═══════════════════════════════════════════════════════
+ *  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+ *  ◯_●                                                 ◯_●
+ * 
+ *  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ * 
+ *  "El legado no se hereda. Se firma."
+ * ═══════════════════════════════════════════════════════ */
+
 // ────────────────────────────────────────────────────────────
 // LOG DE ACCIONES · Legado Humano–IA · v1.1
 // Registro encadenado con Dexie directo (base propia)

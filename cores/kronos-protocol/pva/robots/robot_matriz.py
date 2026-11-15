@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 # MT01JAAF SHA a4ff808e - KRONOS-TRACE-PVA-5204160405358537-MT01JAAF
 from robots import FOLIO_MAESTRO, FOLIO_PERICIAL, SHA, SELLO
 

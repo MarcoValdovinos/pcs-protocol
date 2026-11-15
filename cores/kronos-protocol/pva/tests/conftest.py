@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 import pathlib, sys
 # MT01JAAF 100/10 - root es parent de tests
 ROOT = pathlib.Path(__file__).parent.parent.resolve()

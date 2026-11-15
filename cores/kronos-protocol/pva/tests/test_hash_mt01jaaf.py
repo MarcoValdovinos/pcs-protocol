@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 import hashlib, pytest
 from core.hash_to_semantic import generate_manifesto_from_hash, hash_to_semantic_polarity
 from core.perito_seal import generar_sello_kronos

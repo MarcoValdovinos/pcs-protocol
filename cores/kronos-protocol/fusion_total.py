@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 import pathlib, json, shutil, glob
 root = pathlib.Path(".")
 web = pathlib.Path("web")
@@ -52,4 +61,3 @@ print("OK fusion 289")
 # repara index.html si no existe
 if not (web/"index.html").exists() or (web/"index.html").stat().st_size < 100:
     (web/"index.html").write_text(html)
-

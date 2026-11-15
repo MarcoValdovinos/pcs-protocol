@@ -1,3 +1,12 @@
+/* ═══════════════════════════════════════════════════════
+ *  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+ *  ◯_●                                                 ◯_●
+ * 
+ *  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ * 
+ *  "El legado no se hereda. Se firma."
+ * ═══════════════════════════════════════════════════════ */
+
 /* fsdbg/parser.js — Parser para logs fsdbg de almacenamiento
  * Formatos: m0_history (storage), u_history (UIC), ulc_history (ULC), us_history (US)
  * Expone: window.FSDBG.parse(text), window.FSDBG.summarize(parsed), window.FSDBG.detectType(text)

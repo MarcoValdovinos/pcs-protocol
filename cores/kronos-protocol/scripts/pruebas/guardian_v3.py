@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 import time, requests, os
 from datetime import datetime
 
@@ -28,4 +37,3 @@ while True:
         break
     # duerme 2 horas, no cada hora, para no gastar datos ni bateria
     time.sleep(7200)
-

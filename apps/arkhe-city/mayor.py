@@ -1,3 +1,12 @@
+"""═══════════════════════════════════════════════════════
+  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
+  ◯_●                                                 ◯_●
+ 
+  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
+ 
+  "El legado no se hereda. Se firma."
+ ═══════════════════════════════════════════════════════"""
+
 #!/usr/bin/env python3
 # mayor.py · ALCALDE DE LA CIUDAD ARKHÉ · Firma la memoria de la ciudad (51%)
 import os, glob, hashlib, json, subprocess
