@@ -110,7 +110,7 @@ if (command === 'notarize') {
     // 5. Firmar los metadatos con ML-DSA-65
     console.log(`✍️  Firmando Credencial con ML-DSA-65...`);
     const messageBytes = new TextEncoder().encode(JSON.stringify(credential));
-    const signatureBytes = ml_dsa65.sign(keys.secretKey, messageBytes);
+    const signatureBytes = ml_dsa65.sign(messageBytes, keys.secretKey);
     const signatureBase64 = Buffer.from(signatureBytes).toString('base64');
 
     // 6. Añadir la prueba criptográfica (Proof)

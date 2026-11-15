@@ -13,5 +13,8 @@
   },
   "overrides": {
     "@noble/hashes": "^1.8.0"
+  },
+  "dependencies": {
+    "@noble/post-quantum": "^0.7.1"
   }
 }
