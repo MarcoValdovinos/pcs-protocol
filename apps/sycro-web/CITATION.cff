@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this protocol in your research or project, please cite it as below."
+authors:
+  - family-names: "Rojas Valdovinos"
+    given-names: "Marco Antonio"
+    alias: "MarcoValdovinos"
+title: "SYCRO / ARKHE ZERO: A Post-Quantum Document Certification Protocol with Semantic Metadata and Legal Validity (NOM-151)"
+version: 1.1.0
+doi: 10.5281/zenodo.24182537
+date-released: 2026-11-15
+url: "https://github.com/MarcoValdovinos/pcs-protocol"
+license: Apache-2.0
