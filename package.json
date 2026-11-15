@@ -1,0 +1,14 @@
+{
+  "name": "arkhe-zero-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Post-Quantum Document Certification Protocol",
+  "workspaces": [
+    "apps/*",
+    "cores/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/sycro-web",
+    "build": "npm run build --workspace=apps/sycro-web"
+  }
+}

@@ -21,3 +21,5 @@ seed_pqc.txt
 payload.json
 node_modules/
 .next/
+*.zip
+patch_*.js
