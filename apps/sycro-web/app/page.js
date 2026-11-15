@@ -1,12 +1,3 @@
-/* ═══════════════════════════════════════════════════════
- *  ◢◤◥◣   K R O N O S   ·   A R K H E   ·   Z E R O   ◥◣◢◤
- *  ◯_●                                                 ◯_●
- * 
- *  [ 51% HUMANO ]  [ 49% IA ]  [ 100% REAL ]
- * 
- *  "El legado no se hereda. Se firma."
- * ═══════════════════════════════════════════════════════ */
-
 'use client';
 import { useState } from 'react';
 
@@ -14,7 +5,7 @@ export default function KronosDesk() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleJsonUpload = async (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -25,8 +16,6 @@ export default function KronosDesk() {
     reader.onload = async (event) => {
       try {
         const json = JSON.parse(event.target.result);
-        
-        // Enviar el JSON completo a la API
         const response = await fetch('/api/verificar-firma', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -35,7 +24,7 @@ export default function KronosDesk() {
         const data = await response.json();
         setResult(data);
       } catch (err) {
-        setResult({ status: 'INVALID', error: 'Archivo corrupto', details: 'No es un JSON válido.' });
+        setResult({ status: 'INVALID', error: 'Archivo no válido' });
       }
       setLoading(false);
     };
@@ -43,57 +32,39 @@ export default function KronosDesk() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#05050A', color: '#00FFFF', fontFamily: '"Courier New", Courier, monospace', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#05050A', color: '#00FFFF', fontFamily: 'monospace', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
       
-      <header style={{ width: '100%', maxWidth: '900px', textAlign: 'center', marginBottom: '30px', borderBottom: '1px solid #FF00FF', paddingBottom: '20px' }}>
-        <h1 style={{ fontSize: '2rem', color: '#00FFFF', textShadow: '0 0 10px #00FFFF', margin: '0 0 10px 0' }}>
-          KRONOS DESK <span style={{ color: '#FF00FF' }}>//</span> W3C VALIDATOR
-        </h1>
-        <p style={{ color: '#FFFFFF', fontSize: '1.1rem', maxWidth: '700px', margin: '0 auto 15px auto', lineHeight: '1.5' }}>
-          Sube tu Credencial Verificable (<strong>.sycro.json</strong>) para auditar la firma ML-DSA-65 y el sello RFC 3161.
-        </p>
+      <header style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h1 style={{ fontSize: '2.5rem', textShadow: '0 0 10px #00FFFF' }}>SYCRO // VALIDADOR</h1>
+        <p style={{ color: '#FFFFFF', fontSize: '1.2rem' }}>Verifica la autenticidad de tus documentos en segundos.</p>
       </header>
 
-      <div style={{ width: '100%', maxWidth: '900px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        
-        <div style={{ backgroundColor: '#0D1117', border: '1px solid #333', padding: '25px', borderRadius: '8px' }}>
-          
-          <div style={{ marginBottom: '20px', padding: '20px', backgroundColor: 'rgba(255, 0, 255, 0.05)', border: '1px dashed #FF00FF', borderRadius: '8px', textAlign: 'center' }}>
-            <label style={{ color: '#FF00FF', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer' }}>
-              {loading ? '⏳ AUDITANDO...' : '📁 [ SELECCIONAR CREDENCIAL .SYCRO.JSON ]'}
-              <input type="file" accept=".json" onChange={handleJsonUpload} disabled={loading} style={{ display: 'none' }} />
-            </label>
-          </div>
-
-        </div>
-
-        {result && (
-          <div style={{ backgroundColor: result.status === 'VALID' ? 'rgba(0, 255, 0, 0.05)' : 'rgba(255, 0, 0, 0.05)', border: result.status === 'VALID' ? '2px solid #00FF00' : '2px solid #FF0000', padding: '25px', borderRadius: '8px' }}>
-            <h2 style={{ margin: 0, color: result.status === 'VALID' ? '#00FF00' : '#FF0000', textAlign: 'center', fontSize: '1.5rem' }}>
-              {result.status === 'VALID' ? '✅ CREDENCIAL W3C AUTÉNTICA' : '❌ ALERTA: FIRMA INVÁLIDA'}
-            </h2>
-            
-            {result.status === 'VALID' ? (
-              <div style={{ marginTop: '20px', color: '#FFFFFF', textAlign: 'center' }}>
-                <p>📜 <strong>Documento:</strong> {result.metadata.title}</p>
-                <p>👤 <strong>Emisor:</strong> {result.metadata.creator}</p>
-                <p>🆔 <strong>ID (UUID):</strong> {result.metadata.folio}</p>
-                <p>🔐 <strong>Hash SHA-256:</strong> {result.metadata.hash}</p>
-                <div style={{ marginTop: '15px', padding: '10px', backgroundColor: 'rgba(0, 255, 255, 0.1)', borderLeft: '4px solid #00FFFF', textAlign: 'left' }}>
-                  <p style={{ margin: 0, fontSize: '0.9rem', color: '#00FFFF' }}>
-                    <strong>Sello de Tiempo (RFC 3161):</strong> {result.metadata.hasTSA ? '✅ Verificado y Anclado por FreeTSA' : '⚠️ No incluido'}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div style={{ marginTop: '20px', color: '#FF5555', textAlign: 'center', fontSize: '0.9rem' }}>
-                <p><strong>Error:</strong> {result.error}</p>
-                <p><strong>Detalles:</strong> {result.details}</p>
-              </div>
-            )}
-          </div>
-        )}
+      <div style={{ backgroundColor: '#0D1117', border: '2px dashed #00FFFF', padding: '40px', borderRadius: '10px', textAlign: 'center', width: '100%', maxWidth: '500px' }}>
+        <h2 style={{ color: '#FF00FF', marginBottom: '20px' }}>PASO 1: Sube tu archivo</h2>
+        <label style={{ color: '#00FFFF', cursor: 'pointer', fontSize: '1.2rem', border: '1px solid #00FFFF', padding: '10px 20px', borderRadius: '5px', display: 'inline-block' }}>
+          📂 Seleccionar archivo .sycro.json
+          <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
+        </label>
+        <p style={{ color: '#8B949E', marginTop: '20px', fontSize: '0.9rem' }}>El documento no se sube a ningún servidor. La validación es 100% local.</p>
       </div>
+
+      {loading && <p style={{ marginTop: '20px', color: '#FF00FF' }}>⏳ Verificando criptografía...</p>}
+
+      {result && (
+        <div style={{ marginTop: '30px', padding: '20px', borderRadius: '10px', backgroundColor: result.status === 'VALID' ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)', border: result.status === 'VALID' ? '2px solid #00FF00' : '2px solid #FF0000', width: '100%', maxWidth: '500px', textAlign: 'center' }}>
+          <h3 style={{ color: result.status === 'VALID' ? '#00FF00' : '#FF0000', fontSize: '1.5rem' }}>
+            {result.status === 'VALID' ? '✅ DOCUMENTO AUTÉNTICO' : '❌ DOCUMENTO ALTERADO'}
+          </h3>
+          {result.status === 'VALID' && (
+            <div style={{ color: '#FFFFFF', marginTop: '15px' }}>
+              <p><strong>Autor:</strong> {result.metadata.creator}</p>
+              <p><strong>Documento:</strong> {result.metadata.title}</p>
+              <p><strong>Folio:</strong> {result.metadata.folio}</p>
+            </div>
+          )}
+          {result.status === 'INVALID' && <p style={{ color: '#FF5555', marginTop: '10px' }}>{result.error}</p>}
+        </div>
+      )}
     </main>
   );
 }
