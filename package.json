@@ -10,5 +10,8 @@
   "scripts": {
     "dev": "npm run dev --workspace=apps/sycro-web",
     "build": "npm run build --workspace=apps/sycro-web"
+  },
+  "overrides": {
+    "@noble/hashes": "^1.8.0"
   }
 }
