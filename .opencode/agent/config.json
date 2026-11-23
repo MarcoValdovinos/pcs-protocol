@@ -1,0 +1,14 @@
+{
+  "proyecto": "KRONOS 2099",
+  "autor": "Marco Antonio Rivera Valdovinos (MARV)",
+  "acta": "7225862335",
+  "safe_creative": ["2607086319439", "2607146379465"],
+  "sello": "51% Humano / 49% IA - SCDR-002",
+  "causa": "Gatitos de Lerma 10%",
+  "agentes": [
+    {"nombre": "guardian-2099", "archivo": "guardian-2099.md", "rol": "Seguridad y blindaje"},
+    {"nombre": "perito-2099", "archivo": "perito-2099.md", "rol": "Dictamenes periciales"},
+    {"nombre": "triage-2099", "archivo": "triage-2099.md", "rol": "Clasificacion VERDE/AMARILLO/ROJO"},
+    {"nombre": "tesoreria-2099", "archivo": "tesoreria-2099.md", "rol": "Finanzas y reparto 10%"}
+  ]
+}

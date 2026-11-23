@@ -23,3 +23,6 @@ node_modules/
 .next/
 *.zip
 patch_*.js
+llave_privada*
+*llave_privada*
+*.key
