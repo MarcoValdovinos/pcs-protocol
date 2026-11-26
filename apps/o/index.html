@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MERKABA · QUANTUM CINEMA</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { width:100%; height:100%; overflow:hidden; background:#000; }
+  body { font-family:'Courier New',monospace; color:#c8f8ff; user-select:none; }
+  canvas { display:block; }
+
+  #intro {
+    position:fixed; inset:0; z-index:1000; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background: radial-gradient(circle at center, #050a18 0%, #000 75%);
+    transition: opacity 1s, transform 1s; text-align:center; padding:24px;
+  }
+  #intro.hide { opacity:0; pointer-events:none; transform:scale(1.08); }
+  #intro h1 {
+    font-size: clamp(28px, 6vw, 72px); letter-spacing:14px; font-weight:bold;
+    background: linear-gradient(90deg,#00d0ff,#7a5cff,#ffcc44,#00d0ff);
+    background-size:400% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation: shimmer 5s linear infinite;
+    text-shadow: 0 0 100px #00d0ff55; margin-bottom:14px;
+  }
+  @keyframes shimmer { to { background-position:400% 0; } }
+  #intro .sub { font-size: clamp(10px,1.4vw,14px); letter-spacing:8px; opacity:.55; margin-bottom:44px; }
+  #intro .box {
+    border:1px solid #00d0ff44; border-radius:20px; padding:36px 64px;
+    background: linear-gradient(135deg,#00d0ff08,#7a5cff08,#ffcc4408);
+    font-size:13px; letter-spacing:4px; transition: all .4s; backdrop-filter: blur(12px);
+  }
+  #intro .box:hover { border-color:#00d0ff; box-shadow:0 0 80px #00d0ff44; transform:translateY(-4px); }
+  #intro .modes { margin-top:36px; font-size:10px; opacity:.55; letter-spacing:3px; line-height:2.4; }
+  #intro .hint { margin-top:36px; font-size:9px; opacity:.3; letter-spacing:3px; max-width:460px; line-height:1.8; }
+
+  #hud { position:fixed; inset:0; pointer-events:none; padding:22px; z-index:10;
+         display:flex; flex-direction:column; justify-content:space-between; }
+  .top { display:flex; justify-content:space-between; align-items:flex-start; }
+  .brand { font-size:20px; font-weight:bold; letter-spacing:5px; color:#ffcc44;
+           text-shadow:0 0 24px #ffcc44cc, 0 0 60px #ffcc4455; }
+  .brand span { color:#00d0ff; text-shadow:0 0 24px #00d0ffcc; }
+  .stats { text-align:right; font-size:10px; line-height:2; opacity:.85; letter-spacing:1.5px; }
+  .stats b { color:#00ff88; }
+  .bar { display:inline-block; width:70px; height:3px; background:#ffffff11; border-radius:2px;
+         overflow:hidden; vertical-align:middle; margin-left:8px; }
+  .bar > i { display:block; height:100%; background:linear-gradient(90deg,#00d0ff,#ffcc44); width:0%; transition:width .08s; }
+
+  #scene-tag {
+    position:fixed; top:22px; left:50%; transform:translateX(-50%);
+    font-size:11px; letter-spacing:8px; opacity:.75; z-index:10; pointer-events:none;
+    text-align:center; text-transform:uppercase;
+  }
+  #scene-tag span { color:#ffcc44; text-shadow:0 0 20px #ffcc44; }
+
+  .bottom { display:flex; flex-direction:column; gap:12px; }
+  #buttons { display:flex; gap:10px; flex-wrap:wrap; pointer-events:auto; }
+  .btn {
+    background:#060c1cee; border:1px solid #ffcc4466; color:#ffcc44;
+    padding:12px 22px; border-radius:40px; font-family:inherit;
+    font-size:11px; font-weight:bold; letter-spacing:2.5px; cursor:pointer;
+    backdrop-filter:blur(12px); transition: all .3s cubic-bezier(.2,.8,.2,1);
+    text-transform:uppercase; box-shadow:0 0 22px #ffcc4422;
+  }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 0 34px #ffcc4455; }
+  .btn:active { transform:translateY(0) scale(.97); }
+  .btn.cyan { border-color:#00d0ff66; color:#00d0ff; }
+  .btn.green { border-color:#00ff8866; color:#00ff88; }
+  .btn.red { border-color:#ff224466; color:#ff2244; animation: recPulse 1.4s infinite; }
+  @keyframes recPulse { 0%,100%{ box-shadow:0 0 22px #ff224433;} 50%{ box-shadow:0 0 48px #ff224499;} }
+  .btn small { display:block; font-size:8px; letter-spacing:1px; opacity:.6; margin-top:3px; }
+
+  #keys { font-size:10px; letter-spacing:2px; opacity:.5;
+    background:#060c1c99; border:1px solid #1a2a3a; border-radius:12px;
+    padding:8px 14px; display:inline-block; backdrop-filter: blur(6px); align-self:flex-start; }
+  #keys b { color:#ffcc44; }
+
+  #spectrum { position:fixed; left:22px; bottom:120px; width:260px; height:80px;
+    z-index:10; opacity:.72; pointer-events:none; border-radius:10px; overflow:hidden; }
+
+  #toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.9);
+    background:#060c1cee; border:1px solid #ffcc44; color:#ffcc44;
+    padding:18px 38px; border-radius:18px; font-size:13px; letter-spacing:4px;
+    backdrop-filter:blur(16px); z-index:100; opacity:0; transition: all .4s;
+    pointer-events:none; box-shadow:0 0 80px #ffcc4466; text-align:center; text-transform:uppercase; }
+  #toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+  .letterbox { position:fixed; left:0; right:0; height:0; background:#000; z-index:8;
+                transition: height 1s cubic-bezier(.4,0,.2,1); }
+  #letterbox-top { top:0; }
+  #letterbox-bottom { bottom:0; }
+  body.cinema #letterbox-top, body.cinema #letterbox-bottom { height: 9vh; }
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <h1>MERKABA</h1>
+  <div class="sub">QUANTUM CINEMA · FLOWER OF LIFE · v24</div>
+  <div class="box">◈ SUELTA UN MP3 AQUÍ ◈<br><br>O HAZ CLIC PARA ELEGIR</div>
+  <div class="modes">
+    ▸ MERKABA DE CRISTAL IRIDISCENTE<br>
+    ▸ FLOR DE LA VIDA PROCEDURAL<br>
+    ▸ PLATAFORMA DORADA CON ANILLOS<br>
+    ▸ RAYOS VOLUMÉTRICOS · BLOOM · GRANO FÍLMICO
+  </div>
+  <div class="hint">Audio procesado 100% en tu navegador · graba video en tiempo real</div>
+</div>
+
+<div class="letterbox" id="letterbox-top"></div>
+<div class="letterbox" id="letterbox-bottom"></div>
+
+<div id="hud">
+  <div class="top">
+    <div class="brand">MERKABA<span> · 5D</span></div>
+    <div class="stats">
+      <div><span id="fps">--</span> FPS · QC <b id="quality">ULTRA</b></div>
+      <div>BASS <span class="bar"><i id="barbass"></i></span></div>
+      <div>MID&nbsp;&nbsp;<span class="bar"><i id="barmid"></i></span></div>
+      <div>HIGH <span class="bar"><i id="barhigh"></i></span></div>
+      <div>BEATS <b id="beats">0</b></div>
+      <div id="reclabel" style="color:#ff4466;letter-spacing:3px">● REC OFF</div>
+    </div>
+  </div>
+</div>
+
+<div id="scene-tag">GEOMETRÍA <span id="sceneName">SAGRADA</span></div>
+<canvas id="spectrum"></canvas>
+
+<div style="position:fixed;inset:0;pointer-events:none;padding:22px;z-index:10;display:flex;flex-direction:column;justify-content:flex-end">
+  <div class="bottom">
+    <div id="buttons">
+      <button class="btn cyan" id="btn-collapse">⚛ COLAPSO<small>ESPACIO</small></button>
+      <button class="btn" id="btn-camera">🎬 CÁMARA<small>AUTO</small></button>
+      <button class="btn cyan" id="btn-cinema">🎥 CINE<small>B</small></button>
+      <button class="btn red" id="btn-record">⬤ GRABAR<small>R</small></button>
+      <button class="btn green" id="btn-new">↺ MP3</button>
+    </div>
+    <div id="keys">
+      <b>ESPACIO</b> colapso · <b>B</b> cine · <b>R</b> grabar · <b>C</b> cámara · <b>1-4</b> vistas · arrastra
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<canvas id="canvas"></canvas>
+<input type="file" id="fileinput" accept="audio/*" style="display:none" />
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+
+/* ============================================================
+   CALIDAD ADAPTATIVA
+   ============================================================ */
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const QUALITY = {
+  ULTRA:  { RATIO:2,    SPARK:2000, STARS:2500 },
+  HIGH:   { RATIO:1.75, SPARK:1400, STARS:1800 },
+  MEDIUM: { RATIO:1.5,  SPARK:800,  STARS:1200 },
+  LOW:    { RATIO:1,    SPARK:400,  STARS:600 },
+};
+let currentQuality = IS_MOBILE ? 'MEDIUM' : 'ULTRA';
+let Q = QUALITY[currentQuality];
+
+/* ============================================================
+   RENDERER + ESCENA
+   ============================================================ */
+const canvas = document.getElementById('canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, preserveDrawingBuffer:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0x000308, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000308, 0.012);
+const camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 900);
+
+/* ============================================================
+   🤫 SECRETO · ENVIRONMENT MAP PROCEDURAL
+   Sin esto, el cristal iridiscente se ve negro.
+   Generamos un gradiente radial que simula un estudio de luz.
+   ============================================================ */
+function makeEnvTexture(){
+  const c = document.createElement('canvas');
+  c.width = 512; c.height = 256;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,0,256);
+  g.addColorStop(0.0, '#001133');
+  g.addColorStop(0.35,'#0a3a6a');
+  g.addColorStop(0.5, '#7a5cff');
+  g.addColorStop(0.65,'#00d0ff');
+  g.addColorStop(1.0, '#000308');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,512,256);
+  // Añadir puntos de luz (simulan reflectores)
+  for (let i=0;i<30;i++){
+    const x = Math.random()*512, y = Math.random()*256;
+    const r = 6 + Math.random()*40;
+    const rg = ctx.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0, 'rgba(255,255,255,'+(0.3+Math.random()*0.5)+')');
+    rg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(x-r,y-r,r*2,r*2);
+  }
+  const tex = new THREE.CanvasTexture(c);
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envMap = pmrem.fromEquirectangular(makeEnvTexture()).texture;
+scene.environment = envMap;
+
+/* ============================================================
+   POST-PROCESO
+   ============================================================ */
+const composer = new EffectComposer(renderer);
+composer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+composer.setSize(innerWidth, innerHeight);
+composer.addPass(new RenderPass(scene, camera));
+
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.5, 0.8, 0.2);
+composer.addPass(bloom);
+
+const FilmShader = {
+  uniforms: {
+    tDiffuse:{value:null}, uTime:{value:0},
+    uCA:{value:0.0015}, uGrain:{value:0.045},
+    uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},
+    uPulse:{value:0},
+  },
+  vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader:`
+    uniform sampler2D tDiffuse; uniform float uTime,uCA,uGrain,uPulse;
+    uniform vec2 uResolution; varying vec2 vUv;
+    float rand(vec2 c){ return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453); }
+    void main(){
+      vec2 uv=vUv; vec2 dir=uv-0.5; float d=length(dir);
+      float ca=(uCA+uPulse*0.008)*(0.4+d*1.8);
+      float r=texture2D(tDiffuse,uv+dir*ca).r;
+      float g=texture2D(tDiffuse,uv).g;
+      float b=texture2D(tDiffuse,uv-dir*ca).b;
+      vec3 col=vec3(r,g,b);
+      col+=sin(uv.y*uResolution.y*1.2+uTime*2.0)*0.012;
+      float grain=rand(uv*uResolution+uTime*60.0)-0.5;
+      col+=grain*(uGrain+uPulse*0.09);
+      col*=1.0-smoothstep(0.4,1.0,d)*0.9;
+      col+=uPulse*0.08;
+      gl_FragColor=vec4(col,1.0);
+    }`
+};
+const filmPass = new ShaderPass(FilmShader);
+filmPass.renderToScreen = true;
+composer.addPass(filmPass);
+
+/* ============================================================
+   🌟 MERKABA · Tetraedro Estelar de Cristal Iridiscente
+   Dos tetraedros opuestos (uno rotado 180°) que forman la
+   estrella de 8 puntas. Material físico con transmisión,
+   iridiscencia y clearcoat para el efecto oro-cristal.
+   ============================================================ */
+const merkabaGroup = new THREE.Group();
+scene.add(merkabaGroup);
+
+// Material cristal iridiscente
+const crystalMat = new THREE.MeshPhysicalMaterial({
+  color: 0xfff0c0,
+  metalness: 0.2,
+  roughness: 0.03,
+  transmission: 0.85,
+  thickness: 1.6,
+  ior: 1.6,
+  iridescence: 1.0,
+  iridescenceIOR: 1.35,
+  iridescenceThicknessRange: [100, 700],
+  clearcoat: 1.0,
+  clearcoatRoughness: 0.05,
+  envMap: envMap,
+  envMapIntensity: 2.2,
+  transparent: true,
+  side: THREE.DoubleSide,
+});
+
+// Segundo material dorado para los bordes
+const goldMat = new THREE.MeshPhysicalMaterial({
+  color: 0xffbb33,
+  metalness: 1.0,
+  roughness: 0.08,
+  envMap: envMap,
+  envMapIntensity: 2.5,
+  emissive: 0x442200,
+  emissiveIntensity: 0.3,
+});
+
+// Tetraedro superior
+const tetraUpGeom = new THREE.TetrahedronGeometry(3.6, 0);
+const tetraUp = new THREE.Mesh(tetraUpGeom, crystalMat);
+merkabaGroup.add(tetraUp);
+
+// Tetraedro inferior (invertido)
+const tetraDownGeom = new THREE.TetrahedronGeometry(3.6, 0);
+const tetraDown = new THREE.Mesh(tetraDownGeom, crystalMat);
+tetraDown.rotation.z = Math.PI;
+merkabaGroup.add(tetraDown);
+
+// Aristas doradas (wireframe encima del cristal)
+const edgesUpGeom = new THREE.EdgesGeometry(tetraUpGeom);
+const edgesUp = new THREE.LineSegments(edgesUpGeom, new THREE.LineBasicMaterial({
+  color: 0xffcc44, transparent:true, opacity:0.95, blending: THREE.AdditiveBlending,
+}));
+merkabaGroup.add(edgesUp);
+
+const edgesDownGeom = new THREE.EdgesGeometry(tetraDownGeom);
+const edgesDown = new THREE.LineSegments(edgesDownGeom, new THREE.LineBasicMaterial({
+  color: 0xffcc44, transparent:true, opacity:0.95, blending: THREE.AdditiveBlending,
+}));
+edgesDown.rotation.z = Math.PI;
+merkabaGroup.add(edgesDown);
+
+merkabaGroup.position.y = 3.5;
+
+/* ============================================================
+   🌸 FLOR DE LA VIDA PROCEDURAL (Fondo)
+   Se dibuja en un canvas con círculos en patrón hexagonal
+   y se aplica como textura emisiva en un plano detrás.
+   ============================================================ */
+function makeFlowerOfLife(){
+  const size = 1024;
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0,0,size,size);
+
+  const cx = size/2, cy = size/2;
+  const R = 70; // radio base de los círculos
+
+  ctx.strokeStyle = '#00d0ff';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = '#00d0ff';
+  ctx.shadowBlur = 24;
+
+  // Círculo central + 6 en primera corona
+  const centers = [[cx,cy]];
+  for (let i=0;i<6;i++){
+    const a = (i/6)*Math.PI*2 - Math.PI/2;
+    centers.push([cx + Math.cos(a)*R*2, cy + Math.sin(a)*R*2]);
+  }
+  // Segunda corona (12 círculos)
+  for (let i=0;i<12;i++){
+    const a = (i/12)*Math.PI*2 - Math.PI/2;
+    centers.push([cx + Math.cos(a)*R*4, cy + Math.sin(a)*R*4]);
+  }
+  // Tercera corona parcial (para llenar)
+  for (let i=0;i<18;i++){
+    const a = (i/18)*Math.PI*2 - Math.PI/2;
+    centers.push([cx + Math.cos(a)*R*6, cy + Math.sin(a)*R*6]);
+  }
+
+  // Dibuja cada círculo
+  centers.forEach(([x,y])=>{
+    ctx.beginPath();
+    ctx.arc(x, y, R*2, 0, Math.PI*2);
+    ctx.stroke();
+  });
+
+  // Círculo exterior
+  ctx.beginPath();
+  ctx.arc(cx, cy, R*7.5, 0, Math.PI*2);
+  ctx.stroke();
+
+  // Añadir un segundo trazo más fino para textura
+  ctx.shadowBlur = 8;
+  ctx.lineWidth = 1.2;
+  ctx.globalAlpha = 0.6;
+  centers.forEach(([x,y])=>{
+    ctx.beginPath();
+    ctx.arc(x, y, R*2, 0, Math.PI*2);
+    ctx.stroke();
+  });
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+const flowerTex = makeFlowerOfLife();
+const flowerMat = new THREE.MeshBasicMaterial({
+  map: flowerTex,
+  transparent: true,
+  opacity: 0.9,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  side: THREE.DoubleSide,
+});
+const flowerPlane = new THREE.Mesh(new THREE.PlaneGeometry(28, 28), flowerMat);
+flowerPlane.position.set(0, 6.5, -10);
+scene.add(flowerPlane);
+
+/* Segunda Flor de la Vida más grande y rotada (fondo profundo) */
+const flowerMat2 = new THREE.MeshBasicMaterial({
+  map: flowerTex, transparent:true, opacity:0.35,
+  blending: THREE.AdditiveBlending, depthWrite:false, side:THREE.DoubleSide,
+});
+const flowerPlane2 = new THREE.Mesh(new THREE.PlaneGeometry(50, 50), flowerMat2);
+flowerPlane2.position.set(0, 6.5, -22);
+scene.add(flowerPlane2);
+
+/* ============================================================
+   💫 PLATAFORMA DORADA · Anillos concéntricos
+   ============================================================ */
+const platform = new THREE.Group();
+platform.position.y = 0;
+scene.add(platform);
+
+const goldRingMat = new THREE.MeshBasicMaterial({
+  color: 0xffcc44, transparent:true, opacity:0.85,
+  blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+});
+
+// Anillo exterior
+const ringOuter = new THREE.Mesh(new THREE.RingGeometry(11.5, 12, 128), goldRingMat);
+ringOuter.rotation.x = -Math.PI/2;
+platform.add(ringOuter);
+
+// Anillo medio
+const ringMid = new THREE.Mesh(new THREE.RingGeometry(8.5, 8.7, 128), goldRingMat);
+ringMid.rotation.x = -Math.PI/2;
+ringMid.material = goldRingMat.clone();
+ringMid.material.opacity = 0.7;
+platform.add(ringMid);
+
+// Anillo interior
+const ringInner = new THREE.Mesh(new THREE.RingGeometry(5.5, 5.65, 128), goldRingMat);
+ringInner.rotation.x = -Math.PI/2;
+ringInner.material = goldRingMat.clone();
+ringInner.material.opacity = 0.55;
+platform.add(ringInner);
+
+// Círculo central luminoso
+const centerDisk = new THREE.Mesh(new THREE.CircleGeometry(5, 64), new THREE.MeshBasicMaterial({
+  color: 0x00d0ff, transparent:true, opacity:0.15,
+  blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+}));
+centerDisk.rotation.x = -Math.PI/2;
+centerDisk.position.y = 0.01;
+platform.add(centerDisk);
+
+// Rejilla dorada en el suelo
+const goldGrid = new THREE.GridHelper(40, 40, 0xffcc44, 0x442200);
+goldGrid.material.transparent = true; goldGrid.material.opacity = 0.18;
+scene.add(goldGrid);
+
+/* ============================================================
+   ✨ RAYOS VOLUMÉTRICOS (God Rays)
+   ============================================================ */
+const godRays = [];
+const rayColors = [0x00d0ff, 0xffcc44, 0x7a5cff, 0x00d0ff, 0xffcc44, 0x7a5cff];
+for (let i=0;i<6;i++){
+  const coneGeom = new THREE.ConeGeometry(0.5 + Math.random()*0.6, 34 + Math.random()*12, 12, 1, true);
+  const coneMat = new THREE.MeshBasicMaterial({
+    color: rayColors[i], transparent:true, opacity:0.045 + Math.random()*0.06,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite:false,
+  });
+  const cone = new THREE.Mesh(coneGeom, coneMat);
+  cone.rotation.z = (Math.random()-0.5)*0.35;
+  cone.rotation.x = (Math.random()-0.5)*0.35;
+  cone.position.set((Math.random()-0.5)*10, 18, (Math.random()-0.5)*10);
+  cone.userData.baseOpacity = coneMat.opacity;
+  scene.add(cone);
+  godRays.push(cone);
+}
+
+/* ============================================================
+   ✨ CHISPAS ORBITALES · Partículas alrededor del Merkaba
+   ============================================================ */
+const SPARK_N = Q.SPARK;
+const sparkPos = new Float32Array(SPARK_N*3);
+const sparkData = []; // {radius, theta, phi, speed, orbit}
+for (let i=0;i<SPARK_N;i++){
+  const r = 5 + Math.random()*10;
+  const th = Math.random()*Math.PI*2;
+  const ph = Math.acos(2*Math.random()-1);
+  const speed = 0.15 + Math.random()*0.5;
+  sparkPos[i*3] = r*Math.sin(ph)*Math.cos(th);
+  sparkPos[i*3+1] = r*Math.cos(ph);
+  sparkPos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+  sparkData.push({ r, th, ph, speed });
+}
+const sparkGeom = new THREE.BufferGeometry();
+sparkGeom.setAttribute('position', new THREE.BufferAttribute(sparkPos,3));
+const sparkMat = new THREE.PointsMaterial({
+  color: 0xffcc44, size:0.12, transparent:true, opacity:0.9,
+  blending: THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true,
+});
+const sparks = new THREE.Points(sparkGeom, sparkMat);
+scene.add(sparks);
+
+/* Estrellas de fondo */
+const starPos = new Float32Array(Q.STARS*3);
+for (let i=0;i<Q.STARS;i++){
+  const r = 120+Math.random()*300, th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+  starPos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+  starPos[i*3+1] = r*Math.cos(ph);
+  starPos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+}
+const starGeom = new THREE.BufferGeometry();
+starGeom.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+const stars = new THREE.Points(starGeom, new THREE.PointsMaterial({
+  color:0x88aaff, size:0.5, transparent:true, opacity:0.7,
+  blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true,
+}));
+scene.add(stars);
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+let audioCtx=null, analyser=null, freqData=null, timeData=null;
+let audioEl=null, audioSrc=null, audioDest=null;
+let bass=0, mid=0, high=0, energy=0, prevEnergy=0;
+let beatFlash=0, beatCount=0, lastBeatTime=0, dropFlash=0;
+
+const specCanvas = document.getElementById('spectrum');
+const specCtx = specCanvas.getContext('2d');
+specCanvas.width=260; specCanvas.height=80;
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let t=0, last=performance.now();
+let collapse=0, collapseTarget=0;
+let autoCamera=true, camMode=0, camPhase=0;
+let fpsAcc=0, fpsCount=0, fpsCurrent=60, autoQCool=0;
+let recording=false, recorder=null, recordedChunks=[];
+
+const cam = { theta:0, phi:1.2, radius:22, target: new THREE.Vector3(0,3.5,0) };
+const camGoal = { theta:0, phi:1.2, radius:22 };
+const camTgtGoal = new THREE.Vector3(0,3.5,0);
+
+/* ============================================================
+   CARGA MP3
+   ============================================================ */
+const intro = document.getElementById('intro');
+const dropBox = intro.querySelector('.box');
+const fileInput = document.getElementById('fileinput');
+intro.addEventListener('click', ()=>fileInput.click());
+fileInput.addEventListener('change', e=>{ if(e.target.files[0]) loadAudio(e.target.files[0]); });
+['dragover','dragenter'].forEach(ev=>intro.addEventListener(ev, e=>{
+  e.preventDefault(); dropBox.style.borderColor='#00d0ff'; dropBox.style.boxShadow='0 0 80px #00d0ff66';
+}));
+['dragleave','drop'].forEach(ev=>intro.addEventListener(ev, e=>{
+  e.preventDefault(); dropBox.style.borderColor='#00d0ff44'; dropBox.style.boxShadow='none';
+}));
+intro.addEventListener('drop', e=>{
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('audio/')) loadAudio(f);
+});
+
+async function loadAudio(file){
+  if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if (audioCtx.state==='suspended') await audioCtx.resume();
+  audioEl = new Audio();
+  audioEl.src = URL.createObjectURL(file);
+  audioEl.crossOrigin = 'anonymous';
+  audioSrc = audioCtx.createMediaElementSource(audioEl);
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.72;
+  freqData = new Uint8Array(analyser.frequencyBinCount);
+  timeData = new Uint8Array(analyser.fftSize);
+  audioSrc.connect(analyser);
+  audioDest = audioCtx.createMediaStreamDestination();
+  analyser.connect(audioCtx.destination);
+  analyser.connect(audioDest);
+  intro.classList.add('hide');
+  document.body.classList.add('cinema');
+  await audioEl.play();
+  showToast('🌸 ' + file.name.replace(/\.[^.]+$/,'').toUpperCase());
+}
+
+/* ============================================================
+   ANÁLISIS
+   ============================================================ */
+function analyze(){
+  if (!analyser) return;
+  analyser.getByteFrequencyData(freqData);
+  analyser.getByteTimeDomainData(timeData);
+  const n = freqData.length;
+  const bEnd = Math.floor(n*0.08), mEnd = Math.floor(n*0.45);
+  let b=0,m=0,h=0;
+  for (let i=0;i<bEnd;i++) b+=freqData[i];
+  for (let i=bEnd;i<mEnd;i++) m+=freqData[i];
+  for (let i=mEnd;i<n;i++) h+=freqData[i];
+  bass += ((b/(bEnd*255))-bass)*0.32;
+  mid  += ((m/((mEnd-bEnd)*255))-mid)*0.32;
+  high += ((h/((n-mEnd)*255))-high)*0.32;
+
+  let sum=0;
+  for (let i=0;i<timeData.length;i++){ const v=(timeData[i]-128)/128; sum+=v*v; }
+  energy = Math.sqrt(sum/timeData.length);
+
+  const now = performance.now();
+  if (energy-prevEnergy > 0.075 && now-lastBeatTime > 200){
+    beatFlash = 1; beatCount++; lastBeatTime = now;
+  }
+  prevEnergy = energy*0.55 + prevEnergy*0.45;
+  if (bass>0.75 && energy>0.45) dropFlash = Math.min(1.5, dropFlash+0.4);
+  dropFlash *= 0.94;
+
+  document.getElementById('barbass').style.width = (bass*100).toFixed(0)+'%';
+  document.getElementById('barmid').style.width  = (mid*100).toFixed(0)+'%';
+  document.getElementById('barhigh').style.width = (high*100).toFixed(0)+'%';
+  document.getElementById('beats').textContent   = beatCount;
+
+  specCtx.clearRect(0,0,260,80);
+  specCtx.fillStyle='rgba(0,0,0,0.35)'; specCtx.fillRect(0,0,260,80);
+  const bars=65;
+  for (let i=0;i<bars;i++){
+    const v = freqData[Math.floor(i*n/bars/4)]/255;
+    const hue = 45 + i*2;
+    specCtx.fillStyle=`hsl(${hue},100%,${30+v*55}%)`;
+    const w = 260/bars;
+    specCtx.fillRect(i*w, 80-v*78, w-1, v*78);
+  }
+}
+
+/* ============================================================
+   UPDATE · MERKABA
+   Rota lentamente, escala con el bass, pulsa con el beat.
+   En COLAPSO se contrae y se convierte en una esfera de luz.
+   ============================================================ */
+function updateMerkaba(dt){
+  // Rotación lenta
+  merkabaGroup.rotation.y += dt * (0.35 + bass*1.5);
+  merkabaGroup.rotation.x += dt * (0.15 + mid*1.0);
+
+  // Escala reactiva
+  const s = 1 + bass*0.4 + dropFlash*0.3 + beatFlash*0.15;
+  merkabaGroup.scale.setScalar(s * (1 - collapse*0.35));
+
+  // Flotación vertical
+  merkabaGroup.position.y = 3.5 + Math.sin(t*0.9)*0.35 + beatFlash*0.4;
+
+  // Contra-rotación de los tetraedros (efecto giroscópico)
+  tetraUp.rotation.y += dt * 0.6;
+  tetraDown.rotation.y -= dt * 0.6;
+
+  // Color reactivo
+  const hue = 0.13 + Math.sin(t*0.3)*0.04 + high*0.1;
+  crystalMat.color.setHSL(hue, 0.5, 0.85 - collapse*0.3);
+  crystalMat.iridescence = 0.7 + high*0.3;
+  edgesUp.material.color.setHSL(0.13 + high*0.15, 1, 0.6 + beatFlash*0.3);
+  edgesDown.material.color.setHSL(0.13 + high*0.15, 1, 0.6 + beatFlash*0.3);
+
+  // Reacción al colapso: el cristal se vuelve más emisivo y azul
+  if (collapse > 0.5){
+    crystalMat.color.setHSL(0.55, 0.6, 0.7);
+    edgesUp.material.color.setHex(0x00d0ff);
+    edgesDown.material.color.setHex(0x00d0ff);
+  }
+}
+
+/* ============================================================
+   UPDATE · FLOR DE LA VIDA
+   Rota lentamente y escala con la música. Se desvanece con el colapso.
+   ============================================================ */
+function updateFlower(){
+  flowerPlane.rotation.z += 0.0015;
+  flowerPlane.rotation.y = Math.sin(t*0.2)*0.15;
+  flowerPlane2.rotation.z -= 0.0008;
+  flowerPlane2.rotation.y = Math.cos(t*0.15)*0.1;
+
+  const scale = 1 + bass*0.15 + dropFlash*0.1;
+  flowerPlane.scale.setScalar(scale);
+  flowerPlane2.scale.setScalar(1 + bass*0.1);
+
+  flowerMat.opacity = (0.7 + energy*0.5) * (1 - collapse*0.6);
+  flowerMat2.opacity = 0.35 * (1 - collapse*0.5);
+  flowerMat.color.setHSL(0.55 + Math.sin(t*0.2)*0.05, 1, 0.6 + beatFlash*0.2);
+}
+
+/* ============================================================
+   UPDATE · PLATAFORMA DORADA
+   ============================================================ */
+function updatePlatform(){
+  platform.rotation.y += 0.002 + bass*0.005;
+  const ringScale = 1 + bass*0.08 + beatFlash*0.05;
+  ringOuter.scale.setScalar(ringScale);
+  ringMid.scale.setScalar(1 + bass*0.05);
+  ringInner.scale.setScalar(1 + bass*0.03);
+  goldRingMat.opacity = 0.7 + energy*0.3 + dropFlash*0.2;
+  centerDisk.material.opacity = 0.1 + bass*0.3 + dropFlash*0.2;
+  centerDisk.material.color.setHSL(0.13 + high*0.1, 1, 0.55);
+}
+
+/* ============================================================
+   UPDATE · RAYOS VOLUMÉTRICOS
+   ============================================================ */
+function updateGodRays(){
+  for (let i=0;i<godRays.length;i++){
+    const c = godRays[i];
+    c.rotation.y += 0.002 + high*0.015;
+    c.material.opacity = c.userData.baseOpacity * (1 + energy*2 + dropFlash*1.5);
+    c.material.color.setHSL(0.13 + i*0.12, 1, 0.6);
+  }
+}
+
+/* ============================================================
+   UPDATE · CHISPAS ORBITALES alrededor del Merkaba
+   ============================================================ */
+function updateSparks(dt){
+  const sp = sparkGeom.attributes.position.array;
+  for (let i=0;i<SPARK_N;i++){
+    const d = sparkData[i];
+    d.th += dt * d.speed * (0.5 + bass*2.5);
+    d.ph += dt * d.speed * 0.4;
+    const r = d.r * (1 + bass*0.3 + beatFlash*0.15);
+    sp[i*3]   = r*Math.sin(d.ph)*Math.cos(d.th);
+    sp[i*3+1] = r*Math.cos(d.ph) + 3.5;
+    sp[i*3+2] = r*Math.sin(d.ph)*Math.sin(d.th);
+  }
+  sparkGeom.attributes.position.needsUpdate = true;
+  sparkMat.size = 0.12 + beatFlash*0.12;
+  sparkMat.opacity = 0.6 + energy*0.4;
+  sparkMat.color.setHSL(0.13 + high*0.15, 1, 0.6);
+}
+
+/* ============================================================
+   CÁMARA · 4 modos automáticos
+   ============================================================ */
+const CAM_MODES = ['HERO','ORBIT','CLOSE','TOP'];
+const CAM_NAMES = ['HERO','ÓRBITA','PRIMER PLANO','AÉREA'];
+
+function updateCamera(dt){
+  if (autoCamera && audioEl && !audioEl.paused){
+    camPhase += dt * (0.1 + bass*0.8 + dropFlash);
+    // Cambio de modo cada ~18s
+    if (!updateCamera._last || t - updateCamera._last > 18){
+      camMode = (camMode+1) % CAM_MODES.length;
+      updateCamera._last = t;
+      document.getElementById('sceneName').textContent = CAM_NAMES[camMode];
+    }
+    switch(camMode){
+      case 0: // HERO
+        camGoal.theta = Math.sin(camPhase*0.7)*0.4;
+        camGoal.phi   = 1.25 + Math.sin(camPhase*0.5)*0.1;
+        camGoal.radius= 16 - bass*2;
+        camTgtGoal.set(0,3.8,0); break;
+      case 1: // ORBIT
+        camGoal.theta = camPhase;
+        camGoal.phi   = 1.1 + Math.sin(camPhase*0.4)*0.3;
+        camGoal.radius= 22 + Math.sin(camPhase*0.7)*4 - bass*3;
+        camTgtGoal.set(0,3.5,0); break;
+      case 2: // CLOSE
+        camGoal.theta = camPhase*1.5;
+        camGoal.phi   = 1.3 + Math.sin(camPhase*0.8)*0.15;
+        camGoal.radius= 9 - bass*1.5;
+        camTgtGoal.set(0,3.5,0); break;
+      case 3: // TOP
+        camGoal.theta = camPhase*0.5;
+        camGoal.phi   = 0.4 + Math.sin(camPhase*0.3)*0.08;
+        camGoal.radius= 24 - dropFlash*4;
+        camTgtGoal.set(0,1,0); break;
+    }
+  }
+  cam.theta  += (camGoal.theta  - cam.theta) * Math.min(1, dt*2);
+  cam.phi    += (camGoal.phi    - cam.phi)   * Math.min(1, dt*2);
+  cam.radius += (camGoal.radius - cam.radius)* Math.min(1, dt*2);
+  cam.target.lerp(camTgtGoal, Math.min(1, dt*1.5));
+
+  const sp = Math.sin(cam.phi);
+  camera.position.set(
+    cam.radius*sp*Math.sin(cam.theta),
+    cam.radius*Math.cos(cam.phi)+2.5,
+    cam.radius*sp*Math.cos(cam.theta)
+  );
+  camera.lookAt(cam.target);
+}
+
+/* ============================================================
+   AUTO CALIDAD
+   ============================================================ */
+function checkQuality(dt){
+  autoQCool -= dt;
+  if (autoQCool > 0) return;
+  if (fpsCurrent < 40 && currentQuality !== 'LOW'){
+    const order = ['ULTRA','HIGH','MEDIUM','LOW'];
+    currentQuality = order[Math.min(order.indexOf(currentQuality)+1, order.length-1)];
+    Q = QUALITY[currentQuality];
+    renderer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+    composer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+    document.getElementById('quality').textContent = currentQuality;
+    autoQCool = 6;
+    showToast('⚙ CALIDAD: ' + currentQuality);
+  }
+}
+
+/* ============================================================
+   LOOP
+   ============================================================ */
+function animate(now){
+  requestAnimationFrame(animate);
+  const dt = Math.min(0.05, (now-last)/1000);
+  last = now;
+  if (audioEl && !audioEl.paused) t += dt*1.35;
+
+  fpsAcc += dt; fpsCount++;
+  if (fpsAcc > 0.4){
+    fpsCurrent = fpsCount/fpsAcc;
+    document.getElementById('fps').textContent = Math.round(fpsCurrent);
+    fpsAcc=0; fpsCount=0;
+    checkQuality(dt);
+  }
+
+  analyze();
+  beatFlash *= 0.88;
+  collapse += (collapseTarget - collapse) * Math.min(1, dt*2.5);
+
+  updateMerkaba(dt);
+  updateFlower();
+  updatePlatform();
+  updateGodRays();
+  updateSparks(dt);
+
+  stars.rotation.y += dt*0.005;
+  goldGrid.position.y = -0.001 + beatFlash*0.3;
+
+  updateCamera(dt);
+
+  bloom.strength = 1.3 + energy*1.5 + dropFlash*1.5;
+  bloom.radius   = 0.7 + bass*0.4;
+
+  filmPass.uniforms.uTime.value  = t;
+  filmPass.uniforms.uPulse.value = beatFlash;
+  filmPass.uniforms.uCA.value    = 0.0012 + dropFlash*0.003;
+  filmPass.uniforms.uGrain.value = 0.04 + energy*0.05;
+
+  composer.render();
+}
+
+/* ============================================================
+   GRABACIÓN
+   ============================================================ */
+const btnRecord = document.getElementById('btn-record');
+const recLabel = document.getElementById('reclabel');
+function pickMime(){
+  const list=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  for (const m of list) if (MediaRecorder.isTypeSupported(m)) return m;
+  return '';
+}
+btnRecord.addEventListener('click', ()=>{
+  if (!audioEl || !audioDest){ showToast('⚠ CARGA UN MP3'); return; }
+  if (!recording) startRecording(); else stopRecording();
+});
+function startRecording(){
+  recordedChunks = [];
+  const cs = canvas.captureStream(60);
+  const at = audioDest.stream.getAudioTracks();
+  const combined = new MediaStream([...cs.getVideoTracks(), ...at]);
+  const mime = pickMime();
+  recorder = new MediaRecorder(combined, { mimeType: mime, videoBitsPerSecond: 14_000_000, audioBitsPerSecond: 192_000 });
+  recorder.ondataavailable = e => { if (e.data.size>0) recordedChunks.push(e.data); };
+  recorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type:mime });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `merkaba-${Date.now()}.webm`;
+    a.click();
+    recording=false;
+    recLabel.textContent='● REC OFF'; recLabel.style.color='#ff4466';
+    btnRecord.textContent='⬤ GRABAR';
+    showToast('💾 MERKABA DESCARGADO');
+  };
+  recorder.start(1000);
+  recording=true;
+  recLabel.textContent='● REC ON'; recLabel.style.color='#00ff88';
+  btnRecord.textContent='⏹ DETENER';
+  showToast('⬤ GRABANDO');
+}
+function stopRecording(){ if (recorder && recorder.state!=='inactive') recorder.stop(); }
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+document.getElementById('btn-collapse').addEventListener('click', ()=>{
+  collapseTarget = collapseTarget>0.5?0:1;
+  showToast(collapseTarget>0.5?'⚛ COLAPSO':'⚛ SUPERPOSICIÓN');
+});
+document.getElementById('btn-camera').addEventListener('click', ()=>{
+  autoCamera = !autoCamera;
+  showToast(autoCamera?'🎬 CÁMARA AUTO':'🎬 CÁMARA MANUAL');
+});
+document.getElementById('btn-cinema').addEventListener('click', ()=>{
+  document.body.classList.toggle('cinema');
+  showToast(document.body.classList.contains('cinema')?'🎥 CINE':'🎥 COMPLETO');
+});
+document.getElementById('btn-new').addEventListener('click', ()=>{
+  if (audioEl){ audioEl.pause(); audioEl.currentTime=0; }
+  intro.classList.remove('hide');
+  document.body.classList.remove('cinema');
+});
+
+addEventListener('keydown', e=>{
+  const k = e.key.toLowerCase();
+  if (e.code==='Space'){ e.preventDefault(); document.getElementById('btn-collapse').click(); }
+  if (k==='r') document.getElementById('btn-record').click();
+  if (k==='b') document.getElementById('btn-cinema').click();
+  if (k==='c') document.getElementById('btn-camera').click();
+  if (k>='1' && k<='4'){
+    camMode = parseInt(k)-1; autoCamera = false;
+    document.getElementById('sceneName').textContent = CAM_NAMES[camMode];
+    showToast('🎬 ' + CAM_NAMES[camMode]);
+  }
+});
+
+let dragging=false, lx=0, ly=0;
+function onDown(x,y){ dragging=true; lx=x; ly=y; autoCamera=false; }
+function onMove(x,y){
+  if (!dragging) return;
+  camGoal.theta -= (x-lx)*0.005;
+  camGoal.phi    = Math.max(0.08, Math.min(1.55, camGoal.phi - (y-ly)*0.005));
+  lx=x; ly=y;
+}
+function onUp(){ dragging=false; }
+canvas.addEventListener('mousedown', e=>onDown(e.clientX,e.clientY));
+addEventListener('mousemove', e=>onMove(e.clientX,e.clientY));
+addEventListener('mouseup', onUp);
+canvas.addEventListener('touchstart', e=>{const t=e.touches[0];onDown(t.clientX,t.clientY);},{passive:true});
+canvas.addEventListener('touchmove', e=>{const t=e.touches[0];onMove(t.clientX,t.clientY);e.preventDefault();},{passive:false});
+addEventListener('touchend', onUp);
+
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  filmPass.uniforms.uResolution.value.set(innerWidth, innerHeight);
+});
+
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2400);
+}
+
+requestAnimationFrame(animate);
+
+console.log('%c╔══════════════════════════════════════════╗','color:#ffcc44;font-weight:bold');
+console.log('%c║   MERKABA · QUANTUM CINEMA · v24         ║','color:#ffcc44;font-weight:bold');
+console.log('%c║   FLOWER OF LIFE · IRIDESCENT CRYSTAL    ║','color:#00d0ff;font-weight:bold');
+console.log('%c║   KRONOS Protocol · Autoría verificable  ║','color:#00ff88;font-weight:bold');
+console.log('%c╚══════════════════════════════════════════╝','color:#ffcc44;font-weight:bold');
+</script>
+</body>
+</html>
