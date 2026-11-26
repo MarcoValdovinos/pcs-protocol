@@ -3,7 +3,7 @@ import hashlib, json, os, datetime
 MANIFIESTO = "sentinel-51-49/MANIFIESTO-51-49.json"
 archivos = []
 
-for root, dirs, files in os.walk("cores/kronos-protocol/experiments_and_lore/web"):
+for root, dirs, files in os.walk("."):
     dirs[:] = [d for d in dirs if d not in [".git", "node_modules", "__pycache__"]]
     for f in files:
         if not f.endswith((".md", ".txt", ".html", ".json", ".py", ".js", ".css")):
