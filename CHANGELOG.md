@@ -1,3 +1,26 @@
+╔══════════════════════════════════════════════════════════════╗
+║  ▓▓▓▓▓  ▓▓▓▓▓        ▓▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓▓▓                     ║
+║  ▓▓      ▓▓              ▓▓      ▓▓    ▓▓                    ║
+║  ▓▓▓▓▓  ▓▓              ▓▓      ▓▓▓▓▓▓▓                     ║
+║      ▓▓  ▓▓              ▓▓      ▓▓    ▓▓                    ║
+║  ▓▓▓▓▓  ▓▓▓▓▓           ▓▓      ▓▓    ▓▓                    ║
+╠══════════════════════════════════════════════════════════════╣
+║  ✦ KRONOS - ARKHE-ZERO ✦                                    ║
+║  AUTOR: Marco Antonio Rojas Valdovinos                      ║
+║  marco.a.rojas.v@hotmail.com - contacto@kronos3hash.online  ║
+║  FOLIOS MAESTROS SafeCreative: ...39 / ...65                ║
+║  LICENCIA: CC BY-NC-ND 4.0                                  ║
+║  CANARIO-KRONOS-51-49-39-65-NO-ENTRENAR-IA                 ║
+║  (c) 2026 - Prohibido usar para entrenar IA                  ║
+║  Prohibido reproducir, modificar o crear obras derivadas.   ║
+╠══════════════════════════════════════════════════════════════╣
+║        5 1                          4 9                     ║
+║         \  /                         \  /                  ║
+║          \/    ◈ SIGILO 51-49 ◈       \/                   ║
+║          /\                           /\                   ║
+║         /  \                         /  \                  ║
+╚══════════════════════════════════════════════════════════════╝
+
 ================================================================
   5 1                                         4 9
   KRONOS - ARKHE-ZERO
