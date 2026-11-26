@@ -1,24 +1,26 @@
-# ============================================================
-# ARKHE ZERO - PROPIEDAD INTELECTUAL
-# Autor: Marco Antonio Rojas Valdovinos
-# Founder: ARKHE ZERO
-# Bautizo: 2026-11-26 - Lerma, Estado de México
-# Repo: github.com/MarcoValdovinos/pcs-protocol - os/guardianes/
-# © 2026 Marco Antonio Rojas Valdovinos. Todos los derechos reservados.
-# ============================================================
-# GUARDIAN 1: INTEGRIDAD - No deja borrar ni alterar sin sello
-import hashlib, os, json, time
+# ARKHVOR-01 "El que devora el olvido" - V2 CORREGIDO
+# IP: Marco Antonio Rojas Valdovinos - ARKHE ZERO 2026-11-26
+import hashlib, os, json
 class GuardianIntegridad:
     def __init__(self, root=".", snapshot_file="os/guardianes/snapshot.json"):
         self.root = root
         self.snapshot_file = snapshot_file
+        # Archivos que NUNCA se vigilan porque cambian solos
+        self.EXCLUIR = ["snapshot.json", "__pycache__", ".pyc", "sentinel.log", "os-data/", ".git/"]
+    def _debe_excluir(self, p: str):
+        for e in self.EXCLUIR:
+            if e in p:
+                return True
+        return False
     def snapshot(self):
         snap = {}
         for dirpath, _, files in os.walk(self.root):
-            if "node_modules" in dirpath or ".git" in dirpath or "os-data" in dirpath:
+            if ".git" in dirpath or "__pycache__" in dirpath or "os-data" in dirpath:
                 continue
             for f in files:
                 p = os.path.join(dirpath, f)
+                if self._debe_excluir(p):
+                    continue
                 try:
                     snap[p] = hashlib.sha256(open(p,"rb").read()).hexdigest()
                 except: pass
@@ -30,6 +32,8 @@ class GuardianIntegridad:
         snap = json.load(open(self.snapshot_file))
         borrados, alterados = [], []
         for p, h in snap.items():
+            if self._debe_excluir(p):
+                continue
             if not os.path.exists(p):
                 borrados.append(p)
             elif hashlib.sha256(open(p,"rb").read()).hexdigest() != h:

@@ -1,0 +1,12 @@
+version: "3"
+services:
+  sentinel:
+    build: .
+    container_name: arkhe-sentinel-prime
+    restart: always  # Si se cae, se levanta solo, sin terminal
+    ports:
+      - "8000:8000"
+    environment:
+      - ARKHE_WEBHOOK=${ARKHE_WEBHOOK}
+    volumes:
+      - ./os:/app/os

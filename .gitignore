@@ -26,3 +26,11 @@ patch_*.js
 llave_privada*
 *llave_privada*
 *.key
+__pycache__/
+*.pyc
+sentinel.log
+os-data/
+.arkhe_secreto
+*.log
+__pycache__/
+.env
