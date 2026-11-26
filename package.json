@@ -17,5 +17,8 @@
   "dependencies": {
     "@noble/post-quantum": "^0.7.1",
     "next": "^16.4.6"
+  },
+  "allowScripts": {
+    "@google/genai@3.6.1": true
   }
 }
