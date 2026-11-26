@@ -37,11 +37,13 @@
     "contracts:deploy": "forge script script/Deploy.s.sol --rpc-url $ETHEREUM_RPC --broadcast"
   },
   "dependencies": {
+    "@hono/node-server": "^2.1.11",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@noble/curves": "^2.4.0",
     "@noble/hashes": "^2.4.0",
     "@noble/post-quantum": "^0.7.1",
     "dotenv": "^18.0.9",
+    "hono": "^4.13.22",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
