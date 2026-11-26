@@ -1,0 +1,17 @@
+{
+  "sistema": "GUARDIANES ARKHE ZERO",
+  "autor": "Marco Antonio Rojas Valdovinos",
+  "founder": "ARKHE ZERO",
+  "fecha_bautizo": "2026-11-26",
+  "lugar": "Lerma, Estado de México, México",
+  "repo": "github.com/MarcoValdovinos/pcs-protocol",
+  "guardianes": [
+    {"id": "ARKHVOR-01", "nombre": "El que devora el olvido", "rol": "Integridad"},
+    {"id": "SYMBI-02", "nombre": "El Pacto", "rol": "51/49"},
+    {"id": "KROVOXA-03", "nombre": "El Sello Eterno", "rol": "PQC ML-KEM-1024 / ML-DSA-87"},
+    {"id": "ARKHVOXA-04", "nombre": "La Voz-Archivo", "rol": "Atribucion"},
+    {"id": "GUARDIANESBOT-00", "nombre": "ARKHE SENTINEL PRIME", "rol": "Orquestador"}
+  ],
+  "licencia": "© 2026 Marco Antonio Rojas Valdovinos - ARKHE ZERO. Todos los derechos reservados.",
+  "sello": "ARKH -> SYMBI -> KRO -> VOXA -> VOR -> KRA"
+}

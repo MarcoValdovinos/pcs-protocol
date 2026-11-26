@@ -1,0 +1,14 @@
+[Unit]
+Description=ARKHE SENTINEL PRIME - Guardianes 24/7
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/pcs-protocol
+ExecStart=/usr/bin/python3 -m uvicorn os.guardianes.server.app:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+Environment=ARKHE_WEBHOOK=
+
+[Install]
+WantedBy=multi-user.target

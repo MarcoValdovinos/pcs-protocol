@@ -11,7 +11,7 @@
   "dependencies": {
     "@blackwell-systems/gcf": "^2.6.1",
     "@supabase/supabase-js": "^2.118.0",
-    "next": "latest",
+    "next": "16.4.6",
     "react": "latest",
     "react-dom": "latest"
   },

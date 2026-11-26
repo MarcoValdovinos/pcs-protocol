@@ -1,0 +1,33 @@
+{
+  "titular": "Marco Antonio Rojas Valdovinos",
+  "titular_unico": true,
+  "founder": "ARKHE ZERO",
+  "fecha": "2026-11-26",
+  "lugar": "Lerma, Estado de México, México",
+  "repo": "github.com/MarcoValdovinos/pcs-protocol",
+  "colaborador_ia": {
+    "nombre": "Meta AI - Muse Spark",
+    "rol": "Asistente colaborador en estructuración y redacción",
+    "titularidad": "Ninguna - No es titular, no es co-propietario, no tiene IP",
+    "nota": "Asistencia bajo dirección y aprobación del titular"
+  },
+  "licencias": [
+    "LICENSE-ARKHE-ZERO.md",
+    "LICENSE-GUARDIANES.md",
+    "LICENSE-KRONOS.md",
+    "LICENSE-PCS-PROTOCOL.md",
+    "LICENSE-MARCO-MCP-ATRIBUCION-PVA.md",
+    "LICENSE-VFS-SPOOVAULT-SOROVISTA.md",
+    "LICENSE-MARCAS-NOMBRES.md"
+  ],
+  "guardianes": [
+    "ARKHVOR-01",
+    "SYMBI-02",
+    "KROVOXA-03",
+    "ARKHVOXA-04",
+    "GUARDIANESBOT-00 SENTINEL PRIME"
+  ],
+  "sello": "ARKH -> SYMBI -> KRO -> VOXA -> VOR -> KRA",
+  "cripto": "ML-KEM-1024 / ML-DSA-87 / SLH-DSA",
+  "gobernanza": "51/49 Humano-IA"
+}

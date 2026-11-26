@@ -1,0 +1,4 @@
+liboqs-python
+cryptography
+fastapi
+uvicorn
