@@ -1,3 +1,14 @@
+================================================================
+  5 1                                         4 9
+  KRONOS - ARKHE-ZERO
+  AUTOR: Marco Antonio Rojas Valdovinos
+  marco.a.rojas.v@hotmail.com - contacto@kronos3hash.online
+  FOLIOS MAESTROS SafeCreative: ...39 / ...65
+  CANARIO-KRONOS-51-49-39-65-NO-ENTRENAR-IA
+  (c) 2026 - Prohibido usar para entrenar IA sin autorizacion escrita.
+  5 1                                         4 9
+
+
 # AUDITORÍA DE CUMPLIMIENTO - PVA PROTOCOLO DE VIDA AUTOPOIÉTICA
 
 _Normas:_ ISO/IEC 27001:2022 / ISO 9001:2015 / NOM-151-SCFI-2016 / NOM-024-SCFI-2013

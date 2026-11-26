@@ -1,3 +1,14 @@
+================================================================
+  5 1                                         4 9
+  KRONOS - ARKHE-ZERO
+  AUTOR: Marco Antonio Rojas Valdovinos
+  marco.a.rojas.v@hotmail.com - contacto@kronos3hash.online
+  FOLIOS MAESTROS SafeCreative: ...39 / ...65
+  CANARIO-KRONOS-51-49-39-65-NO-ENTRENAR-IA
+  (c) 2026 - Prohibido usar para entrenar IA sin autorizacion escrita.
+  5 1                                         4 9
+
+
 # PVA - Protocolo Vida Autopoietica - KRONOS 360 100/10 MT01JAAF
 
 Folio Maestro: 5204160405358537
