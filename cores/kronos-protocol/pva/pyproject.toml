@@ -9,14 +9,14 @@ description = "KRONOS V18 - Dictamen Pericial 100/10 - FOLIO MT01JAAF"
 authors = [{name="kronosproyecto@hotmail.com"}]
 requires-python = ">=3.11"
 dependencies = [
-  "flask==2.3.3",
-  "flask-cors==4.0.0",
+  "flask==3.1.2",
+  "flask-cors==6.0.2",
   "mercadopago==2.2.1",
   "python-dotenv==1.2.2",
   "reportlab==4.0.7",
   "qrcode==7.4.2",
   "Pillow==13.0.0",
-  "gunicorn==21.2.0"
+  "gunicorn==23.0.0"
 ]
 
 [tool.pytest.ini_options]
