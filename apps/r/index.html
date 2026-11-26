@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QUANTUM CINEMA · CYMATIC 5D</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { width:100%; height:100%; overflow:hidden; background:#000; }
+  body { font-family:'Courier New',monospace; color:#c8f8ff; user-select:none; }
+  canvas { display:block; }
+
+  /* INTRO */
+  #intro {
+    position:fixed; inset:0; z-index:1000; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background: radial-gradient(circle at center, #060916 0%, #000 70%);
+    transition: opacity 1s, transform 1s; text-align:center; padding:24px;
+  }
+  #intro.hide { opacity:0; pointer-events:none; transform:scale(1.08); }
+  #intro h1 {
+    font-size: clamp(30px, 7vw, 78px); letter-spacing:12px; font-weight:bold;
+    background: linear-gradient(90deg,#00f0ff,#7a5cff,#ff00e0,#00f0ff);
+    background-size:400% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation: shimmer 5s linear infinite; text-shadow: 0 0 100px #7a5cff55; margin-bottom:14px;
+  }
+  @keyframes shimmer { to { background-position:400% 0; } }
+  #intro .sub { font-size: clamp(10px,1.4vw,14px); letter-spacing:8px; opacity:.55; margin-bottom:44px; }
+  #intro .box {
+    border:1px solid #00f0ff44; border-radius:20px; padding:36px 64px;
+    background: linear-gradient(135deg,#00f0ff08,#7a5cff08,#ff00e008);
+    font-size:13px; letter-spacing:4px; transition: all .4s; backdrop-filter: blur(12px);
+  }
+  #intro .box:hover { border-color:#00f0ff; box-shadow:0 0 80px #00f0ff44; transform:translateY(-4px); }
+  #intro .modes { margin-top:36px; font-size:10px; opacity:.55; letter-spacing:3px; line-height:2.4; }
+  #intro .hint { margin-top:36px; font-size:9px; opacity:.3; letter-spacing:3px; max-width:440px; line-height:1.8; }
+
+  /* HUD */
+  #hud { position:fixed; inset:0; pointer-events:none; padding:22px; z-index:10;
+         display:flex; flex-direction:column; justify-content:space-between; }
+  .top { display:flex; justify-content:space-between; align-items:flex-start; }
+  .brand { font-size:22px; font-weight:bold; letter-spacing:5px; color:#00f0ff;
+           text-shadow:0 0 24px #00f0ffcc, 0 0 60px #00f0ff55; }
+  .brand span { color:#ff00e0; text-shadow:0 0 24px #ff00e0cc; }
+  .stats { text-align:right; font-size:10px; line-height:2; opacity:.85; letter-spacing:1.5px; }
+  .stats b { color:#00ff88; }
+  .bar { display:inline-block; width:70px; height:3px; background:#ffffff11; border-radius:2px;
+         overflow:hidden; vertical-align:middle; margin-left:8px; }
+  .bar > i { display:block; height:100%; background:linear-gradient(90deg,#00f0ff,#ff00e0); width:0%; transition:width .08s; }
+
+  #scene-tag {
+    position:fixed; top:22px; left:50%; transform:translateX(-50%);
+    font-size:11px; letter-spacing:8px; opacity:.75; z-index:10; pointer-events:none;
+    text-align:center; text-transform:uppercase;
+  }
+  #scene-tag span { color:#00f0ff; text-shadow:0 0 20px #00f0ff; }
+
+  .bottom { display:flex; flex-direction:column; gap:12px; }
+  #buttons { display:flex; gap:10px; flex-wrap:wrap; pointer-events:auto; }
+  .btn {
+    background:#060c1cee; border:1px solid #00f0ff66; color:#00f0ff;
+    padding:12px 22px; border-radius:40px; font-family:inherit;
+    font-size:11px; font-weight:bold; letter-spacing:2.5px; cursor:pointer;
+    backdrop-filter:blur(12px); transition: all .3s cubic-bezier(.2,.8,.2,1);
+    text-transform:uppercase; box-shadow:0 0 22px #00f0ff22;
+    position:relative; overflow:hidden;
+  }
+  .btn::before { content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), #00f0ff44, transparent 40%);
+    opacity:0; transition:opacity .3s; }
+  .btn:hover::before { opacity:1; }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 0 34px #00f0ff55; }
+  .btn:active { transform:translateY(0) scale(.97); }
+  .btn.magenta { border-color:#ff00e066; color:#ff00e0; }
+  .btn.green { border-color:#00ff8866; color:#00ff88; }
+  .btn.red { border-color:#ff224466; color:#ff2244; animation: recPulse 1.4s infinite; }
+  @keyframes recPulse { 0%,100%{ box-shadow:0 0 22px #ff224433;} 50%{ box-shadow:0 0 48px #ff224499;} }
+  .btn.off { opacity:.3; }
+  .btn small { display:block; font-size:8px; letter-spacing:1px; opacity:.6; margin-top:3px; }
+
+  #keys { font-size:10px; letter-spacing:2px; opacity:.5;
+    background:#060c1c99; border:1px solid #0a3a3a; border-radius:12px;
+    padding:8px 14px; display:inline-block; backdrop-filter: blur(6px); align-self:flex-start; }
+  #keys b { color:#00f0ff; }
+
+  #spectrum { position:fixed; left:22px; bottom:120px; width:260px; height:80px;
+    z-index:10; opacity:.72; pointer-events:none; border-radius:10px; overflow:hidden; }
+
+  #toast { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(.9);
+    background:#060c1cee; border:1px solid #00ff88; color:#00ff88;
+    padding:18px 38px; border-radius:18px; font-size:13px; letter-spacing:4px;
+    backdrop-filter:blur(16px); z-index:100; opacity:0; transition: all .4s;
+    pointer-events:none; box-shadow:0 0 80px #00ff8866; text-align:center; text-transform:uppercase; }
+  #toast.show { opacity:1; transform:translate(-50%,-50%) scale(1); }
+
+  /* Barras cinematográficas */
+  .letterbox { position:fixed; left:0; right:0; height:0; background:#000; z-index:8;
+                transition: height 1s cubic-bezier(.4,0,.2,1); }
+  #letterbox-top { top:0; }
+  #letterbox-bottom { bottom:0; }
+  body.cinema #letterbox-top, body.cinema #letterbox-bottom { height: 10vh; }
+
+  /* Fade de escena */
+  #scene-fade { position:fixed; inset:0; background:#000; z-index:9;
+    opacity:0; pointer-events:none; transition: opacity .6s; }
+  #scene-fade.flash { opacity:1; transition: opacity .15s; }
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <h1>QUANTUM CINEMA</h1>
+  <div class="sub">CYMATIC 5D · CINEMA ENGINE · v24</div>
+  <div class="box">◈ SUELTA UN MP3 AQUÍ ◈<br><br>O HAZ CLIC PARA ELEGIR</div>
+  <div class="modes">
+    ▸ 6 ESCENAS NARRATIVAS AUTOMÁTICAS<br>
+    ▸ GEOMETRÍA QUE MUTA CON LA MÚSICA<br>
+    ▸ EXPLOSIONES DE PARTÍCULAS EN DROPS<br>
+    ▸ RAYOS VOLUMÉTRICOS · BLOOM · GRANO FÍLMICO<br>
+    ▸ MODO CINE (BARRA 2.39:1) ACTIVADO
+  </div>
+  <div class="hint">El audio se procesa 100% en tu navegador · nada se sube a internet<br>Graba video en tiempo real con audio sincronizado</div>
+</div>
+
+<div class="letterbox" id="letterbox-top"></div>
+<div class="letterbox" id="letterbox-bottom"></div>
+<div id="scene-fade"></div>
+
+<div id="hud">
+  <div class="top">
+    <div class="brand">CYMATIC<span> · 5D</span></div>
+    <div class="stats">
+      <div><span id="fps">--</span> FPS · QC <b id="quality">ULTRA</b></div>
+      <div>BASS <span class="bar"><i id="barbass"></i></span></div>
+      <div>MID&nbsp;&nbsp;<span class="bar"><i id="barmid"></i></span></div>
+      <div>HIGH <span class="bar"><i id="barhigh"></i></span></div>
+      <div>BEATS <b id="beats">0</b> · ESC <b id="scene">01</b></div>
+      <div id="reclabel" style="color:#ff4466;letter-spacing:3px">● REC OFF</div>
+    </div>
+  </div>
+</div>
+
+<div id="scene-tag">ESCENA <span id="sceneName">WAVES</span></div>
+<canvas id="spectrum"></canvas>
+
+<div id="hud-bottom" style="position:fixed;inset:0;pointer-events:none;padding:22px;z-index:10;display:flex;flex-direction:column;justify-content:flex-end">
+  <div class="bottom">
+    <div id="buttons">
+      <button class="btn magenta" id="btn-collapse">⚛ COLAPSO<small>ESPACIO</small></button>
+      <button class="btn" id="btn-director">🎬 DIRECTOR<small>AUTO</small></button>
+      <button class="btn" id="btn-scene">🎞 ESCENA<small>N</small></button>
+      <button class="btn" id="btn-cinema">🎥 CINE<small>B</small></button>
+      <button class="btn red" id="btn-record">⬤ GRABAR<small>R</small></button>
+      <button class="btn green" id="btn-new">↺ MP3</button>
+    </div>
+    <div id="keys">
+      <b>ESPACIO</b> colapso · <b>N</b> escena · <b>B</b> cine · <b>R</b> grabar · <b>C</b> director · <b>1-6</b> escenas · arrastra para orbitar
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<canvas id="canvas"></canvas>
+<input type="file" id="fileinput" accept="audio/*" style="display:none" />
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+
+/* ============================================================
+   CALIDAD ADAPTATIVA
+   ============================================================ */
+const IS_MOBILE = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+const QUALITY = {
+  ULTRA:  { N:480, GHOSTS:7, PARTS:3000, SPARK:4000, RATIO:2 },
+  HIGH:   { N:360, GHOSTS:6, PARTS:2000, SPARK:2500, RATIO:1.75 },
+  MEDIUM: { N:260, GHOSTS:5, PARTS:1200, SPARK:1400, RATIO:1.5 },
+  LOW:    { N:180, GHOSTS:4, PARTS:600,  SPARK:600,  RATIO:1 },
+};
+let currentQuality = IS_MOBILE ? 'MEDIUM' : 'ULTRA';
+let Q = QUALITY[currentQuality];
+
+/* ============================================================
+   RENDERER + ESCENA
+   ============================================================ */
+const canvas = document.getElementById('canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, preserveDrawingBuffer:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+renderer.setSize(innerWidth, innerHeight);
+renderer.setClearColor(0x000000, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.014);
+const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.1, 900);
+
+/* ============================================================
+   POST-PROCESO CINEMATOGRÁFICO (5 capas)
+   ============================================================ */
+const composer = new EffectComposer(renderer);
+composer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+composer.setSize(innerWidth, innerHeight);
+composer.addPass(new RenderPass(scene, camera));
+
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 1.4, 0.7, 0.15);
+composer.addPass(bloom);
+
+/* Shader final: aberración cromática + grano + vignette + scanlines + flash */
+const FilmShader = {
+  uniforms: {
+    tDiffuse:{value:null}, uTime:{value:0},
+    uCA:{value:0.0015}, uGrain:{value:0.05},
+    uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},
+    uPulse:{value:0}, uSceneHue:{value:0.5},
+  },
+  vertexShader:`varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+  fragmentShader:`
+    uniform sampler2D tDiffuse; uniform float uTime,uCA,uGrain,uPulse,uSceneHue;
+    uniform vec2 uResolution; varying vec2 vUv;
+    float rand(vec2 c){ return fract(sin(dot(c,vec2(12.9898,78.233)))*43758.5453); }
+    void main(){
+      vec2 uv=vUv; vec2 dir=uv-0.5; float d=length(dir);
+      float ca=(uCA+uPulse*0.008)*(0.4+d*1.8);
+      float r=texture2D(tDiffuse,uv+dir*ca).r;
+      float g=texture2D(tDiffuse,uv).g;
+      float b=texture2D(tDiffuse,uv-dir*ca).b;
+      vec3 col=vec3(r,g,b);
+      col+=sin(uv.y*uResolution.y*1.2+uTime*2.0)*0.012;
+      float grain=rand(uv*uResolution+uTime*60.0)-0.5;
+      col+=grain*(uGrain+uPulse*0.09);
+      col*=1.0-smoothstep(0.4,1.0,d)*0.88;
+      col+=uPulse*0.08;
+      gl_FragColor=vec4(col,1.0);
+    }`
+};
+const filmPass = new ShaderPass(FilmShader);
+filmPass.renderToScreen = true;
+composer.addPass(filmPass);
+
+/* ============================================================
+   MUNDO
+   ============================================================ */
+const grid1 = new THREE.GridHelper(80, 80, 0x00ffcc, 0x0a2a2a);
+grid1.material.transparent = true; grid1.material.opacity = 0.22;
+scene.add(grid1);
+const grid2 = new THREE.GridHelper(80, 16, 0x00f0ff, 0x00f0ff);
+grid2.material.transparent = true; grid2.material.opacity = 0.07;
+grid2.position.y = 0.02;
+scene.add(grid2);
+
+/* Estrellas */
+const starPos = new Float32Array(2500*3);
+for (let i=0;i<2500;i++){
+  const r = 80+Math.random()*280, th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+  starPos[i*3]   = r*Math.sin(ph)*Math.cos(th);
+  starPos[i*3+1] = r*Math.cos(ph);
+  starPos[i*3+2] = r*Math.sin(ph)*Math.sin(th);
+}
+const starGeom = new THREE.BufferGeometry();
+starGeom.setAttribute('position', new THREE.BufferAttribute(starPos,3));
+const stars = new THREE.Points(starGeom, new THREE.PointsMaterial({
+  color:0x88ccff, size:0.4, transparent:true, opacity:0.75,
+  blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true,
+}));
+scene.add(stars);
+
+/* ============================================================
+   🤫 SECRETO #1 · GEOMETRÍA MUTANTE
+   Una malla que interpola entre onda / toro / esfera / nudo.
+   Todo esto sucede en una sola geometría deformada en shader.
+   ============================================================ */
+const MORPH_N = 60; // segmentos por lado
+const morphGeom = new THREE.PlaneGeometry(30, 12, MORPH_N, MORPH_N);
+const morphMat = new THREE.MeshBasicMaterial({
+  color: 0x00f0ff, transparent:true, opacity:0.12,
+  blending: THREE.AdditiveBlending, wireframe:true, depthWrite:false,
+});
+const morphMesh = new THREE.Mesh(morphGeom, morphMat);
+morphMesh.rotation.x = -Math.PI/2;
+morphMesh.position.y = 0.05;
+scene.add(morphMesh);
+
+/* Posiciones originales para interpolación */
+const morphOrig = morphGeom.attributes.position.array.slice();
+
+/* ============================================================
+   ONDAS 5D · principal + fantasmas
+   ============================================================ */
+function makeLine(color, opacity){
+  const pos = new Float32Array(Q.N*3);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const m = new THREE.LineBasicMaterial({ color, transparent:true, opacity,
+    blending:THREE.AdditiveBlending, depthWrite:false });
+  const l = new THREE.Line(g,m);
+  scene.add(l);
+  return { geom:g, mat:m, pos };
+}
+const main = makeLine(0x00f0ff, 1.0);
+const GHOST_COLORS = [0xff00e0, 0x00ff88, 0xffaa00, 0x7a5cff, 0x00d0ff, 0xff4466, 0x44ffaa];
+const ghosts = [];
+for (let i=0;i<Q.GHOSTS;i++){
+  const g = makeLine(GHOST_COLORS[i%GHOST_COLORS.length], 0.4);
+  g.freq = 0.5+Math.random()*1.2; g.amp = 0.8+Math.random()*1.6;
+  g.phase= Math.random()*Math.PI*2; g.dimV= Math.random()*Math.PI*2;
+  g.dimW= 0.2+Math.random()*0.9;
+  ghosts.push(g);
+}
+
+/* ============================================================
+   🤫 SECRETO #2 · CHISPAS Y EXPLOSIONES DE PARTÍCULAS
+   Sistema con gravedad y vidas. Explosiones cuando hay DROP.
+   ============================================================ */
+const SPARK_N = Q.SPARK;
+const sparkPos = new Float32Array(SPARK_N*3);
+const sparkVel = new Float32Array(SPARK_N*3);
+const sparkLife = new Float32Array(SPARK_N);
+const sparkCol = new Float32Array(SPARK_N*3);
+const sparkGeom = new THREE.BufferGeometry();
+sparkGeom.setAttribute('position', new THREE.BufferAttribute(sparkPos,3));
+sparkGeom.setAttribute('color',    new THREE.BufferAttribute(sparkCol,3));
+const sparkMat = new THREE.PointsMaterial({
+  size:0.14, vertexColors:true, transparent:true, opacity:0.9,
+  blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true,
+});
+const sparks = new THREE.Points(sparkGeom, sparkMat);
+scene.add(sparks);
+
+/* Explosión: emite N chispas radiales desde un punto */
+function explode(cx, cy, cz, color, count){
+  let emitted = 0;
+  for (let i=0;i<SPARK_N && emitted<count;i++){
+    if (sparkLife[i] <= 0){
+      sparkPos[i*3]=cx; sparkPos[i*3+1]=cy; sparkPos[i*3+2]=cz;
+      const th = Math.random()*Math.PI*2;
+      const ph = Math.acos(2*Math.random()-1);
+      const speed = 1.5+Math.random()*4;
+      sparkVel[i*3]   = Math.sin(ph)*Math.cos(th)*speed;
+      sparkVel[i*3+1] = Math.cos(ph)*speed*0.8;
+      sparkVel[i*3+2] = Math.sin(ph)*Math.sin(th)*speed;
+      sparkLife[i] = 1.5+Math.random()*1.5;
+      sparkCol[i*3]   = color.r;
+      sparkCol[i*3+1] = color.g;
+      sparkCol[i*3+2] = color.b;
+      emitted++;
+    }
+  }
+}
+
+/* ============================================================
+   ANILLO CIMÁTICO
+   ============================================================ */
+const RING_N = 360;
+const ringPos = new Float32Array(RING_N*3);
+const ringGeom = new THREE.BufferGeometry();
+ringGeom.setAttribute('position', new THREE.BufferAttribute(ringPos,3));
+const ringMat = new THREE.LineBasicMaterial({ color:0xff00e0, transparent:true, opacity:0.55,
+  blending:THREE.AdditiveBlending, depthWrite:false });
+const ring = new THREE.LineLoop(ringGeom, ringMat);
+ring.position.y = 0.1;
+scene.add(ring);
+
+/* Anillo exterior */
+const RING2_N = 240;
+const ring2Pos = new Float32Array(RING2_N*3);
+const ring2Geom = new THREE.BufferGeometry();
+ring2Geom.setAttribute('position', new THREE.BufferAttribute(ring2Pos,3));
+const ring2Mat = new THREE.LineBasicMaterial({ color:0x00ff88, transparent:true, opacity:0.35,
+  blending:THREE.AdditiveBlending, depthWrite:false });
+const ring2 = new THREE.LineLoop(ring2Geom, ring2Mat);
+ring2.position.y = 0.15;
+scene.add(ring2);
+
+/* ============================================================
+   🤫 SECRETO #3 · RAYOS VOLUMÉTRICOS (GOD RAYS)
+   6 conos semitransparentes que salen del centro del escenario.
+   ============================================================ */
+const godRays = [];
+for (let i=0;i<6;i++){
+  const coneGeom = new THREE.ConeGeometry(0.6 + Math.random()*0.4, 30 + Math.random()*15, 8, 1, true);
+  const coneMat = new THREE.MeshBasicMaterial({
+    color: [0x00f0ff, 0xff00e0, 0x7a5cff][i%3],
+    transparent:true, opacity:0.05 + Math.random()*0.08,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite:false,
+  });
+  const cone = new THREE.Mesh(coneGeom, coneMat);
+  cone.rotation.z = (Math.random()-0.5)*0.4;
+  cone.position.set((Math.random()-0.5)*8, 15, (Math.random()-0.5)*8);
+  cone.userData.baseOpacity = coneMat.opacity;
+  scene.add(cone);
+  godRays.push(cone);
+}
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+let audioCtx=null, analyser=null, freqData=null, timeData=null;
+let audioEl=null, audioSrc=null, audioDest=null;
+let bass=0, mid=0, high=0, energy=0, prevEnergy=0;
+let beatFlash=0, beatCount=0, lastBeatTime=0, dropFlash=0;
+
+const spectrumCanvas = document.getElementById('spectrum');
+const specCtx = spectrumCanvas.getContext('2d');
+spectrumCanvas.width=260; spectrumCanvas.height=80;
+
+/* ============================================================
+   🤫 SECRETO #4 · SISTEMA DE ESCENAS
+   6 escenas narrativas que rotan con el director automático.
+   Cada una cambia cámara, geometría, color y post-proceso.
+   ============================================================ */
+const SCENES = [
+  { name:'WAVES',   camMode:0, morphMode:0, hueBase:0.55, cinema:false },
+  { name:'ORBIT',   camMode:1, morphMode:1, hueBase:0.75, cinema:true  },
+  { name:'GODRAYS', camMode:2, morphMode:2, hueBase:0.85, cinema:true  },
+  { name:'CHAMBER', camMode:3, morphMode:3, hueBase:0.50, cinema:true  },
+  { name:'TOP',     camMode:4, morphMode:4, hueBase:0.35, cinema:true  },
+  { name:'LORENZ',  camMode:5, morphMode:5, hueBase:0.10, cinema:false },
+];
+let sceneIdx = 0;
+let sceneElapsed = 0;
+const SCENE_DURATION = 22; // segundos antes de auto-rotar
+
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
+let t=0, last=performance.now();
+let collapse=0, collapseTarget=0;
+let autoCollapse=true, autoDirector=true;
+let camPhase=0;
+let camTargetPos = new THREE.Vector3(0,3,0);
+let fpsAcc=0, fpsCount=0, fpsCurrent=60, autoQCool=0;
+let recording=false, recorder=null, recordedChunks=[];
+let lastAutoExplode = 0;
+
+const cam = { theta:0, phi:1.1, radius:22, target: new THREE.Vector3(0,3,0) };
+const camGoal = { theta:0, phi:1.1, radius:22 };
+const camTgtGoal = new THREE.Vector3(0,3,0);
+
+/* ============================================================
+   CARGA MP3
+   ============================================================ */
+const intro = document.getElementById('intro');
+const dropBox = intro.querySelector('.box');
+const fileInput = document.getElementById('fileinput');
+
+intro.addEventListener('click', ()=>fileInput.click());
+fileInput.addEventListener('change', e=>{ if(e.target.files[0]) loadAudio(e.target.files[0]); });
+['dragover','dragenter'].forEach(ev=>intro.addEventListener(ev, e=>{
+  e.preventDefault(); dropBox.style.borderColor='#00f0ff'; dropBox.style.boxShadow='0 0 80px #00f0ff66';
+}));
+['dragleave','drop'].forEach(ev=>intro.addEventListener(ev, e=>{
+  e.preventDefault(); dropBox.style.borderColor='#00f0ff44'; dropBox.style.boxShadow='none';
+}));
+intro.addEventListener('drop', e=>{
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('audio/')) loadAudio(f);
+});
+
+async function loadAudio(file){
+  if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+  audioEl = new Audio();
+  audioEl.src = URL.createObjectURL(file);
+  audioEl.crossOrigin = 'anonymous';
+
+  audioSrc = audioCtx.createMediaElementSource(audioEl);
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.72;
+  freqData = new Uint8Array(analyser.frequencyBinCount);
+  timeData = new Uint8Array(analyser.fftSize);
+
+  audioSrc.connect(analyser);
+  audioDest = audioCtx.createMediaStreamDestination();
+  analyser.connect(audioCtx.destination);
+  analyser.connect(audioDest);
+
+  intro.classList.add('hide');
+  document.body.classList.add('cinema');
+  await audioEl.play();
+  showToast('🎬 ' + file.name.replace(/\.[^.]+$/,'').toUpperCase());
+}
+
+/* ============================================================
+   ANÁLISIS + BEAT + DROP
+   ============================================================ */
+function analyze(){
+  if (!analyser) return;
+  analyser.getByteFrequencyData(freqData);
+  analyser.getByteTimeDomainData(timeData);
+  const n = freqData.length;
+  const bEnd = Math.floor(n*0.08), mEnd = Math.floor(n*0.45);
+
+  let b=0,m=0,h=0;
+  for (let i=0;i<bEnd;i++) b+=freqData[i];
+  for (let i=bEnd;i<mEnd;i++) m+=freqData[i];
+  for (let i=mEnd;i<n;i++) h+=freqData[i];
+  bass += ((b/(bEnd*255))-bass)*0.32;
+  mid  += ((m/((mEnd-bEnd)*255))-mid)*0.32;
+  high += ((h/((n-mEnd)*255))-high)*0.32;
+
+  let sum=0;
+  for (let i=0;i<timeData.length;i++){ const v=(timeData[i]-128)/128; sum+=v*v; }
+  energy = Math.sqrt(sum/timeData.length);
+
+  const now = performance.now();
+  if (energy-prevEnergy > 0.075 && now-lastBeatTime > 200){
+    beatFlash = 1; beatCount++; lastBeatTime = now;
+    if (autoCollapse && bass > 0.5) collapseTarget = collapseTarget>0.5?0:1;
+  }
+  prevEnergy = energy*0.55 + prevEnergy*0.45;
+
+  // DROP
+  if (bass>0.75 && energy>0.45 && now-lastAutoExplode > 800){
+    dropFlash = Math.min(1.5, dropFlash+0.4);
+    lastAutoExplode = now;
+    // EXPLOSIÓN de chispas en el centro
+    const c = new THREE.Color().setHSL(0.55 + Math.random()*0.3, 1, 0.7);
+    explode(0, 4, 0, c, 400);
+    // Segundo punto de explosión
+    explode((Math.random()-0.5)*8, 2+Math.random()*6, (Math.random()-0.5)*8, c, 200);
+  }
+  dropFlash *= 0.94;
+
+  document.getElementById('barbass').style.width = (bass*100).toFixed(0)+'%';
+  document.getElementById('barmid').style.width  = (mid*100).toFixed(0)+'%';
+  document.getElementById('barhigh').style.width = (high*100).toFixed(0)+'%';
+  document.getElementById('beats').textContent   = beatCount;
+
+  // Espectro
+  specCtx.clearRect(0,0,260,80);
+  specCtx.fillStyle='rgba(0,0,0,0.35)'; specCtx.fillRect(0,0,260,80);
+  const bars=65;
+  for (let i=0;i<bars;i++){
+    const v = freqData[Math.floor(i*n/bars/4)]/255;
+    const hue = 180 + i*3;
+    specCtx.fillStyle=`hsl(${hue},100%,${25+v*55}%)`;
+    const w = 260/bars;
+    specCtx.fillRect(i*w, 80-v*78, w-1, v*78);
+  }
+}
+
+/* ============================================================
+   🤫 SECRETO #5 · MORPHING GEOMÉTRICO
+   La malla del suelo interpola entre formas según el modo.
+   Modos: onda plana / espiral / esfera / silla de montar / vórtice / caos
+   ============================================================ */
+function morphVertex(x, z, mode, time){
+  const r = Math.sqrt(x*x + z*z) || 0.001;
+  const a = Math.atan2(z, x);
+  switch(mode){
+    case 0: return Math.sin(x*0.5 + time*1.5)*1.2 + Math.cos(z*0.4 + time)*0.8;
+    case 1: return Math.sin(r*0.8 - time*1.5) * 2.5;
+    case 2: return Math.cos(r*0.6)*Math.sin(a*3 + time)*1.8;
+    case 3: return (x*x - z*z)*0.05 + Math.sin(time + r)*0.5;
+    case 4: return Math.sin(a*6 + time*2)*(r*0.15);
+    case 5: return Math.sin(x*0.3+time)*Math.cos(z*0.3+time)*3 + Math.sin(r*0.5-time*0.5);
+  }
+  return 0;
+}
+
+function updateMorph(){
+  const p = morphGeom.attributes.position.array;
+  const mode = SCENES[sceneIdx].morphMode;
+  const amp = 1 + bass * 2 + dropFlash * 1.5;
+  for (let i=0;i<p.length;i+=3){
+    const x = morphOrig[i];
+    const z = morphOrig[i+2];
+    p[i+1] = morphVertex(x, z, mode, t) * amp;
+  }
+  morphGeom.attributes.position.needsUpdate = true;
+  const hue = SCENES[sceneIdx].hueBase + Math.sin(t*0.3)*0.05 + high*0.08;
+  morphMat.color.setHSL(hue, 1, 0.5 + beatFlash*0.15);
+  morphMat.opacity = 0.09 + energy*0.12 + dropFlash*0.08;
+}
+
+/* ============================================================
+   ONDAS 5D
+   ============================================================ */
+function mainY(x){
+  const boost = bass*3.2 + energy*3.5 + dropFlash*4;
+  return 3.0 + (1.6+boost)*Math.sin(1.0*x + t*1.15)*(0.75 + high*0.7);
+}
+function mainZ(x){
+  return 0.9*Math.sin(0.5*x + t*0.7 + mid*3.0)*(1+bass*2);
+}
+function updateMain(){
+  const p = main.pos;
+  for (let i=0;i<Q.N;i++){
+    const x = (i/(Q.N-1)-0.5)*30;
+    p[i*3]=x; p[i*3+1]=mainY(x); p[i*3+2]=mainZ(x);
+  }
+  main.geom.attributes.position.needsUpdate = true;
+  const hue = SCENES[sceneIdx].hueBase + Math.sin(t*0.4)*0.08 + high*0.1;
+  main.mat.color.setHSL(hue, 1, 0.55 + beatFlash*0.2);
+}
+function updateGhosts(){
+  for (const g of ghosts){
+    const p = g.pos;
+    const amBoost = 1 + mid*2.5 + dropFlash*2;
+    for (let i=0;i<Q.N;i++){
+      const x = (i/(Q.N-1)-0.5)*30;
+      const gy = 3.0 + (g.amp*amBoost)*
+        Math.sin(g.freq*x + t*(0.5+high) + g.phase)*
+        Math.cos(g.dimW*x*0.35 + t*0.25);
+      const gz = 1.0*Math.sin(g.freq*0.6*x + t*0.8 + g.dimV)*
+        Math.cos(g.freq*0.25*x + t*0.4);
+      p[i*3]=x;
+      p[i*3+1]=gy + (mainY(x)-gy)*collapse;
+      p[i*3+2]=gz + (mainZ(x)-gz)*collapse;
+    }
+    g.geom.attributes.position.needsUpdate = true;
+    g.mat.opacity = (1-collapse)*(0.35 + high*0.45 + dropFlash*0.3);
+  }
+}
+
+/* ============================================================
+   CHISPAS · Física con gravedad
+   ============================================================ */
+function updateSparks(dt){
+  const sp = sparkGeom.attributes.position.array;
+  const sc = sparkGeom.attributes.color.array;
+  for (let i=0;i<SPARK_N;i++){
+    if (sparkLife[i] > 0){
+      sparkLife[i] -= dt;
+      // Gravedad + arrastre
+      sparkVel[i*3+1] -= dt*4.5;
+      sparkVel[i*3]   *= 0.985;
+      sparkVel[i*3+1] *= 0.985;
+      sparkVel[i*3+2] *= 0.985;
+      sp[i*3]   += sparkVel[i*3]  *dt;
+      sp[i*3+1] += sparkVel[i*3+1]*dt;
+      sp[i*3+2] += sparkVel[i*3+2]*dt;
+      // Fade del color
+      const lifeRatio = Math.max(0, Math.min(1, sparkLife[i]));
+      sc[i*3]   *= 0.995;
+      sc[i*3+1] *= 0.99;
+      sc[i*3+2] *= 0.99;
+      if (sparkLife[i] <= 0){
+        sp[i*3]=9999; sp[i*3+1]=9999; sp[i*3+2]=9999;
+      }
+    } else {
+      sp[i*3]=9999; sp[i*3+1]=9999; sp[i*3+2]=9999;
+    }
+  }
+  sparkGeom.attributes.position.needsUpdate = true;
+  sparkGeom.attributes.color.needsUpdate = true;
+  sparkMat.size = 0.12 + beatFlash*0.08;
+}
+
+/* ============================================================
+   ANILLOS CIMÁTICOS
+   ============================================================ */
+function updateRings(){
+  const rp = ringGeom.attributes.position.array;
+  const R = 5.5;
+  for (let i=0;i<RING_N;i++){
+    const a = (i/RING_N)*Math.PI*2;
+    const specIdx = Math.floor((i/RING_N)*60);
+    const amp = (freqData ? freqData[specIdx*6]/255 : 0.3);
+    const r = R + amp*2.5 + beatFlash*1.2;
+    rp[i*3]   = Math.cos(a)*r;
+    rp[i*3+1] = 0.1 + Math.sin(t*3 + a*6)*0.3*(0.5+bass);
+    rp[i*3+2] = Math.sin(a)*r;
+  }
+  ringGeom.attributes.position.needsUpdate = true;
+  ringMat.opacity = 0.35 + high*0.5;
+  ringMat.color.setHSL(SCENES[sceneIdx].hueBase + 0.3, 1, 0.55);
+
+  const r2 = ring2Geom.attributes.position.array;
+  const R2 = 10 + bass*2;
+  for (let i=0;i<RING2_N;i++){
+    const a = (i/RING2_N)*Math.PI*2;
+    const amp = (freqData ? freqData[Math.floor((i/RING2_N)*n)]/255 : 0.2);
+    const r = R2 + amp*3;
+    r2[i*3]   = Math.cos(a)*r;
+    r2[i*3+1] = 0.15 + Math.sin(t*2 + a*8)*0.5;
+    r2[i*3+2] = Math.sin(a)*r;
+  }
+  ring2Geom.attributes.position.needsUpdate = true;
+  ring2Mat.opacity = 0.2 + mid*0.4;
+}
+const n = freqData ? freqData.length : 1024;
+
+/* ============================================================
+   RAYOS VOLUMÉTRICOS
+   ============================================================ */
+function updateGodRays(){
+  for (let i=0;i<godRays.length;i++){
+    const c = godRays[i];
+    c.rotation.y += 0.003 + high*0.02;
+    c.material.opacity = c.userData.baseOpacity * (1 + energy*2 + dropFlash);
+    c.material.color.setHSL(SCENES[sceneIdx].hueBase + i*0.08, 1, 0.6);
+  }
+}
+
+/* ============================================================
+   🤫 SECRETO #6 · DIRECTOR DE CÁMARA CINEMATOGRÁFICO
+   6 modos de cámara, cortes en drops, transiciones fade.
+   ============================================================ */
+function updateCamera(dt){
+  if (autoDirector && audioEl && !audioEl.paused){
+    camPhase += dt * (0.12 + bass*0.9 + dropFlash*1.5);
+    sceneElapsed += dt;
+    if (sceneElapsed > SCENE_DURATION){
+      nextScene();
+    }
+
+    const mode = SCENES[sceneIdx].camMode;
+    switch(mode){
+      case 0: // WAVE
+        camGoal.theta = Math.sin(camPhase*0.7)*0.35;
+        camGoal.phi   = 1.35 + Math.sin(camPhase*0.5)*0.12;
+        camGoal.radius= 14 - bass*2;
+        camTgtGoal.set(0,3,0); break;
+      case 1: // ORBIT
+        camGoal.theta = camPhase;
+        camGoal.phi   = 1.05 + Math.sin(camPhase*0.4)*0.35;
+        camGoal.radius= 20 + Math.sin(camPhase*0.8)*5 - bass*3;
+        camTgtGoal.set(0,3.5,0); break;
+      case 2: // GODRAYS
+        camGoal.theta = camPhase*0.5;
+        camGoal.phi   = 1.55 + Math.sin(camPhase*0.3)*0.15;
+        camGoal.radius= 16 - dropFlash*3;
+        camTgtGoal.set(0,10,0); break;
+      case 3: // CHAMBER (dentro)
+        camGoal.theta = camPhase*0.8;
+        camGoal.phi   = 1.2;
+        camGoal.radius= 8 - bass*1.5;
+        camTgtGoal.set(0,3,-3); break;
+      case 4: // TOP
+        camGoal.theta = camPhase*0.4;
+        camGoal.phi   = 0.25 + Math.sin(camPhase*0.3)*0.08;
+        camGoal.radius= 24 - dropFlash*4;
+        camTgtGoal.set(0,1,-2); break;
+      case 5: // LORENZ
+        camGoal.theta = camPhase*0.8;
+        camGoal.phi   = 1.2 + Math.sin(camPhase*0.6)*0.25;
+        camGoal.radius= 18 + Math.sin(camPhase*0.5)*3;
+        camTgtGoal.set(0,6,0); break;
+    }
+  }
+  cam.theta  += (camGoal.theta  - cam.theta) * Math.min(1, dt*2);
+  cam.phi    += (camGoal.phi    - cam.phi)   * Math.min(1, dt*2);
+  cam.radius += (camGoal.radius - cam.radius)* Math.min(1, dt*2);
+  cam.target.lerp(camTgtGoal, Math.min(1, dt*1.5));
+
+  const sp = Math.sin(cam.phi);
+  camera.position.set(
+    cam.radius*sp*Math.sin(cam.theta),
+    cam.radius*Math.cos(cam.phi)+3,
+    cam.radius*sp*Math.cos(cam.theta)
+  );
+  camera.lookAt(cam.target);
+}
+
+/* Cambio de escena con flash blanco */
+function nextScene(){
+  sceneIdx = (sceneIdx+1) % SCENES.length;
+  sceneElapsed = 0;
+  const fade = document.getElementById('scene-fade');
+  fade.classList.add('flash');
+  setTimeout(()=>fade.classList.remove('flash'), 120);
+  document.getElementById('sceneName').textContent = SCENES[sceneIdx].name;
+  document.getElementById('scene').textContent = String(sceneIdx+1).padStart(2,'0');
+  document.body.classList.toggle('cinema', SCENES[sceneIdx].cinema);
+  showToast('🎬 ESCENA ' + String(sceneIdx+1).padStart(2,'0') + ' · ' + SCENES[sceneIdx].name);
+}
+
+/* ============================================================
+   AUTO CALIDAD
+   ============================================================ */
+function checkQuality(dt){
+  autoQCool -= dt;
+  if (autoQCool > 0) return;
+  if (fpsCurrent < 40 && currentQuality !== 'LOW'){
+    const order = ['ULTRA','HIGH','MEDIUM','LOW'];
+    currentQuality = order[Math.min(order.indexOf(currentQuality)+1, order.length-1)];
+    Q = QUALITY[currentQuality];
+    renderer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+    composer.setPixelRatio(Math.min(devicePixelRatio, Q.RATIO));
+    document.getElementById('quality').textContent = currentQuality;
+    autoQCool = 6;
+    showToast('⚙ CALIDAD: ' + currentQuality);
+  }
+}
+
+/* ============================================================
+   LOOP PRINCIPAL
+   ============================================================ */
+function animate(now){
+  requestAnimationFrame(animate);
+  const dt = Math.min(0.05, (now-last)/1000);
+  last = now;
+  if (audioEl && !audioEl.paused) t += dt*1.35;
+
+  fpsAcc += dt; fpsCount++;
+  if (fpsAcc > 0.4){
+    fpsCurrent = fpsCount/fpsAcc;
+    document.getElementById('fps').textContent = Math.round(fpsCurrent);
+    fpsAcc=0; fpsCount=0;
+    checkQuality(dt);
+  }
+
+  analyze();
+  beatFlash *= 0.88;
+
+  grid1.position.y = -0.001 + beatFlash*0.5 + dropFlash*0.8;
+  grid2.position.y = 0.02 + beatFlash*0.3;
+
+  stars.rotation.y += dt*0.008;
+  stars.rotation.x += dt*0.004;
+
+  collapse += (collapseTarget - collapse) * Math.min(1, dt*2.5);
+
+  updateMorph();
+  updateMain();
+  updateGhosts();
+  updateSparks(dt);
+  updateRings();
+  updateGodRays();
+  updateCamera(dt);
+
+  bloom.strength = 1.2 + energy*1.4 + dropFlash*1.5;
+  bloom.radius   = 0.6 + bass*0.4;
+
+  filmPass.uniforms.uTime.value   = t;
+  filmPass.uniforms.uPulse.value  = beatFlash;
+  filmPass.uniforms.uCA.value     = 0.0012 + dropFlash*0.003;
+  filmPass.uniforms.uGrain.value  = 0.045 + energy*0.05;
+
+  composer.render();
+}
+
+/* ============================================================
+   GRABACIÓN
+   ============================================================ */
+const btnRecord = document.getElementById('btn-record');
+const recLabel = document.getElementById('reclabel');
+function pickMime(){
+  const list=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  for (const m of list) if (MediaRecorder.isTypeSupported(m)) return m;
+  return '';
+}
+btnRecord.addEventListener('click', ()=>{
+  if (!audioEl || !audioDest){ showToast('⚠ CARGA UN MP3'); return; }
+  if (!recording) startRecording(); else stopRecording();
+});
+function startRecording(){
+  recordedChunks = [];
+  const cs = canvas.captureStream(60);
+  const at = audioDest.stream.getAudioTracks();
+  const combined = new MediaStream([...cs.getVideoTracks(), ...at]);
+  const mime = pickMime();
+  recorder = new MediaRecorder(combined, { mimeType: mime, videoBitsPerSecond: 14_000_000, audioBitsPerSecond: 192_000 });
+  recorder.ondataavailable = e => { if (e.data.size>0) recordedChunks.push(e.data); };
+  recorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type:mime });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `quantum-cinema-${Date.now()}.webm`;
+    a.click();
+    recording=false;
+    recLabel.textContent='● REC OFF'; recLabel.style.color='#ff4466';
+    btnRecord.textContent='⬤ GRABAR';
+    showToast('💾 PELÍCULA DESCARGADA');
+  };
+  recorder.start(1000);
+  recording=true;
+  recLabel.textContent='● REC ON'; recLabel.style.color='#00ff88';
+  btnRecord.textContent='⏹ DETENER';
+  showToast('⬤ GRABANDO · TOCA OTRA VEZ PARA DETENER');
+}
+function stopRecording(){ if (recorder && recorder.state!=='inactive') recorder.stop(); }
+
+/* ============================================================
+   CONTROLES
+   ============================================================ */
+document.querySelectorAll('.btn').forEach(b=>{
+  b.addEventListener('mousemove', e=>{
+    const r = b.getBoundingClientRect();
+    b.style.setProperty('--mx', (e.clientX-r.left)+'px');
+    b.style.setProperty('--my', (e.clientY-r.top)+'px');
+  });
+});
+document.getElementById('btn-collapse').addEventListener('click', ()=>{
+  collapseTarget = collapseTarget>0.5?0:1;
+  showToast(collapseTarget>0.5?'⚛ COLAPSO':'⚛ SUPERPOSICIÓN');
+});
+document.getElementById('btn-director').addEventListener('click', ()=>{
+  autoDirector = !autoDirector;
+  showToast(autoDirector?'🎬 DIRECTOR: AUTO':'🎬 DIRECTOR: MANUAL');
+});
+document.getElementById('btn-scene').addEventListener('click', nextScene);
+document.getElementById('btn-cinema').addEventListener('click', ()=>{
+  document.body.classList.toggle('cinema');
+  showToast(document.body.classList.contains('cinema')?'🎥 MODO CINE':'🎥 MODO COMPLETO');
+});
+document.getElementById('btn-new').addEventListener('click', ()=>{
+  if (audioEl){ audioEl.pause(); audioEl.currentTime=0; }
+  intro.classList.remove('hide');
+  document.body.classList.remove('cinema');
+});
+
+addEventListener('keydown', e=>{
+  const k = e.key.toLowerCase();
+  if (e.code==='Space'){ e.preventDefault(); document.getElementById('btn-collapse').click(); }
+  if (k==='r') document.getElementById('btn-record').click();
+  if (k==='n') nextScene();
+  if (k==='b') document.getElementById('btn-cinema').click();
+  if (k==='c') document.getElementById('btn-director').click();
+  if (k>='1' && k<='6'){
+    sceneIdx = parseInt(k)-1; sceneElapsed = 0;
+    document.getElementById('sceneName').textContent = SCENES[sceneIdx].name;
+    document.getElementById('scene').textContent = String(sceneIdx+1).padStart(2,'0');
+    document.body.classList.toggle('cinema', SCENES[sceneIdx].cinema);
+    autoDirector = false;
+    showToast('🎬 ESCENA ' + String(sceneIdx+1).padStart(2,'0') + ' · ' + SCENES[sceneIdx].name);
+  }
+});
+
+/* Órbita */
+let dragging=false, lx=0, ly=0;
+function onDown(x,y){ dragging=true; lx=x; ly=y; autoDirector=false; }
+function onMove(x,y){
+  if (!dragging) return;
+  camGoal.theta -= (x-lx)*0.005;
+  camGoal.phi    = Math.max(0.08, Math.min(1.55, camGoal.phi - (y-ly)*0.005));
+  lx=x; ly=y;
+}
+function onUp(){ dragging=false; }
+canvas.addEventListener('mousedown', e=>onDown(e.clientX,e.clientY));
+addEventListener('mousemove', e=>onMove(e.clientX,e.clientY));
+addEventListener('mouseup', onUp);
+canvas.addEventListener('touchstart', e=>{const t=e.touches[0];onDown(t.clientX,t.clientY);},{passive:true});
+canvas.addEventListener('touchmove', e=>{const t=e.touches[0];onMove(t.clientX,t.clientY);e.preventDefault();},{passive:false});
+addEventListener('touchend', onUp);
+
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  filmPass.uniforms.uResolution.value.set(innerWidth, innerHeight);
+});
+
+/* Toast */
+let toastTimer;
+function showToast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2400);
+}
+
+/* Arranque */
+requestAnimationFrame(animate);
+
+console.log('%c╔══════════════════════════════════════════╗','color:#00f0ff;font-weight:bold');
+console.log('%c║   QUANTUM CINEMA · CYMATIC 5D · v24      ║','color:#00f0ff;font-weight:bold');
+console.log('%c║   CINEMA ENGINE · 6 SCENES · MORPHING    ║','color:#ff00e0;font-weight:bold');
+console.log('%c║   KRONOS Protocol · Autoría verificable  ║','color:#00ff88;font-weight:bold');
+console.log('%c╚══════════════════════════════════════════╝','color:#00f0ff;font-weight:bold');
+</script>
+</body>
+</html>
