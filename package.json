@@ -12,7 +12,8 @@
     "build": "npm run build --workspace=apps/sycro-web"
   },
   "overrides": {
-    "@noble/hashes": "^1.8.0"
+    "@noble/hashes": "^1.8.0",
+    "zod": "^4.6.7"
   },
   "dependencies": {
     "@noble/post-quantum": "^0.7.1",
