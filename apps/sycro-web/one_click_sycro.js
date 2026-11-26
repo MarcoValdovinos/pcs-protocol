@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { ml_dsa65 } from '@noble/post-quantum/ml-dsa.js';
 
 // 1. La semilla secreta fija (sincronizada con Vercel)
-const SEED_HEX = process.env.SEED_HEX || '';;
+const SEED_HEX = process.env.SEED_HEX || '';
 const seed = Buffer.from(SEED_HEX, 'hex');
 const keys = ml_dsa65.keygen(seed);
 

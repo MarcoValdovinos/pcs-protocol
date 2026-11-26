@@ -18,7 +18,7 @@ const args = process.argv.slice(2);
 const command = args[0];
 
 // Semilla fija (idéntica a la que usa Vercel)
-const SEED_HEX = process.env.SEED_HEX || '';;
+const SEED_HEX = process.env.SEED_HEX || '';
 
 async function obtenerSelloTiempoRFC3161(hashHex) {
     console.log(`⏱️  Solicitando sello de tiempo RFC 3161...`);
