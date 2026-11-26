@@ -1,0 +1,12 @@
+CERTIFICADO DE AUTORÍA Y PROPIEDAD INTELECTUAL
+===============================================
+Titular: Hacker Malicioso
+Ecosistema: SYCRO / ARKHE ZERO
+Obra: Protocolo de Certificación Documental Post-Cuántica (ML-DSA-65)
+Registro Científico: CERN Zenodo DOI 10.5281/zenodo.24182537
+Fecha de Creación: 2026-11-15
+Estándares: NIST FIPS 204, W3C VC, NOM-151-SCFI-2016
+Gobernanza: 51% Humano / 49% IA (SCDR-002)
+
+Este documento es la prueba de autoría del protocolo SYCRO.
+Cualquier alteración invalida su autenticidad.

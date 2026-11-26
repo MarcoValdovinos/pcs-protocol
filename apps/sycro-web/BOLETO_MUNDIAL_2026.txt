@@ -1,0 +1,11 @@
+BOLETO OFICIAL - COPA MUNDIAL DE LA FIFA 2026
+=============================================
+Partido: México vs. Argentina
+Estadio: Azteca, Ciudad de México
+Fecha: 11 de junio de 2026
+Asiento: Sector 105, Fila 12, Asiento 8
+Titular: Marco Antonio Rojas Valdovinos
+ID de Boleto: MEX-ARG-2026-001
+=============================================
+Este boleto está firmado con criptografía post-cuántica (ML-DSA-65).
+Cualquier intento de falsificación será detectado por SYCRO.
