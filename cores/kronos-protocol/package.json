@@ -1,7 +1,7 @@
 {
   "name": "kronos-protocol-core",
   "version": "1.0.0",
-  "description": "ARKH\u00c9 ZERO \u00b7 \u00cdndice Primigenio Soberano \u00b7 Local-First \u00b7 Humano-IA \u00b7 Pacto 51/49/100",
+  "description": "ARKHÉ ZERO · Índice Primigenio Soberano · Local-First · Humano-IA · Pacto 51/49/100",
   "type": "module",
   "license": "Apache-2.0",
   "author": {
@@ -64,7 +64,7 @@
     "51-49-100",
     "flailp"
   ],
-  "seal": "\u25ef_\u25cf \u00b7 51/49/100",
+  "seal": "◯_● · 51/49/100",
   "indexZero": {
     "safe_creative_arq": "2607146379465",
     "safe_creative_co": "2607086319439",
