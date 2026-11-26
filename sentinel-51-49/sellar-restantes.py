@@ -13,7 +13,11 @@ SELLO = """================================================================
 """
 count = 0
 for root, dirs, files in os.walk("."):
-    if ".git" in root or "node_modules" in root or "sentinel-51-49" in root:
+    # CORREGIDO: Ya no usa ".git" porque eso borra a ".github"
+    # Ahora solo salta la carpeta .git exacta, no .github
+    if root == "./.git" or "/.git/" in root or root.startswith("./.git/"):
+        continue
+    if "node_modules" in root or "sentinel-51-49" in root:
         continue
     if ".github" not in root:
         continue
