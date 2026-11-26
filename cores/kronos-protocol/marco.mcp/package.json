@@ -1,7 +1,7 @@
 {
   "name": "@arkhe-zero/marco-mcp",
   "version": "1.0.0",
-  "description": "Substrato cognitivo personal · MCP server para el enjambre ARKHÉ",
+  "description": "Substrato cognitivo personal \u00b7 MCP server para el enjambre ARKH\u00c9",
   "type": "module",
   "license": "Apache-2.0",
   "author": "Marco Antonio Rojas Valdovinos <marco@arkhe.zero>",
@@ -47,5 +47,8 @@
     "51-49",
     "marco-mcp"
   ],
-  "seal": "◯_● · 51/49/100"
+  "seal": "\u25ef_\u25cf \u00b7 51/49/100",
+  "overrides": {
+    "zod": "^4.6.7"
+  }
 }
